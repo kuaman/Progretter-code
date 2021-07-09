@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Collections.Generic;
 
 namespace Progretter
 {
@@ -31,21 +32,26 @@ namespace Progretter
                 .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater*/
         }
 
-        private double[] fontSizeArray = new double[]
-        {
-              8.0d,   9.0d,  10.0d,  10.5d,  11.0d,  12.0d,  14.0d,  16.0d,  18.0d,  20.0d,   24.0d,  28.0d,
-             32.0d,  36.0d,  40.0d,  44.0d,  48.0d,  54.0d,  60.0d,  66.0d,  72.0d,  80.0d,  88.0d,  96.0d,
-            128.0d, 136.0d, 144.0d,  160.0d, 192.0d, 256.0d, 288.0d, 352.0d, 480.0d, 500.0d
-        };
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (FontFamily fontFamily in Fonts.SystemFontFamilies)
+            System.Windows.Markup.XmlLanguage cond = System.Windows.Markup.XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentUICulture.Name);
+            List<string> listFont = new List<string>();
+            foreach (FontFamily font in Fonts.SystemFontFamilies)
             {
-                text_family_combo.Items.Add(fontFamily.Source);
+                if (font.FamilyNames.ContainsKey(cond))
+                    listFont.Add(font.FamilyNames[cond]);
+                else
+                    listFont.Add(font.ToString());
             }
 
-            text_family_combo.SelectedIndex = 24;
+            listFont.Sort();
+
+            text_family_combo.ItemsSource = listFont;
+            text_family_combo.SelectedIndex = 6;
+
+            List<string> listSize = new List<string>() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "32", "48", "54", "72", "88", "96", "128", "144", "240", "288", "324", "480", "500"};
+            text_size_combo.ItemsSource = listSize;
+            text_size_combo.SelectedIndex = 4;
         }
 
         // 현재 시간 표시
@@ -110,23 +116,41 @@ namespace Progretter
                 Text.TextDecorations = null;
             }
         }
+        private void text_family_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Text.FontFamily = new FontFamily(text_family_combo.SelectedItem.ToString());
+        }
+
+        private string textsize;
+
         private void text_size_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Console.WriteLine(text_size_combo.Text);
-            Console.WriteLine("1");
+            int returnVal;
+            if (textsize != "key")
+            {
+                bool bl = int.TryParse(text_size_combo.SelectedItem.ToString(), out returnVal);
+                if (bl)
+                {
+                    Text.FontSize = double.Parse(text_size_combo.SelectedItem.ToString());
+                    text_size.Text = text_size_combo.SelectedItem.ToString();
+                }
+            }
+            textsize = "combo";
         }
 
         private void text_size_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                int returnVal = 0;
+                int returnVal;
                 bool bl = int.TryParse(text_size.Text, out returnVal);
-                if (bl == true)
+                if (bl)
                 {
                     if (Convert.ToInt32(text_size.Text) <= 500)
                     {
                         Text.FontSize = double.Parse(text_size.Text);
+                        textsize = "key";
+                        text_size_combo.Text = null;
                     }
                     else // 500 초과
                     {
@@ -156,10 +180,6 @@ namespace Progretter
             if (txtResult.Text == "0" || PerformedOp)
             {
                 txtResult.Clear();
-            }
-            else
-            {
-                callog += "0";
             }
             PerformedOp = false;
             Button button = (Button)sender;
@@ -287,6 +307,92 @@ namespace Progretter
                         Result_Value = double.Parse(txtResult.Text);
                         txtResult.Text = Result_Value.ToString().Remove(0, 1);
                     }
+                    break;
+            }
+        }
+
+        private void Calculator_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch(e.Key)
+            {
+                case Key.D0:
+                case Key.NumPad0:
+                    Cal0.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D1:
+                case Key.NumPad1:
+                    Cal1.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D2:
+                case Key.NumPad2:
+                    Cal2.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D3:
+                case Key.NumPad3:
+                    Cal3.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D4:
+                case Key.NumPad4:
+                    Cal4.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D5:
+                case Key.NumPad5:
+                    Cal5.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D6:
+                case Key.NumPad6:
+                    Cal6.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D7:
+                case Key.NumPad7:
+                    Cal7.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D8:
+                case Key.NumPad8:
+                    Cal8.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.D9:
+                case Key.NumPad9:
+                    Cal9.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.Add:
+                case Key.F1:
+                    CalPlus.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.Subtract:
+                case Key.F2:
+                    CalSub.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.Multiply:
+                case Key.F3:
+                    CalMul.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.Divide:
+                case Key.F4:
+                    CalDiv.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.OemPlus:
+                case Key.Enter:
+                case Key.F5:
+                    Cal_equal_btn.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.F6:
+                    CalC.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
                     break;
             }
         }
