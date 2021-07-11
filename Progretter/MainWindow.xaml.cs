@@ -23,13 +23,21 @@ namespace Progretter
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Timer_Tick;
             timer.Start();
+            DateTime datetime = DateTime.Now;
+            datetime = new DateTime(datetime.Year, datetime.Month, datetime.Day, 12, 20, 10);
             // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
-/*            new ToastContentBuilder()
-                .AddArgument("action", "viewConversation")
-                .AddArgument("conversationId", 9813)
-                .AddText("Andrew sent you a picture")
-                .AddText("Check this out, The Enchantments in Washington!")
-                .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater*/
+            /*            new ToastContentBuilder()
+                            .AddArgument("action", "viewConversation")
+                            .AddArgument("conversationId", 9813)
+                            .AddText("Andrew sent you a picture")
+                            .AddText("Check this out, The Enchantments in Washington!")
+                            .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater*/
+        }
+
+        // 현재 시간 표시
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            Timenow.Content = DateTime.Now.ToString();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -54,14 +62,8 @@ namespace Progretter
             text_size_combo.SelectedIndex = 4;
         }
 
-        // 현재 시간 표시
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            Timenow.Content = DateTime.Now.ToString();
-        }
 
-
-        // 메모장 함수
+        #region 메모장
         private void bold_Btn_Checked(object sender, RoutedEventArgs e)
         {
             Text.FontWeight = FontWeights.Bold;
@@ -165,9 +167,9 @@ namespace Progretter
                 }
             }
         }
+#endregion
 
-
-        // 계산기 코드
+        #region 계산기
         double Result_Value;
         string Operator_Performed = " ";
         bool PerformedOp;
@@ -194,15 +196,14 @@ namespace Progretter
             if (!txtResult.Text.Contains("."))
             {
                 txtResult.Text += button.Content;
-                callog += button.Content.ToString();
+                callog += ".";
             }
-            PerformedOp = true;
         }
         private void Cal_op(object sender, RoutedEventArgs e)
         {
             // +, -, *, / operators
             Button button = (Button)sender;
-            if (!PerformedOp)
+            if (!PerformedOp && Convert.ToBoolean(txtResult.Text.Contains(".")))
             {
                 if (Result_Value != 0)
                 {
@@ -220,6 +221,29 @@ namespace Progretter
                     PerformedOp = true;
                     callog += button.Content.ToString();
                 }
+            }
+            else if(!PerformedOp && !Convert.ToBoolean(txtResult.Text.Contains(".")))
+            {
+                if (Result_Value != 0)
+                {
+                    Cal_equal_btn.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    Operator_Performed = button.Content.ToString();
+                    Label_log.Content = Result_Value + " " + Operator_Performed;
+                    PerformedOp = true;
+                    callog += button.Content.ToString();
+                }
+                else
+                {
+                    Operator_Performed = button.Content.ToString();
+                    Result_Value = double.Parse(txtResult.Text);
+                    Label_log.Content = Result_Value + " " + Operator_Performed;
+                    PerformedOp = true;
+                    callog += button.Content.ToString();
+                }
+            }
+            else
+            {
+                
             }
         }
 
@@ -365,6 +389,10 @@ namespace Progretter
                     Cal9.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
                     break;
 
+                case Key.OemPeriod:
+                    CalPer.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
                 case Key.Add:
                 case Key.F1:
                     CalPlus.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
@@ -421,12 +449,13 @@ namespace Progretter
         {
             Cal_log.Items.Clear();
         }
-
-        // 테트리스 코드
+#endregion
+        #region 테트리스
         private void Tetris_btn_Click(object sender, RoutedEventArgs e)
         {
             Tetris tetris = new Tetris();
             tetris.Show();
         }
+        #endregion
     }
 }

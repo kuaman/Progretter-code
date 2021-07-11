@@ -126,7 +126,7 @@
                         <Button x:Name="Cal2" Grid.Row="3" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}">2</Button>
                         <Button x:Name="Cal3" Grid.Row="3" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}">3</Button>
                         <Button x:Name="CalMul" Grid.Row="3" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFF0D2">×</Button>
-                        <Button Grid.Row="4" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_dot" BorderBrush="{x:Null}">.</Button>
+                        <Button x:Name="CalPer" Grid.Row="4" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_dot" BorderBrush="{x:Null}">.</Button>
                         <Button x:Name="Cal0" Grid.Row="4" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}">0</Button>
                         <Button x:Name="Cal_equal_btn" Grid.Row="4" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_equal" BorderBrush="{x:Null}">=</Button>
                         <Button x:Name="CalDiv" Grid.Row="4" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFF0D2">÷</Button>
