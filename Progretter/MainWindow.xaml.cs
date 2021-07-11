@@ -23,15 +23,13 @@ namespace Progretter
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Timer_Tick;
             timer.Start();
-            DateTime datetime = DateTime.Now;
-            datetime = new DateTime(datetime.Year, datetime.Month, datetime.Day, 12, 20, 10);
             // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
-            /*            new ToastContentBuilder()
-                            .AddArgument("action", "viewConversation")
-                            .AddArgument("conversationId", 9813)
-                            .AddText("Andrew sent you a picture")
-                            .AddText("Check this out, The Enchantments in Washington!")
-                            .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater*/
+            /*new ToastContentBuilder()
+                .AddArgument("action", "viewConversation")
+                .AddArgument("conversationId", 9813)
+                .AddText("Andrew sent you a picture")
+                .AddText("Check this out, The Enchantments in Washington!")
+                .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater*/
         }
 
         // 현재 시간 표시
