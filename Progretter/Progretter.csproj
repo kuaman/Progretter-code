@@ -34,12 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\schedule.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Resources\collided.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
