@@ -67,7 +67,7 @@
                                     <TextBlock Text="U" TextDecorations="Underline"/>
                                 </StackPanel>
                             </ToggleButton>
-                            <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" Grid.Column="5" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14">
+                            <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" Grid.Column="8" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14">
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock Text="S" TextDecorations="Strikethrough"/>
                                 </StackPanel>
