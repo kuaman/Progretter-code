@@ -31,7 +31,15 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid Margin="10"/>
+                    <DataGrid Margin="10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="First Name"/>
+                            <DataGridTextColumn Header="Last Name"/>
+                            <DataGridHyperlinkColumn Header="Email"/>
+                            <DataGridCheckBoxColumn Header="Member"/>
+                            <DataGridComboBoxColumn Header="Order Status"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Margin="0,-1,1,1" Width="120" Height="102">
@@ -138,7 +146,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Label Content="기록" FontSize="18" Margin="116,0,115,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <ListBox x:Name="Cal_log" Margin="10" Grid.Row="1"/>
+                        <ListBox x:Name="Cal_log" Margin="10" Grid.Row="1" MouseDoubleClick="Cal_log_MouseDoubleClick"/>
                         <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" Click="Cal_log_remove_Click"/>
                     </Grid>
                     <Label x:Name="Label_log" Content=""/>

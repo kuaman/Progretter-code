@@ -1,11 +1,11 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
-using System.Collections.Generic;
 
 namespace Progretter
 {
@@ -14,7 +14,7 @@ namespace Progretter
     /// </summary>
     public partial class MainWindow : Window
     {
-        // 초기설정
+        #region 초기설정
         public MainWindow()
         {
             InitializeComponent();
@@ -55,11 +55,11 @@ namespace Progretter
             text_family_combo.ItemsSource = listFont;
             text_family_combo.SelectedIndex = 6;
 
-            List<string> listSize = new List<string>() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "32", "48", "54", "72", "88", "96", "128", "144", "240", "288", "324", "480", "500"};
+            List<string> listSize = new List<string>() { "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "32", "48", "54", "72", "88", "96", "128", "144", "240", "288", "324", "480", "500" };
             text_size_combo.ItemsSource = listSize;
             text_size_combo.SelectedIndex = 4;
         }
-
+        #endregion
 
         #region 메모장
         private void bold_Btn_Checked(object sender, RoutedEventArgs e)
@@ -165,14 +165,13 @@ namespace Progretter
                 }
             }
         }
-#endregion
+        #endregion
 
         #region 계산기
         double Result_Value;
         string Operator_Performed = " ";
         bool PerformedOp;
         string callog;
-        string plusminus;
 
         private void Cal_num(object sender, RoutedEventArgs e)
         {
@@ -184,7 +183,6 @@ namespace Progretter
             PerformedOp = false;
             Button button = (Button)sender;
             txtResult.Text += button.Content;
-            callog += button.Content.ToString();
         }
 
         private void Cal_dot(object sender, RoutedEventArgs e)
@@ -194,12 +192,12 @@ namespace Progretter
             if (!txtResult.Text.Contains("."))
             {
                 txtResult.Text += button.Content;
-                callog += ".";
             }
         }
         private void Cal_op(object sender, RoutedEventArgs e)
         {
             // +, -, *, / operators
+            callog += txtResult.Text + " ";
             Button button = (Button)sender;
             if (!PerformedOp && Convert.ToBoolean(txtResult.Text.Contains(".")))
             {
@@ -220,7 +218,7 @@ namespace Progretter
                     callog += button.Content.ToString();
                 }
             }
-            else if(!PerformedOp && !Convert.ToBoolean(txtResult.Text.Contains(".")))
+            else if (!PerformedOp && !Convert.ToBoolean(txtResult.Text.Contains(".")))
             {
                 if (Result_Value != 0)
                 {
@@ -241,7 +239,7 @@ namespace Progretter
             }
             else
             {
-                
+                callog += "0";
             }
         }
 
@@ -260,28 +258,36 @@ namespace Progretter
             Label_log.Content = " ";
             PerformedOp = false;
             callog = null;
-            plusminus = null;
         }
 
         private void Cal_equal(object sender, RoutedEventArgs e)
         {
             // EQUALS BUTTON
+            callog += " " + txtResult.Text;
             switch (Operator_Performed)
             {
                 case "+":
                     txtResult.Text = (Result_Value + double.Parse(txtResult.Text)).ToString();
+                    callog += " = " + txtResult.Text.ToString();
+                    Cal_log.Items.Add(callog);
                     break;
 
                 case "-":
                     txtResult.Text = (Result_Value - double.Parse(txtResult.Text)).ToString();
+                    callog += " = " + txtResult.Text.ToString();
+                    Cal_log.Items.Add(callog);
                     break;
 
                 case "×":
                     txtResult.Text = (Result_Value * double.Parse(txtResult.Text)).ToString();
+                    callog += " = " + txtResult.Text.ToString();
+                    Cal_log.Items.Add(callog);
                     break;
 
                 case "÷":
                     txtResult.Text = (Result_Value / double.Parse(txtResult.Text)).ToString();
+                    callog += " = " + txtResult.Text.ToString();
+                    Cal_log.Items.Add(callog);
                     break;
 
                 default:
@@ -290,52 +296,21 @@ namespace Progretter
             }
             Result_Value = double.Parse(txtResult.Text);
             Label_log.Content = " ";
-            callog += " = " + Result_Value.ToString();
-            Cal_log.Items.Add(callog);
-            callog = Result_Value.ToString();
             Operator_Performed = " ";
             Label_log.Content = " ";
             PerformedOp = false;
             callog = null;
-            plusminus = null;
         }
 
-        private void Cal_plusminus(object sender, RoutedEventArgs e) // 곱하기 나누기 뒤에 음수오는 경우 추가
+        private void Cal_plusminus(object sender, RoutedEventArgs e)
         {
-            switch (plusminus)
-            {
-                case null:
-                    if (txtResult.Text != "0")
-                    {
-                        plusminus = "minus";
-                        Result_Value = double.Parse(txtResult.Text);
-                        txtResult.Text = Result_Value.ToString().Insert(0, "-");
-                    }
-                    break;
-
-                case "plus":
-                    if (txtResult.Text != "0")
-                    {
-                        plusminus = "minus";
-                        Result_Value = double.Parse(txtResult.Text);
-                        txtResult.Text = Result_Value.ToString().Insert(0, "-");
-                    }
-                    break;
-
-                case "minus":
-                    if (txtResult.Text != "0")
-                    {
-                        plusminus = "plus";
-                        Result_Value = double.Parse(txtResult.Text);
-                        txtResult.Text = Result_Value.ToString().Remove(0, 1);
-                    }
-                    break;
-            }
+            double v = double.Parse(txtResult.Text);
+            txtResult.Text = (-v).ToString();
         }
 
         private void Calculator_KeyDown(object sender, KeyEventArgs e)
         {
-            switch(e.Key)
+            switch (e.Key)
             {
                 case Key.D0:
                 case Key.NumPad0:
@@ -425,7 +400,11 @@ namespace Progretter
 
         private void Cal_back(object sender, RoutedEventArgs e)
         {
-            txtResult.Text = Result_Value.ToString().Remove(Convert.ToInt32(Result_Value.ToString().Length) - 1); // 로그에도 적용
+            txtResult.Text = txtResult.Text.Remove(txtResult.Text.Length - 1);
+            if (txtResult.Text.Length == 0)
+            {
+                txtResult.Text = "0";
+            }
         }
 
         private void txtResult_TextChanged(object sender, TextChangedEventArgs e)
@@ -440,14 +419,21 @@ namespace Progretter
                 PerformedOp = false;
                 Cal_log.Items.Add(callog);
                 callog = null;
-                plusminus = null;
             }
         }
         private void Cal_log_remove_Click(object sender, RoutedEventArgs e)
         {
             Cal_log.Items.Clear();
         }
-#endregion
+
+        private void Cal_log_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            string loadlog = Cal_log.Items.GetItemAt(Cal_log.SelectedIndex).ToString();
+            string loadresult = loadlog.Substring(loadlog.IndexOf("=") + 2);
+            txtResult.Text = loadresult;
+        }
+        #endregion
+
         #region 테트리스
         private void Tetris_btn_Click(object sender, RoutedEventArgs e)
         {
