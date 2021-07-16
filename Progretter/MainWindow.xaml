@@ -12,7 +12,7 @@
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
         <TabControl x:Name="tabcontrol" Margin="10" TabStripPlacement="Left">
-            <TabItem Width="120" Margin="0" Height="102">
+            <TabItem Width="120" Height="102">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical">
                         <Image Source="/Resources/option.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="60"/>
@@ -23,7 +23,7 @@
                     <Button x:Name="Tetris_btn" Content="테트리스" HorizontalAlignment="Left" Margin="10,489,0,0" VerticalAlignment="Top" Width="75" Click="Tetris_btn_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Width="120" Margin="0" Height="102">
+            <TabItem Width="120" Height="102">
                 <TabItem.Header>
                     <StackPanel>
                         <Image Source="/Resources/schedule.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60"/>
@@ -31,18 +31,21 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid Margin="10">
+                    <DataGrid AutoGenerateColumns="False"  Name="dataGrid1" ColumnWidth="*" FontSize="16" CanUserResizeColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="First Name"/>
-                            <DataGridTextColumn Header="Last Name"/>
-                            <DataGridHyperlinkColumn Header="Email"/>
-                            <DataGridCheckBoxColumn Header="Member"/>
-                            <DataGridComboBoxColumn Header="Order Status"/>
+                            <DataGridTextColumn/>
+                            <DataGridTextColumn Header="월요일" Binding="{Binding Path=Monday}"/>
+                            <DataGridTextColumn Header="화요일" Binding="{Binding Path=Tuesday}"/>
+                            <DataGridTextColumn Header="수요일" Binding="{Binding Path=Wednesday}"/>
+                            <DataGridTextColumn Header="목요일" Binding="{Binding Path=Thursday}"/>
+                            <DataGridTextColumn Header="금요일" Binding="{Binding Path=Friday}"/>
+                            <DataGridTextColumn Header="토요일" Binding="{Binding Path=Saturday}"/>
+                            <DataGridTextColumn Header="일요일" Binding="{Binding Path=Sunday}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Margin="0,-1,1,1" Width="120" Height="102">
+            <TabItem Width="120" Height="102">
                 <TabItem.Header>
                     <StackPanel>
                         <Image Source="/Resources/memo.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60"/>
@@ -86,7 +89,7 @@
                 </DockPanel>
 
             </TabItem>
-            <TabItem x:Name="Calculator" Width="120" Margin="0" Height="102" KeyDown="Calculator_KeyDown">
+            <TabItem x:Name="Calculator" Width="120" Height="102" KeyDown="Calculator_KeyDown">
                 <TabItem.Header>
                     <StackPanel>
                         <Image Source="/Resources/calculator.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60"/>
@@ -152,7 +155,7 @@
                     <Label x:Name="Label_log" Content=""/>
                 </Grid>
             </TabItem>
-            <TabItem Width="120" Margin="0" Height="102">
+            <TabItem Width="120" Height="102">
                 <TabItem.Header>
                     <StackPanel>
                         <Image Source="/Resources/paintbrush.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60"/>

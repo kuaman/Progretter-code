@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Data;
 
 namespace Progretter
 {
@@ -23,19 +24,33 @@ namespace Progretter
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Timer_Tick;
             timer.Start();
-            // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
-            new ToastContentBuilder()
-                .AddArgument("action", "viewConversation")
-                .AddArgument("conversationId", 9813)
-                .AddText("Andrew sent you a picture")
-                .AddText("Check this out, The Enchantments in Washington!")
-                .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
         }
 
         // 현재 시간 표시
         private void Timer_Tick(object sender, EventArgs e)
         {
             Timenow.Content = DateTime.Now.ToString();
+
+            if (DateTime.Now.Second == 0)
+            {
+/*                switch(DateTime.Now.Hour) //현재 속한 교시 + 그에 맞는 알림
+                {
+                    case period && rest5min:
+                        break;
+                }*/
+                Notification("시간 변경 알림", "지금은 수학시간 5분 전 입니다.");
+            }
+        }
+
+        private void Notification(string NotiTitle, string NotiContents)
+        {
+            // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
+            new ToastContentBuilder()
+                .AddArgument("action", "viewConversation")
+                .AddArgument("conversationId", 9813)
+                .AddText($"{NotiTitle}")
+                .AddText($"{NotiContents}")
+                .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -58,6 +73,24 @@ namespace Progretter
             List<string> listSize = new List<string>() { "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "32", "48", "54", "72", "88", "96", "128", "144", "240", "288", "324", "480", "500" };
             text_size_combo.ItemsSource = listSize;
             text_size_combo.SelectedIndex = 4;
+
+
+            // DataTable 생성
+            DataTable dataTable = new DataTable();
+
+            // 컬럼 생성
+            dataTable.Columns.Add("Monday", typeof(string));
+            dataTable.Columns.Add("Tuesday", typeof(string));
+            dataTable.Columns.Add("Wednesday", typeof(string));
+
+            // 데이터 생성
+            dataTable.Rows.Add(new string[] { "ID-01", "Name 01", "010-0001-0000" });
+            dataTable.Rows.Add(new string[] { "ID-02", "Name 02", "010-0002-0000" });
+            dataTable.Rows.Add(new string[] { "ID-03", "Name 03", "010-0003-0000" });
+            dataTable.Rows.Add(new string[] { "ID-04", "Name 04", "010-0004-0000" });
+
+            // DataTable의 Default View를 바인딩하기
+            dataGrid1.ItemsSource = dataTable.DefaultView;
         }
         #endregion
 
