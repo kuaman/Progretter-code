@@ -55,6 +55,11 @@ namespace Progretter
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            if (Config.Get("ScheduleIsCheckBox") == "true")
+            {
+
+            }
+
             System.Windows.Markup.XmlLanguage cond = System.Windows.Markup.XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentUICulture.Name);
             List<string> listFont = new List<string>();
             foreach (FontFamily font in Fonts.SystemFontFamilies)
@@ -79,19 +84,49 @@ namespace Progretter
             DataTable dataTable = new DataTable();
 
             // 컬럼 생성
+
+            dataTable.Columns.Add("Period", typeof(string));
             dataTable.Columns.Add("Monday", typeof(string));
             dataTable.Columns.Add("Tuesday", typeof(string));
             dataTable.Columns.Add("Wednesday", typeof(string));
+            dataTable.Columns.Add("Thursday", typeof(string));
+            dataTable.Columns.Add("Friday", typeof(string));
+
+            //토요일 일요일
+/*            dataTable.Columns.Add("Saturday", typeof(string));
+            dataTable.Columns.Add("Sunday", typeof(string));*/
+//xmal
+/*          < DataGridTextColumn Header = "토요일" Binding = "{Binding Path=Saturday}" />
+            < DataGridTextColumn Header = "일요일" Binding = "{Binding Path=Sunday}" />*/
 
             // 데이터 생성
-            dataTable.Rows.Add(new string[] { "ID-01", "Name 01", "010-0001-0000" });
-            dataTable.Rows.Add(new string[] { "ID-02", "Name 02", "010-0002-0000" });
-            dataTable.Rows.Add(new string[] { "ID-03", "Name 03", "010-0003-0000" });
-            dataTable.Rows.Add(new string[] { "ID-04", "Name 04", "010-0004-0000" });
+            // dataTable.Rows.Add(new string[] { "1교시", "월요일", "화요일", "수요일", "목요일", "금요일"/*, "토요일", "일요일"*/ });
+            dataTable.Rows.Add(new string[] { "1교시", "수학", "도덕" });
+            dataTable.Rows.Add(new string[] { "2교시", "영어", "역사" });
+            dataTable.Rows.Add(new string[] { "3교시", "국어", "수학" });
+            dataTable.Rows.Add(new string[] { "4교시", "사회", "영어" });
+            dataTable.Rows.Add(new string[] { "5교시", "과학", "국어" });
+            dataTable.Rows.Add(new string[] { "6교시", "역사", "체육" });
+            dataTable.Rows.Add(new string[] { "7교시", "기술", "미술" });
 
             // DataTable의 Default View를 바인딩하기
-            dataGrid1.ItemsSource = dataTable.DefaultView;
+            Schedule.ItemsSource = dataTable.DefaultView;
         }
+        #endregion
+
+        #region 설정
+        private void chk_ScheduleCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("ScheduleIsCheckBox", "true");
+        }
+
+        private void chk_ScheduleCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("ScheduleIsCheckBox", "false");
+        }
+        #endregion
+
+        #region 시간표
         #endregion
 
         #region 메모장

@@ -11,7 +11,7 @@
             <RowDefinition/>
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
-        <TabControl x:Name="tabcontrol" Margin="10" TabStripPlacement="Left">
+        <TabControl x:Name="tabcontrol" Margin="10" TabStripPlacement="Left" SelectedIndex="1">
             <TabItem Width="120" Height="102">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical">
@@ -20,7 +20,25 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
-                    <Button x:Name="Tetris_btn" Content="테트리스" HorizontalAlignment="Left" Margin="10,489,0,0" VerticalAlignment="Top" Width="75" Click="Tetris_btn_Click"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button x:Name="Tetris_btn" Content="테트리스" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Tetris_btn_Click" Grid.Row="3"/>
+                    <GroupBox Header="시간표 설정" BorderBrush="Black">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <CheckBox x:Name="chk_ScheduleCheckBox" Content="일정 옆 체크박스 표시" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Checked="chk_ScheduleCheckBox_Checked" Unchecked="chk_ScheduleCheckBox_Unchecked"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="그림판 설정" Grid.Row="1" BorderBrush="Black"/>
+                    <GroupBox Header="일반 설정" Grid.Row="2" BorderBrush="Black"/>
                 </Grid>
             </TabItem>
             <TabItem Width="120" Height="102">
@@ -31,17 +49,51 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid AutoGenerateColumns="False"  Name="dataGrid1" ColumnWidth="*" FontSize="16" CanUserResizeColumns="False">
+                    <DataGrid AutoGenerateColumns="False" Name="Schedule" ColumnWidth="*" FontSize="16" CanUserResizeColumns="False" SelectionMode="Extended" AlternationCount="2" AlternatingRowBackground="Gray" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn/>
+                            <DataGridTextColumn Header="교시-임시" Binding="{Binding Path=Period}"/>
                             <DataGridTextColumn Header="월요일" Binding="{Binding Path=Monday}"/>
                             <DataGridTextColumn Header="화요일" Binding="{Binding Path=Tuesday}"/>
                             <DataGridTextColumn Header="수요일" Binding="{Binding Path=Wednesday}"/>
                             <DataGridTextColumn Header="목요일" Binding="{Binding Path=Thursday}"/>
                             <DataGridTextColumn Header="금요일" Binding="{Binding Path=Friday}"/>
-                            <DataGridTextColumn Header="토요일" Binding="{Binding Path=Saturday}"/>
-                            <DataGridTextColumn Header="일요일" Binding="{Binding Path=Sunday}"/>
                         </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+                        </DataGrid.Resources>
+                        <DataGrid.LayoutTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="90"/>
+                                <MatrixTransform Matrix="-1,0,0,1,0,0"/>
+                            </TransformGroup>
+                        </DataGrid.LayoutTransform>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}"
+                BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                <Setter Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <RotateTransform Angle="-90"/>
+                                            <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.CellStyle>
+                            <Style  TargetType="DataGridCell">
+                                <Setter Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <RotateTransform Angle="-90"/>
+                                            <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.CellStyle>
                     </DataGrid>
                 </Grid>
             </TabItem>
