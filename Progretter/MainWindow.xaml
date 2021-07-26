@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Progretter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" MinWidth="1000" MinHeight="600" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded">
+        Title="MainWindow" Height="600" Width="1000" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" MinWidth="1000" MinHeight="600" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -117,7 +117,8 @@
                                 <ColumnDefinition Width="32*"/>
                                 <ColumnDefinition Width="32*"/>
                                 <ColumnDefinition Width="32*"/>
-                                <ColumnDefinition Width="400*"/>
+                                <ColumnDefinition Width="368*"/>
+                                <ColumnDefinition Width="32*"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox x:Name="text_family_combo" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged"/>
                             <TextBox x:Name="text_size" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" KeyDown="text_size_KeyDown"/>
@@ -135,9 +136,12 @@
                                     <TextBlock Text="S" TextDecorations="Strikethrough"/>
                                 </StackPanel>
                             </ToggleButton>
+                            <Button x:Name="text_delete_Btn" Grid.Column="10" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click">
+                                <Image Source="/Resources/deletetext.png"/>
+                            </Button>
                         </Grid>
                     </Border>
-                    <TextBox x:Name="Text" DockPanel.Dock="Bottom" Text="안녕하세요" UndoLimit="200" TextWrapping="Wrap" />
+                    <TextBox x:Name="Text" DockPanel.Dock="Bottom" Text="" UndoLimit="200" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True"/>
                 </DockPanel>
 
             </TabItem>
@@ -223,6 +227,8 @@
             <StatusBarItem x:Name="Timenow"/>
             <Separator/>
             <StatusBarItem x:Name="S_Time" Content="1교시"/>
+            <Separator/>
+            <StatusBarItem x:Name="text"/>
         </StatusBar>
     </Grid>
 </Window>

@@ -11,30 +11,27 @@
     <None Remove="memo.png" />
     <None Remove="option.png" />
     <None Remove="paintbrush.png" />
+    <None Remove="Resources\deletetext.png" />
     <None Remove="Resources\schedule.png" />
     <None Remove="schedule.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\calculator.png">
+    <Resource Include="Resources\calculator.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Resources\deletetext.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\memo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\option.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\paintbrush.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\schedule.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Resources\memo.png" />
+    <Resource Include="Resources\option.png" />
+    <Resource Include="Resources\paintbrush.png" />
+    <Resource Include="Resources\schedule.png" />
   </ItemGroup>
 
   <ItemGroup>

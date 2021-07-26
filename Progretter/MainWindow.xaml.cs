@@ -33,12 +33,12 @@ namespace Progretter
 
             if (DateTime.Now.Second == 0)
             {
-/*                switch(DateTime.Now.Hour) //현재 속한 교시 + 그에 맞는 알림
+                /*switch (DateTime.Now.Hour) //현재 속한 교시 + 그에 맞는 알림
                 {
                     case period && rest5min:
                         break;
-                }*/
-                Notification("시간 변경 알림", "지금은 수학시간 5분 전 입니다.");
+                }
+                Notification("시간 변경 알림", "지금은 수학시간 5분 전 입니다.");*/
             }
         }
 
@@ -52,9 +52,18 @@ namespace Progretter
                 .AddText($"{NotiContents}")
                 .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
         }
+        #endregion
+
+        #region Window_Loaded
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            foreach (var item in Config.Get("CalculatorLog").ToString().Split(new char[] { ',' }))
+            {
+                if (!string.IsNullOrEmpty(item))
+                    Cal_log.Items.Add(item);
+            }
+
             if (Config.Get("ScheduleIsCheckBox") == "true")
             {
 
@@ -111,6 +120,17 @@ namespace Progretter
 
             // DataTable의 Default View를 바인딩하기
             Schedule.ItemsSource = dataTable.DefaultView;
+        }
+        #endregion
+
+        #region Window_Closed
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Config.Set("CalculatorLog", string.Empty);
+            foreach (var item in Cal_log.Items)
+            {
+                Config.Add("CalculatorLog", (string)item);
+            }
         }
         #endregion
 
@@ -233,6 +253,18 @@ namespace Progretter
                 }
             }
         }
+        private void text_delete_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("텍스트를 모두 삭제하시겠습니까? 복구할 수 없습니다!", "텍스트 모두 삭제", MessageBoxButton.YesNo);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    Text.Text = null;
+                    break;
+                case MessageBoxResult.No:
+                    break;
+            }
+        }
         #endregion
 
         #region 계산기
@@ -267,26 +299,7 @@ namespace Progretter
             // +, -, *, / operators
             callog += txtResult.Text + " ";
             Button button = (Button)sender;
-            if (!PerformedOp && Convert.ToBoolean(txtResult.Text.Contains(".")))
-            {
-                if (Result_Value != 0)
-                {
-                    Cal_equal_btn.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
-                    Operator_Performed = button.Content.ToString();
-                    Label_log.Content = Result_Value + " " + Operator_Performed;
-                    PerformedOp = true;
-                    callog += button.Content.ToString();
-                }
-                else
-                {
-                    Operator_Performed = button.Content.ToString();
-                    Result_Value = double.Parse(txtResult.Text);
-                    Label_log.Content = Result_Value + " " + Operator_Performed;
-                    PerformedOp = true;
-                    callog += button.Content.ToString();
-                }
-            }
-            else if (!PerformedOp && !Convert.ToBoolean(txtResult.Text.Contains(".")))
+            if (!PerformedOp)
             {
                 if (Result_Value != 0)
                 {
@@ -367,7 +380,7 @@ namespace Progretter
             Operator_Performed = " ";
             Label_log.Content = " ";
             PerformedOp = false;
-            callog = null;
+            callog = txtResult.Text;
         }
 
         private void Cal_plusminus(object sender, RoutedEventArgs e)

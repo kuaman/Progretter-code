@@ -165,7 +165,7 @@ namespace Progretter
             nextTxt.Visibility = levelTxt.Visibility = GameOverTxt.Visibility = Visibility.Collapsed;
             // Add the 2 wav sound in list
             soundList.Add(new System.Media.SoundPlayer("./Resources/collided.wav"));
-            soundList.Add(new System.Media.SoundPlayer("./Resources/collided.wav"));
+            soundList.Add(new System.Media.SoundPlayer("./Resources/deleteline.wav"));
         }
 
         // Key event method for moving shape down,rigth,left and rotation
