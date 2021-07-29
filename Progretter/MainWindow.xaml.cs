@@ -268,10 +268,10 @@ namespace Progretter
         #endregion
 
         #region 계산기
-        double Result_Value;
+        decimal Result_Value;
         string Operator_Performed = " ";
+        bool reset20 = false;
         bool PerformedOp;
-        string callog;
 
         private void Cal_num(object sender, RoutedEventArgs e)
         {
@@ -294,10 +294,11 @@ namespace Progretter
                 txtResult.Text += button.Content;
             }
         }
+        private string num1;
         private void Cal_op(object sender, RoutedEventArgs e)
         {
             // +, -, *, / operators
-            callog += txtResult.Text + " ";
+            num1 = txtResult.Text;
             Button button = (Button)sender;
             if (!PerformedOp)
             {
@@ -307,20 +308,14 @@ namespace Progretter
                     Operator_Performed = button.Content.ToString();
                     Label_log.Content = Result_Value + " " + Operator_Performed;
                     PerformedOp = true;
-                    callog += button.Content.ToString();
                 }
                 else
                 {
                     Operator_Performed = button.Content.ToString();
-                    Result_Value = double.Parse(txtResult.Text);
+                    Result_Value = decimal.Parse(txtResult.Text);
                     Label_log.Content = Result_Value + " " + Operator_Performed;
                     PerformedOp = true;
-                    callog += button.Content.ToString();
                 }
-            }
-            else
-            {
-                callog += "0";
             }
         }
 
@@ -338,49 +333,53 @@ namespace Progretter
             Operator_Performed = " ";
             Label_log.Content = " ";
             PerformedOp = false;
-            callog = null;
         }
-
+        private string num2;
         private void Cal_equal(object sender, RoutedEventArgs e)
         {
             // EQUALS BUTTON
-            callog += " " + txtResult.Text;
+            num2 = txtResult.Text;
             switch (Operator_Performed)
             {
                 case "+":
-                    txtResult.Text = (Result_Value + double.Parse(txtResult.Text)).ToString();
-                    callog += " = " + txtResult.Text.ToString();
-                    Cal_log.Items.Add(callog);
+                    txtResult.Text = (Result_Value + decimal.Parse(txtResult.Text)).ToString();
+                    if (!reset20)
+                        Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
                     break;
 
                 case "-":
-                    txtResult.Text = (Result_Value - double.Parse(txtResult.Text)).ToString();
-                    callog += " = " + txtResult.Text.ToString();
-                    Cal_log.Items.Add(callog);
+                    txtResult.Text = (Result_Value - decimal.Parse(txtResult.Text)).ToString();
+                    if (!reset20)
+                        Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
                     break;
 
                 case "×":
-                    txtResult.Text = (Result_Value * double.Parse(txtResult.Text)).ToString();
-                    callog += " = " + txtResult.Text.ToString();
-                    Cal_log.Items.Add(callog);
+                    txtResult.Text = (Result_Value * decimal.Parse(txtResult.Text)).ToString();
+                    if (!reset20)
+                        Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
                     break;
 
                 case "÷":
-                    txtResult.Text = (Result_Value / double.Parse(txtResult.Text)).ToString();
-                    callog += " = " + txtResult.Text.ToString();
-                    Cal_log.Items.Add(callog);
+                    try
+                    {
+                        txtResult.Text = (Result_Value / decimal.Parse(txtResult.Text)).ToString();
+                        if (!reset20)
+                            Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
+                    }
+                    catch (Exception m)
+                    {
+                        MessageBox.Show("0으로 나눴습니다." + m.Message);
+                    }
                     break;
 
                 default:
                     break;
 
             }
-            Result_Value = double.Parse(txtResult.Text);
-            Label_log.Content = " ";
-            Operator_Performed = " ";
+            Result_Value = decimal.Parse(txtResult.Text);
             Label_log.Content = " ";
             PerformedOp = false;
-            callog = txtResult.Text;
+            Operator_Performed = " ";
         }
 
         private void Cal_plusminus(object sender, RoutedEventArgs e)
@@ -493,14 +492,17 @@ namespace Progretter
             if (txtResult.Text.Length > 20)
             {
                 MessageBox.Show("[ERROR] 계산값이 20자리를 초과하였습니다.");
-                txtResult.Text = "0";
+                reset20 = true;
                 Result_Value = 0;
+                txtResult.Text = "0";
                 Operator_Performed = " ";
                 Label_log.Content = " ";
                 PerformedOp = false;
-                Cal_log.Items.Add(callog);
-                callog = null;
             }
+        }
+        private void Cal_log_Add(string num1, string op, string num2, string result)
+        {
+            Cal_log.Items.Add(num1 + " " + op + " " + num2 + " " + "=" + " " + result);
         }
         private void Cal_log_remove_Click(object sender, RoutedEventArgs e)
         {
@@ -509,9 +511,12 @@ namespace Progretter
 
         private void Cal_log_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            string loadlog = Cal_log.Items.GetItemAt(Cal_log.SelectedIndex).ToString();
-            string loadresult = loadlog.Substring(loadlog.IndexOf("=") + 2);
-            txtResult.Text = loadresult;
+            if (Cal_log.SelectedIndex != -1)
+            {
+                string loadlog = Cal_log.Items.GetItemAt(Cal_log.SelectedIndex).ToString();
+                string loadresult = loadlog.Substring(loadlog.IndexOf("=") + 2);
+                txtResult.Text = loadresult;
+            }
         }
         #endregion
 
