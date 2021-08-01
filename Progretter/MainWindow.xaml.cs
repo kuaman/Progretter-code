@@ -1,10 +1,13 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.IO;
+using Microsoft.Win32;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 using System.Data;
 
@@ -42,14 +45,14 @@ namespace Progretter
             }
         }
 
-        private void Notification(string NotiTitle, string NotiContents)
+        private void Notification(string Title, string Contents)
         {
             // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
             new ToastContentBuilder()
                 .AddArgument("action", "viewConversation")
                 .AddArgument("conversationId", 9813)
-                .AddText($"{NotiTitle}")
-                .AddText($"{NotiContents}")
+                .AddText($"{Title}")
+                .AddText($"{Contents}")
                 .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
         }
         #endregion
@@ -102,11 +105,11 @@ namespace Progretter
             dataTable.Columns.Add("Friday", typeof(string));
 
             //토요일 일요일
-/*            dataTable.Columns.Add("Saturday", typeof(string));
-            dataTable.Columns.Add("Sunday", typeof(string));*/
-//xmal
-/*          < DataGridTextColumn Header = "토요일" Binding = "{Binding Path=Saturday}" />
-            < DataGridTextColumn Header = "일요일" Binding = "{Binding Path=Sunday}" />*/
+            /*            dataTable.Columns.Add("Saturday", typeof(string));
+                        dataTable.Columns.Add("Sunday", typeof(string));*/
+            //xmal
+            /*          < DataGridTextColumn Header = "토요일" Binding = "{Binding Path=Saturday}" />
+                        < DataGridTextColumn Header = "일요일" Binding = "{Binding Path=Sunday}" />*/
 
             // 데이터 생성
             // dataTable.Rows.Add(new string[] { "1교시", "월요일", "화요일", "수요일", "목요일", "금요일"/*, "토요일", "일요일"*/ });
@@ -338,48 +341,55 @@ namespace Progretter
         private void Cal_equal(object sender, RoutedEventArgs e)
         {
             // EQUALS BUTTON
-            num2 = txtResult.Text;
-            switch (Operator_Performed)
+            if (!PerformedOp)
             {
-                case "+":
-                    txtResult.Text = (Result_Value + decimal.Parse(txtResult.Text)).ToString();
-                    if (!reset20)
-                        Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
-                    break;
-
-                case "-":
-                    txtResult.Text = (Result_Value - decimal.Parse(txtResult.Text)).ToString();
-                    if (!reset20)
-                        Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
-                    break;
-
-                case "×":
-                    txtResult.Text = (Result_Value * decimal.Parse(txtResult.Text)).ToString();
-                    if (!reset20)
-                        Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
-                    break;
-
-                case "÷":
-                    try
-                    {
-                        txtResult.Text = (Result_Value / decimal.Parse(txtResult.Text)).ToString();
+                num2 = txtResult.Text;
+                switch (Operator_Performed)
+                {
+                    case "+":
+                        txtResult.Text = (Result_Value + decimal.Parse(txtResult.Text)).ToString();
                         if (!reset20)
                             Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
-                    }
-                    catch (Exception m)
-                    {
-                        MessageBox.Show("0으로 나눴습니다." + m.Message);
-                    }
-                    break;
+                        break;
 
-                default:
-                    break;
+                    case "-":
+                        txtResult.Text = (Result_Value - decimal.Parse(txtResult.Text)).ToString();
+                        if (!reset20)
+                            Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
+                        break;
 
+                    case "×":
+                        txtResult.Text = (Result_Value * decimal.Parse(txtResult.Text)).ToString();
+                        if (!reset20)
+                            Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
+                        break;
+
+                    case "÷":
+                        try
+                        {
+                            txtResult.Text = (Result_Value / decimal.Parse(txtResult.Text)).ToString();
+                            if (!reset20)
+                                Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
+                        }
+                        catch (Exception m)
+                        {
+                            MessageBox.Show("0으로 나눴습니다." + m.Message);
+                        }
+                        break;
+
+                    default:
+                        break;
+
+                }
+                Result_Value = decimal.Parse(txtResult.Text);
+                Label_log.Content = " ";
+                PerformedOp = false;
+                Operator_Performed = " ";
             }
-            Result_Value = decimal.Parse(txtResult.Text);
-            Label_log.Content = " ";
-            PerformedOp = false;
-            Operator_Performed = " ";
+            else
+            {
+                MessageBox.Show("연산자 뒤에 = 이 올 수 없습니다.");
+            }
         }
 
         private void Cal_plusminus(object sender, RoutedEventArgs e)
@@ -517,6 +527,50 @@ namespace Progretter
                 string loadresult = loadlog.Substring(loadlog.IndexOf("=") + 2);
                 txtResult.Text = loadresult;
             }
+        }
+        #endregion
+
+        #region 그림판
+        private void Canvas_load_btn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            if (openDialog.ShowDialog() == true)
+            {
+                if (File.Exists(openDialog.FileName))
+                {
+                    BitmapImage bitmapImage = new BitmapImage(new Uri(openDialog.FileName, UriKind.RelativeOrAbsolute));
+                    // InkCanvas의 배경으로 지정
+                    inkCanvas.Background = new ImageBrush(bitmapImage);
+                }
+            }
+        }
+        private void Canvas_save_btn_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Jpg Files(*.jpg)|*.jpg";
+
+            Nullable<bool> result = sfd.ShowDialog();
+            string fileName = "";
+
+            if (result == true)
+            {
+                fileName = sfd.FileName;
+                Size size = inkCanvas.RenderSize;
+                RenderTargetBitmap rtb = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
+                inkCanvas.Measure(size);
+                inkCanvas.Arrange(new Rect(size)); // This is important
+                rtb.Render(inkCanvas);
+                JpegBitmapEncoder jpg = new JpegBitmapEncoder();
+                jpg.Frames.Add(BitmapFrame.Create(rtb));
+                using (Stream stm = File.Create(fileName))
+                {
+                    jpg.Save(stm);
+                }
+            }
+        }
+        private void Canvas_clear_btn_Click(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.Strokes.Clear();
         }
         #endregion
 

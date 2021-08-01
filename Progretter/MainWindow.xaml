@@ -14,7 +14,7 @@
         <TabControl x:Name="tabcontrol" Margin="10" TabStripPlacement="Left" SelectedIndex="1">
             <TabItem Width="120" Height="102">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical">
+                    <StackPanel>
                         <Image Source="/Resources/option.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="60"/>
                         <TextBlock Text="메뉴" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     </StackPanel>
@@ -105,42 +105,31 @@
                     </StackPanel>
                 </TabItem.Header>
                 <DockPanel>
-                    <Border DockPanel.Dock="Top" Height="24" BorderBrush="Black" BorderThickness="1">
-                        <Grid x:Name="TextTool" Background="#FFF0F0F0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="120*"/>
-                                <ColumnDefinition Width="10*"/>
-                                <ColumnDefinition Width="60*"/>
-                                <ColumnDefinition Width="80*"/>
-                                <ColumnDefinition Width="10*"/>
-                                <ColumnDefinition Width="32*"/>
-                                <ColumnDefinition Width="32*"/>
-                                <ColumnDefinition Width="32*"/>
-                                <ColumnDefinition Width="32*"/>
-                                <ColumnDefinition Width="368*"/>
-                                <ColumnDefinition Width="32*"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox x:Name="text_family_combo" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged"/>
-                            <TextBox x:Name="text_size" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" KeyDown="text_size_KeyDown"/>
-                            <ComboBox x:Name="text_size_combo" Grid.Column="3" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged">
-                            </ComboBox>
-                            <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1"  Grid.Column="5"/>
-                            <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" Grid.Column="6" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1"/>
-                            <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" Grid.Column="7" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14">
-                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <TextBlock Text="U" TextDecorations="Underline"/>
-                                </StackPanel>
-                            </ToggleButton>
-                            <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" Grid.Column="8" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14">
-                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <TextBlock Text="S" TextDecorations="Strikethrough"/>
-                                </StackPanel>
-                            </ToggleButton>
-                            <Button x:Name="text_delete_Btn" Grid.Column="10" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click">
-                                <Image Source="/Resources/deletetext.png"/>
-                            </Button>
-                        </Grid>
-                    </Border>
+                    <Grid x:Name="TextTool" DockPanel.Dock="Top" Background="#FFF0F0F0" Height="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="472"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="text_family_combo" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged" Width="130" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+                        <TextBox x:Name="text_size" TextWrapping="Wrap" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" KeyDown="text_size_KeyDown" Width="80" Margin="153,0,0,0" HorizontalAlignment="Left" FontSize="14"/>
+                        <ComboBox x:Name="text_size_combo" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged" Width="80" HorizontalAlignment="Left" Margin="239,0,0,0"/>
+                        <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="289,0,105,0" HorizontalAlignment="Right"/>
+                        <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="324,0,70,0" HorizontalAlignment="Right"/>
+                        <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="359,0,35,0" HorizontalAlignment="Right">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="U" TextDecorations="Underline"/>
+                            </StackPanel>
+                        </ToggleButton>
+                        <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="420,0,0,0" HorizontalAlignment="Right">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="S" TextDecorations="Strikethrough"/>
+                            </StackPanel>
+                        </ToggleButton>
+                        <Button x:Name="text_delete_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click" Width="30" Grid.Column="2">
+                            <Image Source="/Resources/deletetext.png"/>
+                        </Button>
+                    </Grid>
                     <TextBox x:Name="Text" DockPanel.Dock="Bottom" Text="" UndoLimit="200" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True"/>
                 </DockPanel>
 
@@ -218,9 +207,14 @@
                         <TextBlock Text="그림판" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid Background="#FFE5E5E5">
-                    <Canvas HorizontalAlignment="Left" Height="367" Margin="10,10,0,0" VerticalAlignment="Top" Width="618"/>
-                </Grid>
+                <DockPanel Background="#FFE5E5E5">
+                    <StackPanel DockPanel.Dock="Top" Height="24" Orientation="Horizontal">
+                        <Button x:Name="Canvas_load_btn" Content="불러오기" Click="Canvas_load_btn_Click"/>
+                        <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Content="저장" Click="Canvas_save_btn_Click"/>
+                        <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Content="모두 지우기" Click="Canvas_clear_btn_Click"/>
+                    </StackPanel>
+                    <InkCanvas x:Name="inkCanvas"/>
+                </DockPanel>
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="1">
