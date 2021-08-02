@@ -1,15 +1,15 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
-using System;
-using System.IO;
 using Microsoft.Win32;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using System.Data;
 
 namespace Progretter
 {
@@ -658,17 +658,17 @@ namespace Progretter
         }
 
 
-/*        // 지우기 모드
-        private void btn_Erase(object sender, RoutedEventArgs e)
-        {
-            inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
-        }
+        /*        // 지우기 모드
+                private void btn_Erase(object sender, RoutedEventArgs e)
+                {
+                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
+                }
 
-        // 잉크 모드
-        private void btn_Pen(object sender, RoutedEventArgs e)
-        {
-            inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
-        }*/
+                // 잉크 모드
+                private void btn_Pen(object sender, RoutedEventArgs e)
+                {
+                    inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
+                }*/
 
         // 잉크 색상 변경
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)

@@ -197,7 +197,7 @@
                         <ListBox x:Name="Cal_log" Margin="10" Grid.Row="1" MouseDoubleClick="Cal_log_MouseDoubleClick"/>
                         <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" Click="Cal_log_remove_Click"/>
                     </Grid>
-                    <Label x:Name="Label_log" Content=""/>
+                    <Label x:Name="Label_log" Content="" FontSize="16"/>
                 </Grid>
             </TabItem>
             <TabItem Width="120" Height="102">
@@ -208,10 +208,16 @@
                     </StackPanel>
                 </TabItem.Header>
                 <DockPanel Background="#FFE5E5E5">
-                    <StackPanel DockPanel.Dock="Top" Height="24" Orientation="Horizontal">
-                        <Button x:Name="Canvas_load_btn" Content="불러오기" Click="Canvas_load_btn_Click"/>
-                        <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Content="저장" Click="Canvas_save_btn_Click"/>
-                        <Button x:Name="Canvas_brush_property" Margin="10,0,0,0" Content="붓 속성" Click="Canvas_brush_property_Click"/>
+                    <StackPanel DockPanel.Dock="Top" Height="36" Orientation="Horizontal">
+                        <Button x:Name="Canvas_load_btn" Click="Canvas_load_btn_Click">
+                            <Image Source="/Resources/load.png"/>
+                        </Button>
+                        <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Click="Canvas_save_btn_Click">
+                            <Image Source="/Resources/save.png"/>
+                        </Button>
+                        <Button x:Name="Canvas_brush_property" Margin="10,0,0,0" Click="Canvas_brush_property_Click">
+                            <Image Source="/Resources/brush.png"/>
+                        </Button>
                         <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Click="Canvas_clear_btn_Click">
                             <Image Source="/Resources/deletetext.png"/>
                         </Button>
