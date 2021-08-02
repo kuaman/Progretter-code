@@ -11,6 +11,7 @@
     <None Remove="memo.png" />
     <None Remove="option.png" />
     <None Remove="paintbrush.png" />
+    <None Remove="Resources\colors.png" />
     <None Remove="Resources\deletetext.png" />
     <None Remove="Resources\schedule.png" />
     <None Remove="schedule.png" />
@@ -25,9 +26,8 @@
     <Resource Include="Resources\calculator.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Content Include="Resources\deletetext.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Resources\colors.png" />
+    <Resource Include="Resources\deletetext.png" />
     <Resource Include="Resources\memo.png" />
     <Resource Include="Resources\option.png" />
     <Resource Include="Resources\paintbrush.png" />

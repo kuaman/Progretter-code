@@ -544,33 +544,144 @@ namespace Progretter
                 }
             }
         }
+
+        private byte[] Pixels = new byte[4];
+
+        // 이미지 캡쳐
         private void Canvas_save_btn_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Jpg Files(*.jpg)|*.jpg";
+            RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+            ImageSave(bitmap);
+        }
 
-            Nullable<bool> result = sfd.ShowDialog();
-            string fileName = "";
+        // 해당 객체를 이미지로 변환
+        private static RenderTargetBitmap ConverterBitmapImage(FrameworkElement element)
+        {
+            DrawingVisual drawingVisual = new DrawingVisual();
+            DrawingContext drawingContext = drawingVisual.RenderOpen();
 
-            if (result == true)
+            // 해당 객체의 그래픽요소로 사각형의 그림을 그립니다.
+            drawingContext.DrawRectangle(new VisualBrush(element), null,
+                new Rect(new Point(0, 0), new Point(element.ActualWidth, element.ActualHeight)));
+
+            drawingContext.Close();
+
+            // 비트맵으로 변환합니다.
+            RenderTargetBitmap target =
+                new RenderTargetBitmap((int)element.ActualWidth, (int)element.ActualHeight,
+                96, 96, PixelFormats.Pbgra32);
+
+            target.Render(drawingVisual);
+            return target;
+        }
+
+        // 해당 이미지 저장
+        private static void ImageSave(BitmapSource source)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+
+            // 이미지 포맷들
+            saveDialog.Filter = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp";
+            saveDialog.AddExtension = true;
+
+            if (saveDialog.ShowDialog() == true)
             {
-                fileName = sfd.FileName;
-                Size size = inkCanvas.RenderSize;
-                RenderTargetBitmap rtb = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
-                inkCanvas.Measure(size);
-                inkCanvas.Arrange(new Rect(size)); // This is important
-                rtb.Render(inkCanvas);
-                JpegBitmapEncoder jpg = new JpegBitmapEncoder();
-                jpg.Frames.Add(BitmapFrame.Create(rtb));
-                using (Stream stm = File.Create(fileName))
+                BitmapEncoder encoder = null;
+                // 파일 생성
+                FileStream stream = new FileStream(saveDialog.FileName, FileMode.Create, FileAccess.Write);
+
+                // 파일 포맷
+                string upper = saveDialog.SafeFileName.ToUpper();
+                char[] format = upper.ToCharArray(saveDialog.SafeFileName.Length - 3, 3);
+                upper = new string(format);
+
+                // 해당 포맷에 맞게 인코더 생성
+                switch (upper.ToString())
                 {
-                    jpg.Save(stm);
+                    case "PNG":
+                        encoder = new PngBitmapEncoder();
+                        break;
+
+                    case "JPG":
+                        encoder = new JpegBitmapEncoder();
+                        break;
+
+                    case "GIF":
+                        encoder = new GifBitmapEncoder();
+                        break;
+
+                    case "BMP":
+                        encoder = new BmpBitmapEncoder();
+                        break;
                 }
+
+                // 인코더 프레임에 이미지 추가
+                encoder.Frames.Add(BitmapFrame.Create(source));
+                // 파일에 저장
+                encoder.Save(stream);
+
+                stream.Close();
             }
         }
+
+        // 픽셀 값 얻어오기
+        private Color GetPixelColor(Point CurrentPoint)
+        {
+            BitmapSource CurrentSource = colorsImage.Source as BitmapSource;
+
+            // 비트맵 내의 좌표 값 계산
+            CurrentPoint.X *= CurrentSource.PixelWidth / colorsImage.ActualWidth;
+            CurrentPoint.Y *= CurrentSource.PixelHeight / colorsImage.ActualHeight;
+
+            if (CurrentSource.Format == PixelFormats.Bgra32 || CurrentSource.Format == PixelFormats.Bgr32)
+            {
+                // 32bit stride = (width * bpp + 7) /8
+                int Stride = (CurrentSource.PixelWidth * CurrentSource.Format.BitsPerPixel + 7) / 8;
+                // 한 픽셀 복사
+                CurrentSource.CopyPixels(new Int32Rect((int)CurrentPoint.X, (int)CurrentPoint.Y, 1, 1), Pixels, Stride, 0);
+
+                // 컬러로 변환 후 리턴
+                return Color.FromArgb(Pixels[3], Pixels[2], Pixels[1], Pixels[0]);
+            }
+            else
+            {
+                MessageBox.Show("지원되지 않는 포맷형식");
+            }
+
+            return Color.FromArgb(Pixels[3], Pixels[2], Pixels[1], Pixels[0]);
+        }
+
+
+        private void Canvas_brush_property_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+/*        // 지우기 모드
+        private void btn_Erase(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
+        }
+
+        // 잉크 모드
+        private void btn_Pen(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
+        }*/
+
+        // 잉크 색상 변경
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Point point = e.GetPosition(sender as Image);
+
+            inkCanvas.DefaultDrawingAttributes.Color = GetPixelColor(point);
+        }
+
         private void Canvas_clear_btn_Click(object sender, RoutedEventArgs e)
         {
             inkCanvas.Strokes.Clear();
+            inkCanvas.Background = Brushes.White; //배경도 지우기
         }
         #endregion
 

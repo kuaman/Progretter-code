@@ -211,7 +211,11 @@
                     <StackPanel DockPanel.Dock="Top" Height="24" Orientation="Horizontal">
                         <Button x:Name="Canvas_load_btn" Content="불러오기" Click="Canvas_load_btn_Click"/>
                         <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Content="저장" Click="Canvas_save_btn_Click"/>
-                        <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Content="모두 지우기" Click="Canvas_clear_btn_Click"/>
+                        <Button x:Name="Canvas_brush_property" Margin="10,0,0,0" Content="붓 속성" Click="Canvas_brush_property_Click"/>
+                        <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Click="Canvas_clear_btn_Click">
+                            <Image Source="/Resources/deletetext.png"/>
+                        </Button>
+                        <Image x:Name="colorsImage" Source="/Resources/colors.png" Margin="10,0,0,0" MouseDown="Image_MouseDown"/>
                     </StackPanel>
                     <InkCanvas x:Name="inkCanvas"/>
                 </DockPanel>
