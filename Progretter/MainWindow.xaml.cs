@@ -90,13 +90,6 @@ namespace Progretter
             List<string> listSize = new List<string>() { "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "32", "48", "54", "72", "88", "96", "128", "144", "240", "288", "324", "480", "500" };
             text_size_combo.ItemsSource = listSize;
             text_size_combo.SelectedIndex = 4;
-
-            List<User> users = new List<User>();
-            users.Add(new User() { Priod = 1, Monday = "John Doe", Birthday = new DateTime(1971, 7, 23) });
-            users.Add(new User() { Priod = 2, Name = "Jane Doe", Birthday = new DateTime(1974, 1, 17) });
-            users.Add(new User() { Priod = 3, Name = "Sammy Doe", Birthday = new DateTime(1991, 9, 2) });
-
-            Schedule.ItemsSource = users;
         }
         #endregion
 
@@ -667,24 +660,5 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
-    }
-
-    public class User
-    {
-        public int Priod { get; set; }
-
-        public string Monday { get; set; }
-
-        public string Tuesday { get; set; }
-
-        public string Wednesday { get; set; }
-
-        public string Thursday { get; set; }
-
-        public string Friday { get; set; }
-        
-        public string Saturday { get; set; }
-
-        public string Sunday { get; set; }
     }
 }
