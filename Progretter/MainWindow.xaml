@@ -49,51 +49,12 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid AutoGenerateColumns="False" Name="Schedule" ColumnWidth="*" FontSize="16" CanUserResizeColumns="False" SelectionMode="Extended" AlternationCount="2" AlternatingRowBackground="Gray" CanUserAddRows="False" CanUserDeleteRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="교시-임시" Binding="{Binding Path=Period}"/>
-                            <DataGridTextColumn Header="월요일" Binding="{Binding Path=Monday}"/>
-                            <DataGridTextColumn Header="화요일" Binding="{Binding Path=Tuesday}"/>
-                            <DataGridTextColumn Header="수요일" Binding="{Binding Path=Wednesday}"/>
-                            <DataGridTextColumn Header="목요일" Binding="{Binding Path=Thursday}"/>
-                            <DataGridTextColumn Header="금요일" Binding="{Binding Path=Friday}"/>
-                        </DataGrid.Columns>
+                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" AlternationCount="2" AlternatingRowBackground="Gray">
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
                         </DataGrid.Resources>
-                        <DataGrid.LayoutTransform>
-                            <TransformGroup>
-                                <RotateTransform Angle="90"/>
-                                <MatrixTransform Matrix="-1,0,0,1,0,0"/>
-                            </TransformGroup>
-                        </DataGrid.LayoutTransform>
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}"
-                BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
-                                <Setter Property="LayoutTransform">
-                                    <Setter.Value>
-                                        <TransformGroup>
-                                            <RotateTransform Angle="-90"/>
-                                            <ScaleTransform ScaleX="1" ScaleY="-1" />
-                                        </TransformGroup>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.CellStyle>
-                            <Style  TargetType="DataGridCell">
-                                <Setter Property="LayoutTransform">
-                                    <Setter.Value>
-                                        <TransformGroup>
-                                            <RotateTransform Angle="-90"/>
-                                            <ScaleTransform ScaleX="1" ScaleY="-1" />
-                                        </TransformGroup>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DataGrid.CellStyle>
                     </DataGrid>
                 </Grid>
             </TabItem>
