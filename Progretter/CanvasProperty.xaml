@@ -4,9 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Progretter"
+        xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
-        Title="CanvasProperty" Height="450" Width="800" ResizeMode="NoResize">
+        Title="CanvasProperty" Height="600" Width="320" ResizeMode="NoResize">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="붓 설정">
+        </GroupBox>
+        <GroupBox Header="색 설정" Grid.Row="1">
+            <colorpicker:StandardColorPicker x:Name="standard_picker"
+                                         ColorState="{Binding ElementName=maindisplay, Path=ColorState, Mode=TwoWay, Delay=10}"
+                                         SecondColorState="{Binding ElementName=maindisplay, Path=SecondColorState, Mode=TwoWay}"/>
+        </GroupBox>
     </Grid>
 </Window>

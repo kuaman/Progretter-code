@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows;
+using Excel = Microsoft.Office.Interop.Excel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -117,6 +118,25 @@ namespace Progretter
         #endregion
 
         #region 시간표
+        private void Schedule_import_Click(object sender, RoutedEventArgs e)
+        {
+            ExportToExcelAndCsv();
+        }
+
+        private void ExportToExcelAndCsv()
+        {
+            Schedule.SelectAllCells();
+            Schedule.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, Schedule);
+            String resultat = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
+            String result = (string)Clipboard.GetData(DataFormats.Text);
+            Schedule.UnselectAllCells();
+            System.IO.StreamWriter file1 = new System.IO.StreamWriter(@"D:\test.xls");
+            file1.WriteLine(result.Replace(',', ' '));
+            file1.Close();
+
+            MessageBox.Show(" Exporting DataGrid data to Excel file created.xls");
+        }
         #endregion
 
         #region 메모장

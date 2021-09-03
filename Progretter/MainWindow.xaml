@@ -49,13 +49,26 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" AlternationCount="2" AlternatingRowBackground="Gray">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="346*"/>
+                        <RowDefinition Height="139*"/>
+                        <RowDefinition Height="49*"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" AlternationCount="2" AlternatingRowBackground="Gray" Grid.RowSpan="2">
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
                         </DataGrid.Resources>
                     </DataGrid>
+                    <Grid Grid.Row="1" Margin="0,139,0,0" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="Schedule_import" Content="불러오기" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Schedule_import_Click"/>
+                        <Button Content="수정하기" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Width="120" Height="102">
