@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using NanoXLSX;
 using NanoXLSX.Styles;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Progretter
 {
@@ -121,7 +122,7 @@ namespace Progretter
         #region 시간표
         private void Schedule_import_Click(object sender, RoutedEventArgs e)
         {
-            ExportToExcel();
+            btnOpenExcel_Click();
         }
 
         private void ExportToExcel()
@@ -150,7 +151,104 @@ namespace Progretter
             workbook.CurrentWorksheet.GoToNextRow();
             workbook.CurrentWorksheet.AddNextCell("7교시");
             workbook.Save();                                                                    // Save the workbook
+
         }
+        private void btnOpenExcel_Click(object sender, EventArgs e)
+        {
+            // 엑셀 변수 선언
+            Excel.Application xlApp = null;
+            Excel.Workbook xlWorkbook = null;
+            Excel.Worksheet xlWorksheet = null;
+
+            // 파일 선택
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Excel File (*.xlsx)|*.xlsx|Excel File 97~2003 (*.xls)|*.xls|All Files (*.*)|*.*";
+
+            if (ofd.ShowDialog() == true)
+            {
+                try
+                {
+                    // 데이터그리드뷰 클리어
+                    Schedule.Columns.Clear();
+
+                    // 엑셀데이터를 담을 데이터테이블 선언
+                    DataTable dt = new DataTable();
+
+                    // 엑셀 변수들 초기화   
+                    xlApp = new Excel.Application();
+                    xlWorkbook = xlApp.Workbooks.Open(ofd.FileName);
+                    xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.get_Item(1); // 첫 번째 시트
+
+                    // 시트에서 범위 설정
+                    // UsedRange는 사용된 셀 모두이므로 
+                    // 범위를 따로 지정하려면 
+                    // xlWorksheet.Range[xlWorksheet.Cells[시작 행, 시작 열], xlWorksheet.Cells[끝 행, 끝 열]]
+                    Excel.Range range = xlWorksheet.UsedRange;
+
+                    // 2차원 배열에 담기
+                    object[,] data = range.Value;
+
+                    // 데이터테이블에 엑셀 칼럼만큼 칼럼 추가
+                    for (int i = 1; i <= range.Columns.Count; i++)
+                    {
+                        dt.Columns.Add(i.ToString(), typeof(string));
+                    }
+
+                    // 데이터테이블에 2차원 배열에 담은 엑셀데이터 추가
+                    for (int r = 1; r < range.Rows.Count; r++)
+                    {
+                        DataRow dr = dt.Rows.Add();
+
+                        for (int c = 1; c < range.Columns.Count; c++)
+                        {
+                            dr[c - 1] = data[r, c];
+                        }
+                    }
+
+                    xlWorkbook.Close(true);
+                    xlApp.Quit();
+
+                    // 데이터그리드뷰에 데이터테이블 바인딩
+                    Schedule.ItemsSource = dt;
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                finally
+                {
+
+                    // 사용이 끝난 엑셀파일 Release
+                    ReleaseExcelObject(xlWorksheet);
+                    ReleaseExcelObject(xlWorkbook);
+                    ReleaseExcelObject(xlApp);
+                }
+            }
+        }
+
+
+        private void ReleaseExcelObject(object obj)
+        {
+            try
+            {
+                if (obj != null)
+                {
+                    /*Marshal.ReleaseComObject(obj);*/
+                    obj = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                obj = null;
+                throw ex;
+            }
+            finally
+            {
+                GC.Collect();
+            }
+        }
+
         #endregion
 
         #region 메모장
