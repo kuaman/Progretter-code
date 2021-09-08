@@ -39,6 +39,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="NanoXLSX">
+      <HintPath>NanoXLSX.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\brush.png" />
     <Resource Include="Resources\calculator.png" />
     <Resource Include="Resources\colors.png" />

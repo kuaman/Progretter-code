@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows;
-using Excel = Microsoft.Office.Interop.Excel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using NanoXLSX;
+using NanoXLSX.Styles;
 
 namespace Progretter
 {
@@ -120,22 +121,35 @@ namespace Progretter
         #region 시간표
         private void Schedule_import_Click(object sender, RoutedEventArgs e)
         {
-            ExportToExcelAndCsv();
+            ExportToExcel();
         }
 
-        private void ExportToExcelAndCsv()
+        private void ExportToExcel()
         {
-            Schedule.SelectAllCells();
-            Schedule.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            ApplicationCommands.Copy.Execute(null, Schedule);
-            String resultat = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
-            String result = (string)Clipboard.GetData(DataFormats.Text);
-            Schedule.UnselectAllCells();
-            System.IO.StreamWriter file1 = new System.IO.StreamWriter(@"D:\test.xls");
-            file1.WriteLine(result.Replace(',', ' '));
-            file1.Close();
-
-            MessageBox.Show(" Exporting DataGrid data to Excel file created.xls");
+            Workbook workbook = new Workbook("Default Schedules.xlsx", "Sheet1");         // Create new workbook with a worksheet called Sheet1
+            workbook.CurrentWorksheet.AddNextCell("0-0반 시간표");                   // Add cell A1
+            workbook.CurrentWorksheet.AddNextCell("월요일");                      // Add cell B1
+            workbook.CurrentWorksheet.AddNextCell("화요일");
+            workbook.CurrentWorksheet.AddNextCell("수요일");
+            workbook.CurrentWorksheet.AddNextCell("목요일");
+            workbook.CurrentWorksheet.AddNextCell("금요일");
+            workbook.CurrentWorksheet.GoToNextRow();                         // Go to Row 2
+            workbook.CurrentWorksheet.AddNextCell("1교시");
+            workbook.CurrentWorksheet.GoToNextRow();
+            workbook.CurrentWorksheet.AddNextCell("2교시");
+            workbook.CurrentWorksheet.GoToNextRow();
+            workbook.CurrentWorksheet.AddNextCell("3교시");
+            workbook.CurrentWorksheet.GoToNextRow();
+            workbook.CurrentWorksheet.AddNextCell("4교시");
+            workbook.CurrentWorksheet.GoToNextRow();
+            workbook.CurrentWorksheet.AddNextCell("점심 시간");
+            workbook.CurrentWorksheet.GoToNextRow();
+            workbook.CurrentWorksheet.AddNextCell("5교시");
+            workbook.CurrentWorksheet.GoToNextRow();
+            workbook.CurrentWorksheet.AddNextCell("6교시");
+            workbook.CurrentWorksheet.GoToNextRow();
+            workbook.CurrentWorksheet.AddNextCell("7교시");
+            workbook.Save();                                                                    // Save the workbook
         }
         #endregion
 

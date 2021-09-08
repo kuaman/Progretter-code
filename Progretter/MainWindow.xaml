@@ -50,18 +50,17 @@
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="346*"/>
-                        <RowDefinition Height="139*"/>
-                        <RowDefinition Height="49*"/>
+                        <RowDefinition Height="9*"/>
+                        <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" AlternationCount="2" AlternatingRowBackground="Gray" Grid.RowSpan="2">
+                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" AlternationCount="2" AlternatingRowBackground="Gray" Grid.RowSpan="1">
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
                         </DataGrid.Resources>
                     </DataGrid>
-                    <Grid Grid.Row="1" Margin="0,139,0,0" Grid.RowSpan="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
