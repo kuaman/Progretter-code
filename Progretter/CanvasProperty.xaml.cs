@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Media;
 
 namespace Progretter
 {
@@ -13,6 +12,9 @@ namespace Progretter
             InitializeComponent();
         }
 
+        public delegate void ColorPropertyDataHandler(byte A, byte R, byte G, byte B);
+
+        public event ColorPropertyDataHandler CPEvent;
         private byte Alpha = 255;
         private byte Red = 0;
         private byte Green = 0;
@@ -24,12 +26,8 @@ namespace Progretter
             Red = colorpicker.SelectedColor.R;
             Green = colorpicker.SelectedColor.G;
             Blue = colorpicker.SelectedColor.B;
-            ColorProperty(Alpha, Red, Green, Blue);
-        }
 
-        public static Color ColorProperty(byte A, byte R, byte G, byte B)
-        {
-            return Color.FromArgb(A, R, G, B);
+            CPEvent(Alpha, Red, Green, Blue);
         }
     }
 }

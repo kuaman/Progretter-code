@@ -192,7 +192,7 @@ namespace Progretter
             }
         }
 
-private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog oFileDialog = new OpenFileDialog();
             oFileDialog.Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls";
@@ -201,8 +201,6 @@ private void btnOpenFile_Click(object sender, RoutedEventArgs e)
             {
                 return;
             }
-
-            
         }
 
         private void releaseObject(object obj)
@@ -262,6 +260,24 @@ private void btnOpenFile_Click(object sender, RoutedEventArgs e)
 
                 }
             }
+        }
+
+        private void Schedule_Row_Add_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable dt = new DataTable();
+            if (Schedule.ItemsSource != null)
+                dt = ((DataView)Schedule.ItemsSource).ToTable();
+            dt.Rows.Add();
+            Schedule.ItemsSource = dt.DefaultView;
+        }
+
+        private void Schedule_Column_Add_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable dt = new DataTable();
+            if (Schedule.ItemsSource != null)
+                dt = ((DataView)Schedule.ItemsSource).ToTable();
+            dt.Columns.Add();
+            Schedule.ItemsSource = dt.DefaultView;
         }
 
         #endregion
@@ -769,8 +785,8 @@ private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         private void Canvas_brush_property_Click(object sender, RoutedEventArgs e)
         {
             CanvasProperty canvasProperty = new CanvasProperty();
+            canvasProperty.CPEvent += ColorChange;
             canvasProperty.Show();
-            
         }
 
 
@@ -790,9 +806,12 @@ private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Point point = e.GetPosition(sender as Image);
+            inkCanvas.DefaultDrawingAttributes.Color = GetPixelColor(point);
+        }
 
-            /*inkCanvas.DefaultDrawingAttributes.Color = GetPixelColor(point);*/
-            inkCanvas.DefaultDrawingAttributes.Color = CanvasProperty.ColorProperty();
+        private void ColorChange(byte A, byte R, byte G, byte B)
+        {
+            inkCanvas.DefaultDrawingAttributes.Color = Color.FromArgb(A, R, G, B);
         }
 
         private void Canvas_clear_btn_Click(object sender, RoutedEventArgs e)
@@ -809,23 +828,5 @@ private void btnOpenFile_Click(object sender, RoutedEventArgs e)
             tetris.Show();
         }
         #endregion
-
-        private void Schedule_Row_Add_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            DataTable dt = new DataTable();
-            if (Schedule.ItemsSource != null)
-                dt = ((DataView)Schedule.ItemsSource).ToTable();
-            dt.Rows.Add();
-            Schedule.ItemsSource = dt.DefaultView;
-        }
-
-        private void Schedule_Column_Add_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            DataTable dt = new DataTable();
-            if (Schedule.ItemsSource != null)
-                dt = ((DataView)Schedule.ItemsSource).ToTable();
-            dt.Columns.Add();
-            Schedule.ItemsSource = dt.DefaultView;
-        }
     }
 }
