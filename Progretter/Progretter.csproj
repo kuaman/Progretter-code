@@ -29,6 +29,7 @@
       <Lcid>0</Lcid>
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
+      <Private>true</Private>
     </COMReference>
   </ItemGroup>
 
@@ -36,12 +37,6 @@
     <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.0.2" />
     <PackageReference Include="PixiEditor.ColorPicker" Version="3.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="NanoXLSX">
-      <HintPath>NanoXLSX.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

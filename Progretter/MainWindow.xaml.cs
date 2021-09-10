@@ -10,10 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using NanoXLSX;
-using NanoXLSX.Styles;
 using Excel = Microsoft.Office.Interop.Excel;
-
 namespace Progretter
 {
     /// <summary>
@@ -120,38 +117,151 @@ namespace Progretter
         #endregion
 
         #region 시간표
-        private void Schedule_import_Click(object sender, RoutedEventArgs e)
+        private void ImportExcel(object sender, RoutedEventArgs e)
         {
-            ExportToExcel();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Excel File (*.xlsx)|*.xlsx|Csv File(*.csv)|*.csv";
+            if (openFileDialog.ShowDialog() == true)
+            {
+
+                var path = openFileDialog.FileName;
+
+                Excel.Application xlApp;
+                Excel.Workbook xlWorkBook;
+                Excel.Worksheet xlWorkSheet;
+                Excel.Range range;
+
+                string str;
+                int rCnt = 0;
+                int cCnt = 0;
+                string sCellData = "";
+                double dCellData;
+
+                xlApp = new Excel.Application();
+
+                try
+                {
+                    xlWorkBook = xlApp.Workbooks.Open(path, 0, true, 5, "", "", true, Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+                    xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+                    range = xlWorkSheet.UsedRange;
+
+                    DataTable dt = new DataTable();
+
+                    // 첫 행을 제목으로
+                    for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
+                    {
+                        str = (string)(range.Cells[1, cCnt] as Excel.Range).Value2;
+                        dt.Columns.Add(str, typeof(string));
+                    }
+
+                    for (rCnt = 2; rCnt <= range.Rows.Count; rCnt++)
+                    {
+                        string sData = "";
+                        for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
+                        {
+                            try
+                            {
+                                sCellData = (string)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
+                                sData += sCellData + "|";
+                            }
+                            catch (Exception ex)
+                            {
+                                dCellData = (double)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
+                                sData += dCellData.ToString() + "|";
+                            }
+                        }
+                        sData = sData.Remove(sData.Length - 1, 1);
+                        dt.Rows.Add(sData.Split('|'));
+                    }
+
+                    Schedule.ItemsSource = dt.DefaultView;
+
+                    xlWorkBook.Close(true, null, null);
+                    xlApp.Quit();
+
+                    releaseObject(xlWorkSheet);
+                    releaseObject(xlWorkBook);
+                    releaseObject(xlApp);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("파일 열기 실패! : " + ex.Message);
+                    return;
+                }
+            }
         }
 
-        private void ExportToExcel()
+private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         {
-            Workbook workbook = new Workbook("Default Schedules.xlsx", "Sheet1");         // Create new workbook with a worksheet called Sheet1
-            workbook.CurrentWorksheet.AddNextCell("0-0반 시간표");                   // Add cell A1
-            workbook.CurrentWorksheet.AddNextCell("월요일");                      // Add cell B1
-            workbook.CurrentWorksheet.AddNextCell("화요일");
-            workbook.CurrentWorksheet.AddNextCell("수요일");
-            workbook.CurrentWorksheet.AddNextCell("목요일");
-            workbook.CurrentWorksheet.AddNextCell("금요일");
-            workbook.CurrentWorksheet.GoToNextRow();                         // Go to Row 2
-            workbook.CurrentWorksheet.AddNextCell("1교시");
-            workbook.CurrentWorksheet.GoToNextRow();
-            workbook.CurrentWorksheet.AddNextCell("2교시");
-            workbook.CurrentWorksheet.GoToNextRow();
-            workbook.CurrentWorksheet.AddNextCell("3교시");
-            workbook.CurrentWorksheet.GoToNextRow();
-            workbook.CurrentWorksheet.AddNextCell("4교시");
-            workbook.CurrentWorksheet.GoToNextRow();
-            workbook.CurrentWorksheet.AddNextCell("점심 시간");
-            workbook.CurrentWorksheet.GoToNextRow();
-            workbook.CurrentWorksheet.AddNextCell("5교시");
-            workbook.CurrentWorksheet.GoToNextRow();
-            workbook.CurrentWorksheet.AddNextCell("6교시");
-            workbook.CurrentWorksheet.GoToNextRow();
-            workbook.CurrentWorksheet.AddNextCell("7교시");
-            workbook.Save();                                                                    // Save the workbook
+            OpenFileDialog oFileDialog = new OpenFileDialog();
+            oFileDialog.Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls";
 
+            if (oFileDialog.ShowDialog() == false)
+            {
+                return;
+            }
+
+            
+        }
+
+        private void releaseObject(object obj)
+        {
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                obj = null;
+            }
+            catch (Exception ex)
+            {
+                obj = null;
+                MessageBox.Show("Unable to release the Object " + ex.ToString());
+            }
+            finally
+            {
+                GC.Collect();
+            }
+        }
+
+
+        private void ExportToExcel(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Excel file (*.xlsx)|*.xlsx|Csv File(*.csv)|*.csv";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                DataTable dt = new DataTable();
+                dt = ((DataView)Schedule.ItemsSource).ToTable();
+
+                string path = saveFileDialog.FileName;
+                try
+                {
+                    var excelApp = new Excel.Application();
+                    excelApp.Workbooks.Add();
+                    Excel._Worksheet workSheet = (Excel._Worksheet)excelApp.ActiveSheet;
+                    for (var i = 0; i < dt.Columns.Count; i++)
+                    {
+                        workSheet.Cells[1, i + 1] = dt.Columns[i].ColumnName;
+                    }
+                    for (var i = 0; i < dt.Rows.Count; i++)
+                    {
+                        for (var j = 0; j < dt.Columns.Count; j++)
+                        {
+                            workSheet.Cells[i + 2, j + 1] = dt.Rows[i][j];
+                        }
+                    }
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                    workSheet.SaveAs2(path);
+                    excelApp.Quit();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
         }
 
         #endregion
@@ -660,6 +770,7 @@ namespace Progretter
         {
             CanvasProperty canvasProperty = new CanvasProperty();
             canvasProperty.Show();
+            
         }
 
 
@@ -680,7 +791,8 @@ namespace Progretter
         {
             Point point = e.GetPosition(sender as Image);
 
-            inkCanvas.DefaultDrawingAttributes.Color = GetPixelColor(point);
+            /*inkCanvas.DefaultDrawingAttributes.Color = GetPixelColor(point);*/
+            inkCanvas.DefaultDrawingAttributes.Color = CanvasProperty.ColorProperty();
         }
 
         private void Canvas_clear_btn_Click(object sender, RoutedEventArgs e)
@@ -697,5 +809,23 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
+
+        private void Schedule_Row_Add_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable dt = new DataTable();
+            if (Schedule.ItemsSource != null)
+                dt = ((DataView)Schedule.ItemsSource).ToTable();
+            dt.Rows.Add();
+            Schedule.ItemsSource = dt.DefaultView;
+        }
+
+        private void Schedule_Column_Add_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable dt = new DataTable();
+            if (Schedule.ItemsSource != null)
+                dt = ((DataView)Schedule.ItemsSource).ToTable();
+            dt.Columns.Add();
+            Schedule.ItemsSource = dt.DefaultView;
+        }
     }
 }

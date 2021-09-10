@@ -15,7 +15,7 @@
         <GroupBox Header="붓 설정">
         </GroupBox>
         <GroupBox Header="색 설정" Grid.Row="1">
-            <colorpicker:StandardColorPicker x:Name="standard_picker"
+            <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged"
                                          ColorState="{Binding ElementName=maindisplay, Path=ColorState, Mode=TwoWay, Delay=10}"
                                          SecondColorState="{Binding ElementName=maindisplay, Path=SecondColorState, Mode=TwoWay}"/>
         </GroupBox>

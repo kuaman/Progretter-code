@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Progretter
 {
@@ -22,6 +11,25 @@ namespace Progretter
         public CanvasProperty()
         {
             InitializeComponent();
+        }
+
+        private byte Alpha = 255;
+        private byte Red = 0;
+        private byte Green = 0;
+        private byte Blue = 0;
+
+        private void colorpicker_ColorChanged(object sender, RoutedEventArgs e)
+        {
+            Alpha = colorpicker.SelectedColor.A;
+            Red = colorpicker.SelectedColor.R;
+            Green = colorpicker.SelectedColor.G;
+            Blue = colorpicker.SelectedColor.B;
+            ColorProperty(Alpha, Red, Green, Blue);
+        }
+
+        public static Color ColorProperty(byte A, byte R, byte G, byte B)
+        {
+            return Color.FromArgb(A, R, G, B);
         }
     }
 }
