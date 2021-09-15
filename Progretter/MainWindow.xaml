@@ -50,27 +50,46 @@
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="9*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="8*"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" AlternationCount="2" AlternatingRowBackground="Gray" Grid.RowSpan="1">
+                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" Grid.Row="1" CanUserAddRows="False" SelectedCellsChanged="Schedule_SelectedCellsChanged">
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
                         </DataGrid.Resources>
                     </DataGrid>
-                    <Grid Grid.Row="1">
+                    <Grid x:Name="Schedule1" Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="Schedule_import" Content="불러오기" Click="ImportExcel"/>
-                        <Button x:Name="Schedule_export" Content="내보내기" Click="ExportToExcel" Grid.Column="1"/>
-                        <Button x:Name="Schedule_Row_Add_Btn" Content="행 추가하기" Grid.Column="2" Click="Schedule_Row_Add_Btn_Click"/>
-                        <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="3" Click="Schedule_Column_Add_Btn_Click"/>
+                        <Button x:Name="Schedule_import" Content="불러오기" Click="ImportExcel" BorderBrush="{x:Null}"/>
+                        <Button x:Name="Schedule_export" Content="내보내기" Click="ExportToExcel" Grid.Column="1" BorderBrush="{x:Null}"/>
+                        <Button x:Name="Schedule_Modifier_Btn" Content="수정하기" Grid.Column="2" Margin="0,0,0,-1"/>
+                    </Grid>
+                    <Grid Background="#FFDDDDDD" Margin="0,3,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="Schedule_Row_Add_Btn" Content="행 추가하기" Click="Schedule_Row_Add_Btn_Click" Grid.Column="1"/>
+                        <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click"/>
+                        <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3"/>
+                        <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click"/>
+                        <ComboBox HorizontalAlignment="Left" Margin="211,9,0,0" VerticalAlignment="Top" Width="120">
+                            <ComboBoxItem Content="RED"/>
+                            <ComboBoxItem Content="YELLOW"/>
+                            <ComboBoxItem Content="NORMAL"/>
+                        </ComboBox>
+                        <Label x:Name="row" Content="" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="column" Content="" HorizontalAlignment="Left" Margin="54,10,0,0" VerticalAlignment="Top"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -84,26 +103,25 @@
                 <DockPanel>
                     <Grid x:Name="TextTool" DockPanel.Dock="Top" Background="#FFF0F0F0" Height="24">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="472"/>
+                            <ColumnDefinition Width="420"/>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="30"/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox x:Name="text_family_combo" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged" Width="130" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-                        <TextBox x:Name="text_size" TextWrapping="Wrap" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" KeyDown="text_size_KeyDown" Width="80" Margin="153,0,0,0" HorizontalAlignment="Left" FontSize="14"/>
-                        <ComboBox x:Name="text_size_combo" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged" Width="80" HorizontalAlignment="Left" Margin="239,0,0,0"/>
-                        <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="289,0,105,0" HorizontalAlignment="Right"/>
-                        <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="324,0,70,0" HorizontalAlignment="Right"/>
-                        <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="359,0,35,0" HorizontalAlignment="Right">
+                        <ComboBox x:Name="text_family_combo" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged" Width="130" HorizontalAlignment="Left"/>
+                        <ComboBox x:Name="text_size_combo" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged" Width="80" HorizontalAlignment="Left" Margin="160,0,0,0" IsEditable="True" KeyDown="text_size_KeyDown" IsTextSearchCaseSensitive="False"/>
+                        <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="270,0,0,0" HorizontalAlignment="Left"/>
+                        <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="310,0,0,0" HorizontalAlignment="Left"/>
+                        <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="350,0,0,0" HorizontalAlignment="Left">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock Text="U" TextDecorations="Underline"/>
                             </StackPanel>
                         </ToggleButton>
-                        <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="420,0,0,0" HorizontalAlignment="Right">
+                        <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="390,0,0,0" HorizontalAlignment="Left">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock Text="S" TextDecorations="Strikethrough"/>
                             </StackPanel>
                         </ToggleButton>
-                        <Button x:Name="text_delete_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click" Width="30" Grid.Column="2">
+                        <Button x:Name="text_delete_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click" Grid.Column="2">
                             <Image Source="/Resources/deletetext.png"/>
                         </Button>
                     </Grid>
@@ -146,7 +164,7 @@
                         <Button Grid.Row="0" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_plusminus" BorderBrush="{x:Null}" Background="#FFFFF0D2">+/-</Button>
                         <Button Grid.Row="0" Grid.Column="1" Margin="5" FontSize="22" Click="Cal_CE" BorderBrush="{x:Null}" Background="#FFFFF0D2">CE</Button>
                         <Button x:Name="CalC" Grid.Row="0" Grid.Column="2" Margin="5" FontSize="22" Click="Cal_C" BorderBrush="{x:Null}" Background="#FFFFF0D2">C</Button>
-                        <Button Grid.Row="0" Grid.Column="3" Margin="5" FontSize="20" Click="Cal_back" BorderBrush="{x:Null}" Background="#FFD1F7FF">Backspace</Button>
+                        <Button x:Name="CalBack" Grid.Row="0" Grid.Column="3" Margin="5" FontSize="20" Click="Cal_back" BorderBrush="{x:Null}" Background="#FFD1F7FF">Backspace</Button>
                         <Button x:Name="Cal7" Grid.Row="1" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}">7</Button>
                         <Button x:Name="Cal8" Grid.Row="1" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}">8</Button>
                         <Button x:Name="Cal9" Grid.Row="1" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}">9</Button>
@@ -205,11 +223,11 @@
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="1">
-                <StatusBarItem x:Name="Timenow"/>
-                <Separator/>
-                <StatusBarItem x:Name="S_Time" Content="1교시"/>
-                <Separator/>
-                <StatusBarItem x:Name="text"/>
-            </StatusBar>
+            <StatusBarItem x:Name="Timenow"/>
+            <Separator/>
+            <StatusBarItem x:Name="S_Time" Content="1교시"/>
+            <Separator/>
+            <StatusBarItem x:Name="text"/>
+        </StatusBar>
     </Grid>
 </Window>

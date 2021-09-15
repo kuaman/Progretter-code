@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Excel = Microsoft.Office.Interop.Excel;
+using ClosedXML.Excel;
 namespace Progretter
 {
     /// <summary>
@@ -22,7 +23,6 @@ namespace Progretter
         public MainWindow()
         {
             InitializeComponent();
-            text_size.Text = Text.FontSize.ToString();
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Timer_Tick;
@@ -117,14 +117,60 @@ namespace Progretter
         #endregion
 
         #region 시간표
-        private void ImportExcel(object sender, RoutedEventArgs e)
+        public static DataTable ImportExceltoDatatable(string filePath, string sheetName)
         {
+            // Open the Excel file using ClosedXML.
+            // Keep in mind the Excel file cannot be open when trying to read it
+            using (XLWorkbook workBook = new XLWorkbook(filePath))
+            {
+                //Read the first Sheet from Excel file.
+                IXLWorksheet workSheet = workBook.Worksheet(1);
+
+                //Create a new DataTable.
+                DataTable dt = new DataTable();
+
+                //Loop through the Worksheet rows.
+                bool firstRow = true;
+                foreach (IXLRow row in workSheet.Rows())
+                {
+                    //Use the first row to add columns to DataTable.
+                    if (firstRow)
+                    {
+                        foreach (IXLCell cell in row.Cells())
+                        {
+                            dt.Columns.Add(cell.Value.ToString());
+                        }
+                        firstRow = false;
+                    }
+                    else
+                    {
+                        //Add rows to DataTable.
+                        dt.Rows.Add();
+                        int i = 0;
+
+                        foreach (IXLCell cell in row.Cells(row.FirstCellUsed().Address.ColumnNumber, row.LastCellUsed().Address.ColumnNumber))
+                        {
+                            dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
+                            i++;
+                        }
+                    }
+                }
+
+                return dt;
+            }
+        }
+
+
+        private void ImportExcel(object sender, RoutedEventArgs e)
+            {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Excel File (*.xlsx)|*.xlsx|Csv File(*.csv)|*.csv";
             if (openFileDialog.ShowDialog() == true)
             {
+                Schedule.ItemsSource = ImportExceltoDatatable(openFileDialog.FileName, "Sheet1").DefaultView;
 
-                var path = openFileDialog.FileName;
+                // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
+/*                var path = openFileDialog.FileName;
 
                 Excel.Application xlApp;
                 Excel.Workbook xlWorkBook;
@@ -188,7 +234,7 @@ namespace Progretter
                 {
                     MessageBox.Show("파일 열기 실패! : " + ex.Message);
                     return;
-                }
+                }*/
             }
         }
 
@@ -231,34 +277,35 @@ namespace Progretter
                 DataTable dt = new DataTable();
                 dt = ((DataView)Schedule.ItemsSource).ToTable();
 
-                string path = saveFileDialog.FileName;
-                try
-                {
-                    var excelApp = new Excel.Application();
-                    excelApp.Workbooks.Add();
-                    Excel._Worksheet workSheet = (Excel._Worksheet)excelApp.ActiveSheet;
-                    for (var i = 0; i < dt.Columns.Count; i++)
-                    {
-                        workSheet.Cells[1, i + 1] = dt.Columns[i].ColumnName;
-                    }
-                    for (var i = 0; i < dt.Rows.Count; i++)
-                    {
-                        for (var j = 0; j < dt.Columns.Count; j++)
-                        {
-                            workSheet.Cells[i + 2, j + 1] = dt.Rows[i][j];
-                        }
-                    }
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-                    workSheet.SaveAs2(path);
-                    excelApp.Quit();
-                }
-                catch (Exception ex)
-                {
+                // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
+                /*                string path = saveFileDialog.FileName;
+                                try
+                                {
+                                    var excelApp = new Excel.Application();
+                                    excelApp.Workbooks.Add();
+                                    Excel._Worksheet workSheet = (Excel._Worksheet)excelApp.ActiveSheet;
+                                    for (var i = 0; i < dt.Columns.Count; i++)
+                                    {
+                                        workSheet.Cells[1, i + 1] = dt.Columns[i].ColumnName;
+                                    }
+                                    for (var i = 0; i < dt.Rows.Count; i++)
+                                    {
+                                        for (var j = 0; j < dt.Columns.Count; j++)
+                                        {
+                                            workSheet.Cells[i + 2, j + 1] = dt.Rows[i][j];
+                                        }
+                                    }
+                                    if (File.Exists(path))
+                                    {
+                                        File.Delete(path);
+                                    }
+                                    workSheet.SaveAs2(path);
+                                    excelApp.Quit();
+                                }
+                                catch (Exception ex)
+                                {
 
-                }
+                                }*/
             }
         }
 
@@ -271,6 +318,15 @@ namespace Progretter
             Schedule.ItemsSource = dt.DefaultView;
         }
 
+        private void Schedule_Row_Del_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable dt = new DataTable();
+            if (Schedule.ItemsSource != null)
+                dt = ((DataView)Schedule.ItemsSource).ToTable();
+            dt.Rows.RemoveAt(dt.Rows.Count - 1);
+            Schedule.ItemsSource = dt.DefaultView;
+        }
+
         private void Schedule_Column_Add_Btn_Click(object sender, RoutedEventArgs e)
         {
             DataTable dt = new DataTable();
@@ -279,6 +335,23 @@ namespace Progretter
             dt.Columns.Add();
             Schedule.ItemsSource = dt.DefaultView;
         }
+
+        private void Schedule_Column_Del_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable dt = new DataTable();
+            if (Schedule.ItemsSource != null)
+                dt = ((DataView)Schedule.ItemsSource).ToTable();
+            dt.Columns.RemoveAt(dt.Columns.Count - 1);
+            Schedule.ItemsSource = dt.DefaultView;
+        }
+
+        private void Schedule_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            row.Content = Schedule.SelectedIndex.ToString();
+
+            column.Content = Schedule.CurrentColumn.DisplayIndex.ToString(); // 삭제 때 오류..
+        }
+
 
         #endregion
 
@@ -342,21 +415,17 @@ namespace Progretter
             Text.FontFamily = new FontFamily(text_family_combo.SelectedItem.ToString());
         }
 
-        private string textsize;
-
         private void text_size_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int returnVal;
-            if (textsize != "key")
+            if (text_size_combo.SelectedItem != null)
             {
                 bool bl = int.TryParse(text_size_combo.SelectedItem.ToString(), out returnVal);
                 if (bl)
                 {
                     Text.FontSize = double.Parse(text_size_combo.SelectedItem.ToString());
-                    text_size.Text = text_size_combo.SelectedItem.ToString();
                 }
             }
-            textsize = "combo";
         }
 
         private void text_size_KeyDown(object sender, KeyEventArgs e)
@@ -364,25 +433,23 @@ namespace Progretter
             if (e.Key == Key.Enter)
             {
                 int returnVal;
-                bool bl = int.TryParse(text_size.Text, out returnVal);
+                bool bl = int.TryParse(text_size_combo.Text, out returnVal);
                 if (bl)
                 {
-                    if (Convert.ToInt32(text_size.Text) <= 500)
+                    if (Convert.ToInt32(text_size_combo.Text) <= 500)
                     {
-                        Text.FontSize = double.Parse(text_size.Text);
-                        textsize = "key";
-                        text_size_combo.Text = null;
+                        Text.FontSize = double.Parse(text_size_combo.Text);
                     }
                     else // 500 초과
                     {
                         MessageBox.Show("글자 크기는 500을 넘을 수 없습니다.");
-                        text_size.Text = null;
+                        text_size_combo.Text = Text.FontSize.ToString();
                     }
                 }
                 else
                 {
                     MessageBox.Show("글자 크기에는 숫자만 들어갈 수 있습니다.");
-                    text_size.Text = null;
+                    text_size_combo.Text = Text.FontSize.ToString();
                 }
             }
         }
@@ -416,6 +483,8 @@ namespace Progretter
             PerformedOp = false;
             Button button = (Button)sender;
             txtResult.Text += button.Content;
+            reset20 = false;
+            txtResult.Focus();
         }
 
         private void Cal_dot(object sender, RoutedEventArgs e)
@@ -426,8 +495,11 @@ namespace Progretter
             {
                 txtResult.Text += button.Content;
             }
+            reset20 = false;
         }
+
         private string num1;
+
         private void Cal_op(object sender, RoutedEventArgs e)
         {
             // +, -, *, / operators
@@ -450,12 +522,14 @@ namespace Progretter
                     PerformedOp = true;
                 }
             }
+            reset20 = false;
         }
 
         private void Cal_CE(object sender, RoutedEventArgs e)
         {
             //CLEAR ENTRY BUTTON
             txtResult.Text = "0";
+            reset20 = false;
         }
 
         private void Cal_C(object sender, RoutedEventArgs e)
@@ -466,8 +540,11 @@ namespace Progretter
             Operator_Performed = " ";
             Label_log.Content = " ";
             PerformedOp = false;
+            reset20 = false;
         }
+
         private string num2;
+
         private void Cal_equal(object sender, RoutedEventArgs e)
         {
             // EQUALS BUTTON
@@ -515,6 +592,7 @@ namespace Progretter
                 Label_log.Content = " ";
                 PerformedOp = false;
                 Operator_Performed = " ";
+                reset20 = false;
             }
             else
             {
@@ -526,6 +604,7 @@ namespace Progretter
         {
             double v = double.Parse(txtResult.Text);
             txtResult.Text = (-v).ToString();
+            reset20 = false;
         }
 
         private void Calculator_KeyDown(object sender, KeyEventArgs e)
@@ -607,13 +686,21 @@ namespace Progretter
                     break;
 
                 case Key.OemPlus:
-                case Key.Enter:
                 case Key.F5:
                     Cal_equal_btn.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
                     break;
 
+                case Key.Enter:
+                    Cal_equal_btn.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    Keyboard.Focus(Label_log);
+                    break;
+
                 case Key.F6:
                     CalC.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    break;
+
+                case Key.Back:
+                    CalBack.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
                     break;
             }
         }
@@ -625,6 +712,7 @@ namespace Progretter
             {
                 txtResult.Text = "0";
             }
+            reset20 = false;
         }
 
         private void txtResult_TextChanged(object sender, TextChangedEventArgs e)

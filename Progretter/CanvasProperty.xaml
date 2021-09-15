@@ -15,9 +15,16 @@
         <GroupBox Header="붓 설정">
         </GroupBox>
         <GroupBox Header="색 설정" Grid.Row="1">
-            <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="12*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Content="스포이드(임시)"/>
+                <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged" Grid.Row="1"
                                          ColorState="{Binding ElementName=maindisplay, Path=ColorState, Mode=TwoWay, Delay=10}"
-                                         SecondColorState="{Binding ElementName=maindisplay, Path=SecondColorState, Mode=TwoWay}"/>
+                                         SecondColorState="{Binding ElementName=maindisplay, Path=SecondColorState, Mode=TwoWay}" Grid.RowSpan="2"/>
+            </Grid>
         </GroupBox>
     </Grid>
 </Window>
