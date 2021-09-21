@@ -54,7 +54,7 @@
                         <RowDefinition Height="8*"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" Grid.Row="1" CanUserAddRows="False" SelectedCellsChanged="Schedule_SelectedCellsChanged">
+                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" Grid.Row="1" CanUserAddRows="False" SelectedCellsChanged="Schedule_SelectedCellsChanged" SelectionChanged="Schedule_SelectionChanged" HeadersVisibility="None">
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
@@ -69,7 +69,7 @@
                         </Grid.ColumnDefinitions>
                         <Button x:Name="Schedule_import" Content="불러오기" Click="ImportExcel" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_export" Content="내보내기" Click="ExportToExcel" Grid.Column="1" BorderBrush="{x:Null}"/>
-                        <Button x:Name="Schedule_Modifier_Btn" Content="수정하기" Grid.Column="2" Margin="0,0,0,-1"/>
+                        <Button x:Name="Schedule_Modifier_Btn" Content="수정하기" Grid.Column="2" Margin="0,0,0,-1" BorderBrush="{x:Null}"/>
                     </Grid>
                     <Grid Background="#FFDDDDDD" Margin="0,3,0,0">
                         <Grid.ColumnDefinitions>
@@ -79,10 +79,10 @@
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="Schedule_Row_Add_Btn" Content="행 추가하기" Click="Schedule_Row_Add_Btn_Click" Grid.Column="1"/>
-                        <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click"/>
-                        <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3"/>
-                        <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click"/>
+                        <Button x:Name="Schedule_Row_Add_Btn" Content="행 추가하기" Click="Schedule_Row_Add_Btn_Click" Grid.Column="1" BorderBrush="{x:Null}"/>
+                        <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click" BorderBrush="{x:Null}"/>
+                        <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3" BorderBrush="{x:Null}"/>
+                        <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click" BorderBrush="{x:Null}"/>
                         <ComboBox HorizontalAlignment="Left" Margin="211,9,0,0" VerticalAlignment="Top" Width="120">
                             <ComboBoxItem Content="RED"/>
                             <ComboBoxItem Content="YELLOW"/>

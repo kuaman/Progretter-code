@@ -347,9 +347,9 @@ namespace Progretter
 
         private void Schedule_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            row.Content = Schedule.SelectedIndex.ToString();
+/*            row.Content = Schedule.SelectedIndex.ToString();
 
-            column.Content = Schedule.CurrentColumn.DisplayIndex.ToString(); // 삭제 때 오류..
+            column.Content = Schedule.CurrentColumn.DisplayIndex.ToString(); // 삭제 때 오류..*/
         }
 
 
@@ -916,5 +916,12 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
+
+        private void Schedule_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            row.Content = Schedule.SelectedIndex.ToString();
+            /*            column.Content = Schedule.CurrentColumn.DisplayIndex.ToString(); // 삭제 때 오류..*/
+            
+        }
     }
 }
