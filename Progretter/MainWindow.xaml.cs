@@ -336,11 +336,39 @@ namespace Progretter
             Schedule.ItemsSource = dt.DefaultView;
         }
 
-        private void Schedule_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        private void Schedule_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) // 테스트 용 실사 불가능
         {
-/*            row.Content = Schedule.SelectedIndex.ToString();
+            if (Schedule.SelectedIndex != -1)
+            {
+                row.Content = Schedule.SelectedIndex.ToString();
+            }
+            else
+            {
+                if (Convert.ToInt32(row.Content) - 1 < 0)
+                {
+                    row.Content = 0;
+                }
+                else
+                {
+                    row.Content = (Convert.ToInt32(row.Content) - 1).ToString();
+                }
+            }
+            if (Schedule.CurrentColumn != null)
+            {
+                column.Content = Schedule.CurrentColumn.DisplayIndex.ToString();
+            }
+            else
+            {
 
-            column.Content = Schedule.CurrentColumn.DisplayIndex.ToString(); // 삭제 때 오류..*/
+            }
+            if (Convert.ToInt32(column.Content) - 1 < 0)
+            {
+                column.Content = 0;
+            }
+            else
+            {
+                column.Content = (Convert.ToInt32(column.Content) - 1).ToString();
+            }
         }
 
 
@@ -907,12 +935,5 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
-
-        private void Schedule_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            row.Content = Schedule.SelectedIndex.ToString();
-            /*            column.Content = Schedule.CurrentColumn.DisplayIndex.ToString(); // 삭제 때 오류..*/
-            
-        }
     }
 }

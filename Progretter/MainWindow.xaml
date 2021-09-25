@@ -19,26 +19,38 @@
                         <TextBlock Text="메뉴" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid Background="#FFE5E5E5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="3*"/>
-                        <RowDefinition Height="3*"/>
-                        <RowDefinition Height="3*"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Button x:Name="Tetris_btn" Content="테트리스" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Tetris_btn_Click" Grid.Row="3"/>
-                    <GroupBox Header="시간표 설정" BorderBrush="Black">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <CheckBox x:Name="chk_ScheduleCheckBox" Content="일정 옆 체크박스 표시" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Checked="chk_ScheduleCheckBox_Checked" Unchecked="chk_ScheduleCheckBox_Unchecked"/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="그림판 설정" Grid.Row="1" BorderBrush="Black"/>
-                    <GroupBox Header="일반 설정" Grid.Row="2" BorderBrush="Black"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button x:Name="Tetris_btn" Content="테트리스" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Tetris_btn_Click" Grid.Row="3"/>
+                        <GroupBox Header="시간표 설정" BorderBrush="Black">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CheckBox x:Name="chk_ScheduleCheckBox" Content="일정 옆 체크박스 표시" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Checked="chk_ScheduleCheckBox_Checked" Unchecked="chk_ScheduleCheckBox_Unchecked"/>
+                                <TextBox HorizontalAlignment="Stretch" Grid.Row="2" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="그림판 설정" Grid.Row="1" BorderBrush="Black"/>
+                        <GroupBox Header="일반 설정" Grid.Row="2" BorderBrush="Black"/>
+                    </Grid>
+                    <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Background="#FFE5E5E5">
+                        <Viewbox VerticalAlignment="Top" Margin="-1">
+                            <Calendar VerticalAlignment="Stretch" BorderBrush="{x:Null}"/>
+                        </Viewbox>
+                    </Border>
                 </Grid>
             </TabItem>
             <TabItem Width="120" Height="102">
@@ -50,11 +62,11 @@
                 </TabItem.Header>
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
                         <RowDefinition/>
-                        <RowDefinition Height="8*"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" Grid.Row="1" CanUserAddRows="False" SelectedCellsChanged="Schedule_SelectedCellsChanged" SelectionChanged="Schedule_SelectionChanged" HeadersVisibility="None">
+                    <DataGrid Name="Schedule" ColumnWidth="*" FontSize="16" Grid.Row="1" CanUserAddRows="False" SelectedCellsChanged="Schedule_SelectedCellsChanged" HeadersVisibility="None">
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
@@ -73,17 +85,17 @@
                     </Grid>
                     <Grid Background="#FFDDDDDD" Margin="0,3,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="8*"/>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
                         </Grid.ColumnDefinitions>
                         <Button x:Name="Schedule_Row_Add_Btn" Content="행 추가하기" Click="Schedule_Row_Add_Btn_Click" Grid.Column="1" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click" BorderBrush="{x:Null}"/>
-                        <ComboBox HorizontalAlignment="Left" Margin="211,9,0,0" VerticalAlignment="Top" Width="120">
+                        <ComboBox Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,30,0">
                             <ComboBoxItem Content="RED"/>
                             <ComboBoxItem Content="YELLOW"/>
                             <ComboBoxItem Content="NORMAL"/>
