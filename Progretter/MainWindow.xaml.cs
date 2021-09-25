@@ -117,139 +117,125 @@ namespace Progretter
         #endregion
 
         #region 시간표
-        public static DataTable ImportExceltoDatatable(string filePath, string sheetName)
+        private void ImportExcel(object sender, RoutedEventArgs e)
         {
-            // Open the Excel file using ClosedXML.
-            // Keep in mind the Excel file cannot be open when trying to read it
-            using (XLWorkbook workBook = new XLWorkbook(filePath))
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx|Excel 97-2003 File(*.xls)|*.xls|Csv File(*.csv)|*.csv";
+            if (openFileDialog.ShowDialog() == true)
+        {
+            DataTable dt = new DataTable();
+            //Checking file content length and Extension must be .xlsx  
+            using (XLWorkbook workbook = new XLWorkbook(openFileDialog.FileName))
             {
-                //Read the first Sheet from Excel file.
-                IXLWorksheet workSheet = workBook.Worksheet(1);
-
-                //Create a new DataTable.
-                DataTable dt = new DataTable();
-
-                //Loop through the Worksheet rows.
-                bool firstRow = true;
-                foreach (IXLRow row in workSheet.Rows())
+                IXLWorksheet worksheet = workbook.Worksheet(1);
+                bool FirstRow = true;
+                //Range for reading the cells based on the last cell used.  
+                string readRange = "1:1";
+                foreach (IXLRow row in worksheet.RowsUsed())
                 {
-                    //Use the first row to add columns to DataTable.
-                    if (firstRow)
+                    //If Reading the First Row (used) then add them as column name  
+                    if (FirstRow)
                     {
-                        foreach (IXLCell cell in row.Cells())
+                        //Checking the Last cellused for column generation in datatable  
+                        readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                        foreach (IXLCell cell in row.Cells(readRange))
                         {
                             dt.Columns.Add(cell.Value.ToString());
                         }
-                        firstRow = false;
+                        FirstRow = false;
                     }
                     else
                     {
-                        //Add rows to DataTable.
+                        //Adding a Row in datatable  
                         dt.Rows.Add();
-                        int i = 0;
-
-                        foreach (IXLCell cell in row.Cells(row.FirstCellUsed().Address.ColumnNumber, row.LastCellUsed().Address.ColumnNumber))
+                        int cellIndex = 0;
+                        //Updating the values of datatable  
+                        foreach (IXLCell cell in row.Cells(readRange))
                         {
-                            dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
-                            i++;
+                            dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                            cellIndex++;
                         }
                     }
                 }
-
-                return dt;
+                //If no data in Excel file  
+                if (FirstRow)
+                {
+                    MessageBox.Show("빈 파일!");
+                }
             }
+            Schedule.ItemsSource = dt.DefaultView;
         }
-
-
-        private void ImportExcel(object sender, RoutedEventArgs e)
-            {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Excel File (*.xlsx)|*.xlsx|Csv File(*.csv)|*.csv";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                Schedule.ItemsSource = ImportExceltoDatatable(openFileDialog.FileName, "Sheet1").DefaultView;
 
                 // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
-/*                var path = openFileDialog.FileName;
+                /*                var path = openFileDialog.FileName;
 
-                Excel.Application xlApp;
-                Excel.Workbook xlWorkBook;
-                Excel.Worksheet xlWorkSheet;
-                Excel.Range range;
+                                Excel.Application xlApp;
+                                Excel.Workbook xlWorkBook;
+                                Excel.Worksheet xlWorkSheet;
+                                Excel.Range range;
 
-                string str;
-                int rCnt = 0;
-                int cCnt = 0;
-                string sCellData = "";
-                double dCellData;
+                                string str;
+                                int rCnt = 0;
+                                int cCnt = 0;
+                                string sCellData = "";
+                                double dCellData;
 
-                xlApp = new Excel.Application();
+                                xlApp = new Excel.Application();
 
-                try
-                {
-                    xlWorkBook = xlApp.Workbooks.Open(path, 0, true, 5, "", "", true, Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-                    xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+                                try
+                                {
+                                    xlWorkBook = xlApp.Workbooks.Open(path, 0, true, 5, "", "", true, Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+                                    xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 
-                    range = xlWorkSheet.UsedRange;
+                                    range = xlWorkSheet.UsedRange;
 
-                    DataTable dt = new DataTable();
+                                    DataTable dt = new DataTable();
 
-                    // 첫 행을 제목으로
-                    for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
-                    {
-                        str = (string)(range.Cells[1, cCnt] as Excel.Range).Value2;
-                        dt.Columns.Add(str, typeof(string));
-                    }
+                                    // 첫 행을 제목으로
+                                    for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
+                                    {
+                                        str = (string)(range.Cells[1, cCnt] as Excel.Range).Value2;
+                                        dt.Columns.Add(str, typeof(string));
+                                    }
 
-                    for (rCnt = 2; rCnt <= range.Rows.Count; rCnt++)
-                    {
-                        string sData = "";
-                        for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
-                        {
-                            try
-                            {
-                                sCellData = (string)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
-                                sData += sCellData + "|";
-                            }
-                            catch (Exception ex)
-                            {
-                                dCellData = (double)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
-                                sData += dCellData.ToString() + "|";
-                            }
-                        }
-                        sData = sData.Remove(sData.Length - 1, 1);
-                        dt.Rows.Add(sData.Split('|'));
-                    }
+                                    for (rCnt = 2; rCnt <= range.Rows.Count; rCnt++)
+                                    {
+                                        string sData = "";
+                                        for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
+                                        {
+                                            try
+                                            {
+                                                sCellData = (string)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
+                                                sData += sCellData + "|";
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                dCellData = (double)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
+                                                sData += dCellData.ToString() + "|";
+                                            }
+                                        }
+                                        sData = sData.Remove(sData.Length - 1, 1);
+                                        dt.Rows.Add(sData.Split('|'));
+                                    }
 
-                    Schedule.ItemsSource = dt.DefaultView;
+                                    Schedule.ItemsSource = dt.DefaultView;
 
-                    xlWorkBook.Close(true, null, null);
-                    xlApp.Quit();
+                                    xlWorkBook.Close(true, null, null);
+                                    xlApp.Quit();
 
-                    releaseObject(xlWorkSheet);
-                    releaseObject(xlWorkBook);
-                    releaseObject(xlApp);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("파일 열기 실패! : " + ex.Message);
-                    return;
-                }*/
-            }
+                                    releaseObject(xlWorkSheet);
+                                    releaseObject(xlWorkBook);
+                                    releaseObject(xlApp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("파일 열기 실패! : " + ex.Message);
+                                    return;
+                                }*/
         }
 
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog oFileDialog = new OpenFileDialog();
-            oFileDialog.Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls";
 
-            if (oFileDialog.ShowDialog() == false)
-            {
-                return;
-            }
-        }
-
-        private void releaseObject(object obj)
+        private void releaseObject(object obj) // Interop
         {
             try
             {
@@ -276,6 +262,11 @@ namespace Progretter
             {
                 DataTable dt = new DataTable();
                 dt = ((DataView)Schedule.ItemsSource).ToTable();
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add(dt, "Sheet1");
+                    workbook.SaveAs(saveFileDialog.FileName);
+                }
 
                 // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
                 /*                string path = saveFileDialog.FileName;
