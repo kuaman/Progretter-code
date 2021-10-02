@@ -13,6 +13,17 @@
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="붓 설정">
+            <Grid>
+                <Label Width="100" Height="30" Margin="10,10,198,54" Content="붓 모드"/>
+                <ComboBox x:Name="StrokeEditingMode" Width="140" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0" SelectionChanged="StrokeEditingMode_SelectionChanged" SelectedIndex="0">
+                    <ComboBoxItem Content="펜"/>
+                    <ComboBoxItem Content="지우개 (사각형)"/>
+                    <ComboBoxItem Content="지우개 (스냅)"/>
+                    <ComboBoxItem Content="제스처"/>
+                    <ComboBoxItem Content="펜과 제스처"/>
+                    <ComboBoxItem Content="선택"/>
+                </ComboBox>
+            </Grid>
         </GroupBox>
         <GroupBox Header="색 설정" Grid.Row="1">
             <Grid>

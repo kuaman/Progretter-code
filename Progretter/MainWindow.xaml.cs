@@ -61,6 +61,17 @@ namespace Progretter
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Setting_Schedule_StartUp_Label.Content = Config.Get("ScheduleStartUpPath");
+            if (Config.Get("ScheduleStartUpImport") == "true")
+            {
+                Schedule.ItemsSource = Schedules.ImportExcel(Config.Get("ScheduleStartUpPath")).DefaultView;
+            }
+
+            if (Config.Get("ScheduleCloseSave") == "true")
+            {
+                Setting_Schedule_Close_Save_CheckBox.IsChecked = true;
+            }
+
             foreach (var item in Config.Get("CalculatorLog").ToString().Split(new char[] { ',' }))
             {
                 if (!string.IsNullOrEmpty(item))
@@ -96,6 +107,14 @@ namespace Progretter
         #region Window_Closed
         private void Window_Closed(object sender, EventArgs e)
         {
+            if(Config.Get("ScheduleCloseSave") == "true")
+            {
+                if(Schedule.ItemsSource != null)
+                {
+                    string path = @"AutoSave\" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                    Schedules.ExportExcel((DataView)Schedule.ItemsSource, path);
+                }
+            }
             Config.Set("CalculatorLog", string.Empty);
             foreach (var item in Cal_log.Items)
             {
@@ -114,6 +133,35 @@ namespace Progretter
         {
             Config.Set("ScheduleIsCheckBox", "false");
         }
+
+        private void Setting_Schedule_StartUp_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx|Excel 97-2003 File(*.xls)|*.xls|Csv File(*.csv)|*.csv";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                Setting_Schedule_StartUp_Label.Content = openFileDialog.FileName;
+                Config.Set("ScheduleStartUpImport", "true");
+                Config.Set("ScheduleStartUpPath", Setting_Schedule_StartUp_Label.Content.ToString());
+            }
+        }
+
+        private void Setting_Schedule_StartUp_Reset_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            Setting_Schedule_StartUp_Label.Content = null;
+            Config.Set("ScheduleStartUpImport", "false");
+            Config.Set("ScheduleStartUpPath", "");
+        }
+
+        private void Setting_Schedule_Close_Save_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("ScheduleCloseSave", "true");
+        }
+
+        private void Setting_Schedule_Close_Save_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("ScheduleCloseSave", "false");
+        }
         #endregion
 
         #region 시간표
@@ -122,49 +170,9 @@ namespace Progretter
         OpenFileDialog openFileDialog = new OpenFileDialog();
         openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx|Excel 97-2003 File(*.xls)|*.xls|Csv File(*.csv)|*.csv";
             if (openFileDialog.ShowDialog() == true)
-        {
-            DataTable dt = new DataTable();
-            //Checking file content length and Extension must be .xlsx  
-            using (XLWorkbook workbook = new XLWorkbook(openFileDialog.FileName))
             {
-                IXLWorksheet worksheet = workbook.Worksheet(1);
-                bool FirstRow = true;
-                //Range for reading the cells based on the last cell used.  
-                string readRange = "1:1";
-                foreach (IXLRow row in worksheet.RowsUsed())
-                {
-                    //If Reading the First Row (used) then add them as column name  
-                    if (FirstRow)
-                    {
-                        //Checking the Last cellused for column generation in datatable  
-                        readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
-                        foreach (IXLCell cell in row.Cells(readRange))
-                        {
-                            dt.Columns.Add(cell.Value.ToString());
-                        }
-                        FirstRow = false;
-                    }
-                    else
-                    {
-                        //Adding a Row in datatable  
-                        dt.Rows.Add();
-                        int cellIndex = 0;
-                        //Updating the values of datatable  
-                        foreach (IXLCell cell in row.Cells(readRange))
-                        {
-                            dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
-                            cellIndex++;
-                        }
-                    }
-                }
-                //If no data in Excel file  
-                if (FirstRow)
-                {
-                    MessageBox.Show("빈 파일!");
-                }
+                Schedule.ItemsSource = Schedules.ImportExcel(openFileDialog.FileName).DefaultView;
             }
-            Schedule.ItemsSource = dt.DefaultView;
-        }
 
                 // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
                 /*                var path = openFileDialog.FileName;
@@ -235,7 +243,7 @@ namespace Progretter
         }
 
 
-        private void releaseObject(object obj) // Interop
+/*        private void releaseObject(object obj) // Interop
         {
             try
             {
@@ -251,7 +259,7 @@ namespace Progretter
             {
                 GC.Collect();
             }
-        }
+        }*/
 
 
         private void ExportToExcel(object sender, RoutedEventArgs e)
@@ -260,13 +268,7 @@ namespace Progretter
             saveFileDialog.Filter = "Excel file (*.xlsx)|*.xlsx|Csv File(*.csv)|*.csv";
             if (saveFileDialog.ShowDialog() == true)
             {
-                DataTable dt = new DataTable();
-                dt = ((DataView)Schedule.ItemsSource).ToTable();
-                using (var workbook = new XLWorkbook())
-                {
-                    var worksheet = workbook.Worksheets.Add(dt, "Sheet1");
-                    workbook.SaveAs(saveFileDialog.FileName);
-                }
+                Schedules.ExportExcel((DataView)Schedule.ItemsSource, saveFileDialog.FileName);
 
                 // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
                 /*                string path = saveFileDialog.FileName;
@@ -318,13 +320,28 @@ namespace Progretter
             Schedule.ItemsSource = dt.DefaultView;
         }
 
+        public string columnindex;
+
         private void Schedule_Column_Add_Btn_Click(object sender, RoutedEventArgs e)
         {
-            DataTable dt = new DataTable();
+            ScheduleColumn scheduleColumn = new ScheduleColumn((Schedule.Columns.Count + 1).ToString());
+            scheduleColumn.ShowDialog();
+            if (scheduleColumn.DialogResult == true)
+            {
+                DataGridTextColumn textColumn = new DataGridTextColumn();
+                // DataGrid의 컬럼헤드
+                textColumn.Header = ScheduleColumn.columnindex;
+                /*            // 데이터 바인딩
+                            textColumn.Binding = new Binding(ScheduleColumn.columnindex);*/
+                // DataGrid에 컬럼 추가
+                Schedule.Columns.Add(textColumn);
+            }
+
+/*            DataTable dt = new DataTable();
             if (Schedule.ItemsSource != null)
                 dt = ((DataView)Schedule.ItemsSource).ToTable();
             dt.Columns.Add();
-            Schedule.ItemsSource = dt.DefaultView;
+            Schedule.ItemsSource = dt.DefaultView;*/
         }
 
         private void Schedule_Column_Del_Btn_Click(object sender, RoutedEventArgs e)
@@ -893,21 +910,39 @@ namespace Progretter
         {
             CanvasProperty canvasProperty = new CanvasProperty();
             canvasProperty.CPEvent += ColorChange;
+            canvasProperty.EMEvent += StrokeEditingModeChange;
             canvasProperty.Show();
         }
 
-
-        /*        // 지우기 모드
-                private void btn_Erase(object sender, RoutedEventArgs e)
-                {
-                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
-                }
-
-                // 잉크 모드
-                private void btn_Pen(object sender, RoutedEventArgs e)
-                {
+        private void StrokeEditingModeChange(int mode)
+        {
+            switch (mode)
+            {
+                case 0:
                     inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
-                }*/
+                    break;
+
+                case 1:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
+                    break;
+
+                case 2:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByStroke;
+                    break;
+
+                case 3:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.GestureOnly;
+                    break;
+
+                case 4:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.InkAndGesture;
+                    break;
+
+                case 5:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.Select;
+                    break;
+            }
+        }
 
         // 잉크 색상 변경
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
