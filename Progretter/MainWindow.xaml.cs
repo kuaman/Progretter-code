@@ -10,8 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Excel = Microsoft.Office.Interop.Excel;
-using ClosedXML.Excel;
+/*using Excel = Microsoft.Office.Interop.Excel;*/
 namespace Progretter
 {
     /// <summary>
@@ -911,6 +910,7 @@ namespace Progretter
             CanvasProperty canvasProperty = new CanvasProperty();
             canvasProperty.CPEvent += ColorChange;
             canvasProperty.EMEvent += StrokeEditingModeChange;
+            canvasProperty.RecEditingMode(inkCanvas.EditingMode.ToString());
             canvasProperty.Show();
         }
 
