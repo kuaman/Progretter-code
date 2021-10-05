@@ -87,11 +87,9 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
                         <Button x:Name="Schedule_import" Content="불러오기" Click="ImportExcel" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_export" Content="내보내기" Click="ExportToExcel" Grid.Column="1" BorderBrush="{x:Null}"/>
-                        <Button x:Name="Schedule_Modifier_Btn" Content="수정하기" Grid.Column="2" Margin="0,0,0,-1" BorderBrush="{x:Null}"/>
                     </Grid>
                     <Grid Background="#FFDDDDDD" Margin="0,3,0,0">
                         <Grid.ColumnDefinitions>
@@ -125,27 +123,37 @@
                 <DockPanel>
                     <Grid x:Name="TextTool" DockPanel.Dock="Top" Background="#FFF0F0F0" Height="24">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="420"/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="390"/>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="30"/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox x:Name="text_family_combo" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged" Width="130" HorizontalAlignment="Left"/>
-                        <ComboBox x:Name="text_size_combo" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged" Width="80" HorizontalAlignment="Left" Margin="160,0,0,0" IsEditable="True" KeyDown="text_size_KeyDown" IsTextSearchCaseSensitive="False"/>
-                        <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="270,0,0,0" HorizontalAlignment="Left"/>
-                        <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="310,0,0,0" HorizontalAlignment="Left"/>
-                        <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="350,0,0,0" HorizontalAlignment="Left">
+                        <ComboBox x:Name="text_family_combo" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged" Width="130" HorizontalAlignment="Left" Grid.Column="2" Margin="12,0,0,0"/>
+                        <ComboBox x:Name="text_size_combo" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged" Width="80" HorizontalAlignment="Left" Margin="150,0,0,0" IsEditable="True" KeyDown="text_size_KeyDown" IsTextSearchCaseSensitive="False" Grid.Column="2"/>
+                        <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="251,0,0,0" HorizontalAlignment="Left" Grid.Column="2"/>
+                        <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="286,0,0,0" HorizontalAlignment="Left" Grid.Column="2"/>
+                        <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="321,0,0,0" HorizontalAlignment="Left" Grid.Column="2">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock Text="U" TextDecorations="Underline"/>
                             </StackPanel>
                         </ToggleButton>
-                        <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="390,0,0,0" HorizontalAlignment="Left">
+                        <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="356,0,0,0" HorizontalAlignment="Left" Grid.Column="2">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock Text="S" TextDecorations="Strikethrough"/>
                             </StackPanel>
                         </ToggleButton>
-                        <Button x:Name="text_delete_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click" Grid.Column="2">
+                        <Button x:Name="text_load_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_load_Btn_Click">
+                            <Image Source="/Resources/load.png"/>
+                        </Button>
+                        <Button x:Name="text_save_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_save_Btn_Click" Grid.Column="1">
+                            <Image Source="/Resources/save.png"/>
+                        </Button>
+                        <Button x:Name="text_delete_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click" Grid.Column="4">
                             <Image Source="/Resources/deletetext.png"/>
                         </Button>
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Grid.Column="2" HorizontalAlignment="Left" Background="DimGray" Margin="6,2,0,2"/>
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Grid.Column="2" HorizontalAlignment="Left" Background="DimGray" Margin="240,2,0,2"/>
                     </Grid>
                     <TextBox x:Name="Text" DockPanel.Dock="Bottom" Text="" UndoLimit="200" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True"/>
                 </DockPanel>
@@ -212,7 +220,7 @@
                         </Grid.RowDefinitions>
                         <Label Content="기록" FontSize="18" Margin="116,0,115,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <ListBox x:Name="Cal_log" Margin="10" Grid.Row="1" MouseDoubleClick="Cal_log_MouseDoubleClick"/>
-                        <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" Click="Cal_log_remove_Click"/>
+                        <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" Click="Cal_log_remove_Click" Width="80"/>
                     </Grid>
                     <Label x:Name="Label_log" Content="" FontSize="16"/>
                 </Grid>
@@ -226,16 +234,16 @@
                 </TabItem.Header>
                 <DockPanel Background="#FFE5E5E5">
                     <StackPanel DockPanel.Dock="Top" Height="36" Orientation="Horizontal">
-                        <Button x:Name="Canvas_load_btn" Click="Canvas_load_btn_Click">
+                        <Button x:Name="Canvas_load_btn" Click="Canvas_load_btn_Click" BorderBrush="{x:Null}">
                             <Image Source="/Resources/load.png"/>
                         </Button>
-                        <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Click="Canvas_save_btn_Click">
+                        <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Click="Canvas_save_btn_Click" BorderBrush="{x:Null}">
                             <Image Source="/Resources/save.png"/>
                         </Button>
-                        <Button x:Name="Canvas_brush_property" Margin="10,0,0,0" Click="Canvas_brush_property_Click">
+                        <Button x:Name="Canvas_brush_property" Margin="10,0,0,0" Click="Canvas_brush_property_Click" BorderBrush="{x:Null}">
                             <Image Source="/Resources/brush.png"/>
                         </Button>
-                        <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Click="Canvas_clear_btn_Click">
+                        <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Click="Canvas_clear_btn_Click" BorderBrush="{x:Null}">
                             <Image Source="/Resources/deletetext.png"/>
                         </Button>
                         <Image x:Name="colorsImage" Source="/Resources/colors.png" Margin="10,0,0,0" MouseDown="Image_MouseDown"/>

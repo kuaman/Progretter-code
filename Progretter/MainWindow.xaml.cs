@@ -324,23 +324,16 @@ namespace Progretter
         private void Schedule_Column_Add_Btn_Click(object sender, RoutedEventArgs e)
         {
             ScheduleColumn scheduleColumn = new ScheduleColumn((Schedule.Columns.Count + 1).ToString());
+            scheduleColumn.Owner = this;
             scheduleColumn.ShowDialog();
             if (scheduleColumn.DialogResult == true)
             {
-                DataGridTextColumn textColumn = new DataGridTextColumn();
-                // DataGrid의 컬럼헤드
-                textColumn.Header = ScheduleColumn.columnindex;
-                /*            // 데이터 바인딩
-                            textColumn.Binding = new Binding(ScheduleColumn.columnindex);*/
-                // DataGrid에 컬럼 추가
-                Schedule.Columns.Add(textColumn);
+                DataTable dt = new DataTable();
+                if (Schedule.ItemsSource != null)
+                    dt = ((DataView)Schedule.ItemsSource).ToTable();
+                dt.Columns.Add(ScheduleColumn.columnindex);
+                Schedule.ItemsSource = dt.DefaultView;
             }
-
-/*            DataTable dt = new DataTable();
-            if (Schedule.ItemsSource != null)
-                dt = ((DataView)Schedule.ItemsSource).ToTable();
-            dt.Columns.Add();
-            Schedule.ItemsSource = dt.DefaultView;*/
         }
 
         private void Schedule_Column_Del_Btn_Click(object sender, RoutedEventArgs e)
@@ -391,6 +384,67 @@ namespace Progretter
         #endregion
 
         #region 메모장
+        private void text_load_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text file (*.txt)|*.txt";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                Text.Text = File.ReadAllText(openFileDialog.FileName);
+            }
+        }
+        private void text_save_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text file (*.txt)|*.txt";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                File.WriteAllText(saveFileDialog.FileName, Text.Text);
+            }
+        }
+        private void text_family_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Text.FontFamily = new FontFamily(text_family_combo.SelectedItem.ToString());
+        }
+
+        private void text_size_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int returnVal;
+            if (text_size_combo.SelectedItem != null)
+            {
+                bool bl = int.TryParse(text_size_combo.SelectedItem.ToString(), out returnVal);
+                if (bl)
+                {
+                    Text.FontSize = double.Parse(text_size_combo.SelectedItem.ToString());
+                }
+            }
+        }
+
+        private void text_size_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                int returnVal;
+                bool bl = int.TryParse(text_size_combo.Text, out returnVal);
+                if (bl)
+                {
+                    if (Convert.ToInt32(text_size_combo.Text) <= 500)
+                    {
+                        Text.FontSize = double.Parse(text_size_combo.Text);
+                    }
+                    else // 500 초과
+                    {
+                        MessageBox.Show("글자 크기는 500을 넘을 수 없습니다.");
+                        text_size_combo.Text = Text.FontSize.ToString();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("글자 크기에는 숫자만 들어갈 수 있습니다.");
+                    text_size_combo.Text = Text.FontSize.ToString();
+                }
+            }
+        }
         private void bold_Btn_Checked(object sender, RoutedEventArgs e)
         {
             Text.FontWeight = FontWeights.Bold;
@@ -443,49 +497,6 @@ namespace Progretter
             else
             {
                 Text.TextDecorations = null;
-            }
-        }
-        private void text_family_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Text.FontFamily = new FontFamily(text_family_combo.SelectedItem.ToString());
-        }
-
-        private void text_size_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            int returnVal;
-            if (text_size_combo.SelectedItem != null)
-            {
-                bool bl = int.TryParse(text_size_combo.SelectedItem.ToString(), out returnVal);
-                if (bl)
-                {
-                    Text.FontSize = double.Parse(text_size_combo.SelectedItem.ToString());
-                }
-            }
-        }
-
-        private void text_size_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                int returnVal;
-                bool bl = int.TryParse(text_size_combo.Text, out returnVal);
-                if (bl)
-                {
-                    if (Convert.ToInt32(text_size_combo.Text) <= 500)
-                    {
-                        Text.FontSize = double.Parse(text_size_combo.Text);
-                    }
-                    else // 500 초과
-                    {
-                        MessageBox.Show("글자 크기는 500을 넘을 수 없습니다.");
-                        text_size_combo.Text = Text.FontSize.ToString();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("글자 크기에는 숫자만 들어갈 수 있습니다.");
-                    text_size_combo.Text = Text.FontSize.ToString();
-                }
             }
         }
         private void text_delete_Btn_Click(object sender, RoutedEventArgs e)
