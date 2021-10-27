@@ -23,18 +23,15 @@
                     <ComboBoxItem Content="펜과 제스처"/>
                     <ComboBoxItem Content="선택"/>
                 </ComboBox>
+                <Label Width="100" Height="30" Margin="10,54,198,10" Content="붓 크기"/>
+                <Slider x:Name="StrokeSize" HorizontalAlignment="Left" Margin="158,60,0,0" VerticalAlignment="Top" Width="140" ValueChanged="StrokeSize_ValueChanged" Maximum="50" Minimum="1"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="색 설정" Grid.Row="1">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="12*"/>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0" Content="스포이드(임시)"/>
                 <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged" Grid.Row="1"
-                                         ColorState="{Binding ElementName=maindisplay, Path=ColorState, Mode=TwoWay, Delay=10}"
-                                         SecondColorState="{Binding ElementName=maindisplay, Path=SecondColorState, Mode=TwoWay}" Grid.RowSpan="2"/>
+                                         ColorState="{Binding Path=ColorState, Mode=TwoWay, Delay=10}"
+                                         SecondColorState="{Binding Path=SecondColorState, Mode=TwoWay}" Grid.RowSpan="2"/>
             </Grid>
         </GroupBox>
     </Grid>

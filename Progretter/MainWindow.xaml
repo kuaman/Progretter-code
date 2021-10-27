@@ -56,11 +56,26 @@
                         <GroupBox Header="그림판 설정" Grid.Row="1" BorderBrush="Black"/>
                         <GroupBox Header="일반 설정" Grid.Row="2" BorderBrush="Black"/>
                     </Grid>
-                    <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Background="#FFE5E5E5">
-                        <Viewbox VerticalAlignment="Top" Margin="-1">
-                            <Calendar VerticalAlignment="Stretch" BorderBrush="{x:Null}"/>
-                        </Viewbox>
-                    </Border>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="9*"/>
+                            <RowDefinition Height="10*"/>
+                        </Grid.RowDefinitions>
+                        <CheckBox x:Name="Setting_Alarm_Chk" Content="알림 보이기" Checked="Setting_Alarm_Chk_Checked" Unchecked="Setting_Alarm_Chk_Unchecked" Margin="0,0,0,240" Grid.RowSpan="2"/>
+                        <Grid x:Name="Setting_Alarm_Grid" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="10*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="7*"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Button Content="수정하기" VerticalAlignment="Center" Height="29" Grid.Row="1" Grid.ColumnSpan="2"/>
+                            <Slider HorizontalAlignment="Center" VerticalAlignment="Center" Width="15" Orientation="Vertical" Height="211" IsHitTestVisible="False" Focusable="False"/>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Width="120" Height="102">
@@ -103,7 +118,7 @@
                         <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click" BorderBrush="{x:Null}"/>
-                        <ComboBox Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,30,0">
+                        <ComboBox x:Name="Schedule_CellColor_Combo" Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,30,0" SelectionChanged="Schedule_CellColor_Combo_SelectionChanged">
                             <ComboBoxItem Content="RED"/>
                             <ComboBoxItem Content="YELLOW"/>
                             <ComboBoxItem Content="NORMAL"/>

@@ -25,6 +25,11 @@ namespace Progretter
         public event EditModeHandler EMEvent;
         private int editmode = 0;
 
+        public delegate void EditSizeHandler(double size);
+
+        public event EditSizeHandler ESEvent;
+        private double slider_size = 1;
+
         private void colorpicker_ColorChanged(object sender, RoutedEventArgs e)
         {
             Alpha = colorpicker.SelectedColor.A;
@@ -51,8 +56,12 @@ namespace Progretter
             }
         }
 
-        public void RecEditingMode(string noweditmode)
+        public void RecEditingMode(byte A, byte R, byte G, byte B, string noweditmode)
         {
+            colorpicker.Color.A = A;
+            colorpicker.Color.RGB_R = R;
+            colorpicker.Color.RGB_G = G;
+            colorpicker.Color.RGB_B = B;
             switch (noweditmode)
             {
                 case "Ink":
@@ -79,6 +88,14 @@ namespace Progretter
                     StrokeEditingMode.SelectedIndex = 5;
                     break;
             }
+        }
+
+        private void StrokeSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            slider_size = StrokeSize.Value;
+            var handler = ESEvent;
+            if (null != handler)
+                ESEvent(slider_size);
         }
     }
 }

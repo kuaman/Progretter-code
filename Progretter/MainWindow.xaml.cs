@@ -921,8 +921,14 @@ namespace Progretter
             CanvasProperty canvasProperty = new CanvasProperty();
             canvasProperty.CPEvent += ColorChange;
             canvasProperty.EMEvent += StrokeEditingModeChange;
-            canvasProperty.RecEditingMode(inkCanvas.EditingMode.ToString());
+            canvasProperty.ESEvent += StrokeSizeChange;
+            canvasProperty.RecEditingMode(inkCanvas.DefaultDrawingAttributes.Color.A, inkCanvas.DefaultDrawingAttributes.Color.R, inkCanvas.DefaultDrawingAttributes.Color.G, inkCanvas.DefaultDrawingAttributes.Color.B, inkCanvas.EditingMode.ToString());
             canvasProperty.Show();
+        }
+
+        private void ColorChange(byte A, byte R, byte G, byte B)
+        {
+            inkCanvas.DefaultDrawingAttributes.Color = Color.FromArgb(A, R, G, B);
         }
 
         private void StrokeEditingModeChange(int mode)
@@ -955,16 +961,18 @@ namespace Progretter
             }
         }
 
+        private void StrokeSizeChange(double size)
+        {
+            inkCanvas.DefaultDrawingAttributes.Width = size;
+            inkCanvas.DefaultDrawingAttributes.Height = size;
+        }
+
         // 잉크 색상 변경
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Point point = e.GetPosition(sender as Image);
             inkCanvas.DefaultDrawingAttributes.Color = GetPixelColor(point);
-        }
-
-        private void ColorChange(byte A, byte R, byte G, byte B)
-        {
-            inkCanvas.DefaultDrawingAttributes.Color = Color.FromArgb(A, R, G, B);
+            StrokeSizeChange(11);
         }
 
         private void Canvas_clear_btn_Click(object sender, RoutedEventArgs e)
@@ -981,5 +989,20 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
+
+        private void Schedule_CellColor_Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Setting_Alarm_Chk_Checked(object sender, RoutedEventArgs e)
+        {
+            Setting_Alarm_Grid.Visibility = Visibility.Visible;
+        }
+
+        private void Setting_Alarm_Chk_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Setting_Alarm_Grid.Visibility = Visibility.Collapsed;
+        }
     }
 }
