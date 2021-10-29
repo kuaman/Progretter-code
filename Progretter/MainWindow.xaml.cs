@@ -82,6 +82,27 @@ namespace Progretter
 
             }
 
+            if (Config.Get("TextTheme") == "1")
+            {
+                Text.Background = Brushes.Black;
+                Text.Foreground = Brushes.White;
+            }
+
+            if (Config.Get("CalculatorDeleteLog") == "true")
+            {
+                Setting_Cal_DeleteLog_CheckBox.IsChecked = true;
+            }
+
+            if (Config.Get("CanvasAutoLoad") == "true")
+            {
+                Setting_Canvas_Autoload_Checkbox.IsChecked = true;
+            }
+
+            if (Config.Get("CanvasAutoSave") == "true")
+            {
+                Setting_Canvas_Autosave_Checkbox.IsChecked = true;
+            }
+
             System.Windows.Markup.XmlLanguage cond = System.Windows.Markup.XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentUICulture.Name);
             List<string> listFont = new List<string>();
             foreach (FontFamily font in Fonts.SystemFontFamilies)
@@ -114,10 +135,32 @@ namespace Progretter
                     Schedules.ExportExcel((DataView)Schedule.ItemsSource, path);
                 }
             }
-            Config.Set("CalculatorLog", string.Empty);
-            foreach (var item in Cal_log.Items)
+            if (Config.Get("CalculatorDeleteLog") == "false")
             {
-                Config.Add("CalculatorLog", (string)item);
+                Config.Set("CalculatorLog", string.Empty);
+                foreach (var item in Cal_log.Items)
+                {
+                    Config.Add("CalculatorLog", (string)item);
+                }
+
+            }
+            else
+            {
+                Config.Set("CalculatorLog", string.Empty);
+            }
+
+            if (Config.Get("CanvasAutoSave") == "true")
+            {
+                if(Config.Get("CanvasLastAdress") != "")
+                {
+                    RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+                    ImageSave(bitmap, 1);
+                }
+                else
+                {
+                    RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+                    ImageSave(bitmap, 2);
+                }
             }
         }
         #endregion
@@ -161,9 +204,52 @@ namespace Progretter
         {
             Config.Set("ScheduleCloseSave", "false");
         }
+
+        private void Setting_Cal_DeleteLog_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("CalculatorDeleteLog", "true");
+        }
+
+        private void Setting_Cal_DeleteLog_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("CalculatorDeleteLog", "false");
+        }
+        private void Setting_Canvas_Autosave_Checkbox_Checked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("CanvasAutoSave", "true");
+        }
+
+        private void Setting_Canvas_Autosave_Checkbox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("CanvasAutoSave", "false");
+        }
+
+        private void Setting_Canvas_Autoload_Checkbox_Checked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("CanvasAutoLoad", "true");
+        }
+
+        private void Setting_Canvas_Autoload_Checkbox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("CanvasAutoLoad", "false");
+        }
+        private void Setting_Alarm_Chk_Checked(object sender, RoutedEventArgs e)
+        {
+            Setting_Alarm_Grid.Visibility = Visibility.Visible;
+        }
+
+        private void Setting_Alarm_Chk_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Setting_Alarm_Grid.Visibility = Visibility.Collapsed;
+        }
         #endregion
 
         #region 시간표
+        private void Schedule_CellColor_Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
         private void ImportExcel(object sender, RoutedEventArgs e)
         {
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -499,6 +585,23 @@ namespace Progretter
                 Text.TextDecorations = null;
             }
         }
+
+        private void text_theme_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Config.Get("TextTheme") == "0")
+            {
+                Text.Background = Brushes.Black;
+                Text.Foreground = Brushes.White;
+                Config.Set("TextTheme", "1");
+            }
+            else
+            {
+                Text.Background = Brushes.White;
+                Text.Foreground = Brushes.Black;
+                Config.Set("TextTheme", "0");
+            }
+        }
+
         private void text_delete_Btn_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("텍스트를 모두 삭제하시겠습니까? 복구할 수 없습니다!", "텍스트 모두 삭제", MessageBoxButton.YesNo);
@@ -781,6 +884,7 @@ namespace Progretter
         private void Cal_log_remove_Click(object sender, RoutedEventArgs e)
         {
             Cal_log.Items.Clear();
+            Config.Set("CalculatorLog", string.Empty);
         }
 
         private void Cal_log_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -792,21 +896,41 @@ namespace Progretter
                 txtResult.Text = loadresult;
             }
         }
+
+        private void Cal_log_export_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text file (*.txt)|*.txt";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                using (var sw = new StreamWriter(saveFileDialog.FileName, false))
+                    foreach (var item in Cal_log.Items)
+                        sw.Write(item.ToString() + Environment.NewLine);
+            }
+        }
         #endregion
 
         #region 그림판
         private void Canvas_load_btn_Click(object sender, RoutedEventArgs e)
         {
+            inkCanvas.Strokes.Clear();
             OpenFileDialog openDialog = new OpenFileDialog();
             if (openDialog.ShowDialog() == true)
             {
                 if (File.Exists(openDialog.FileName))
                 {
-                    BitmapImage bitmapImage = new BitmapImage(new Uri(openDialog.FileName, UriKind.RelativeOrAbsolute));
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.None;
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                    bitmapImage.UriSource = new Uri(openDialog.FileName, UriKind.RelativeOrAbsolute);
                     // InkCanvas의 배경으로 지정
                     inkCanvas.Background = new ImageBrush(bitmapImage);
+                    bitmapImage.EndInit();
                 }
             }
+            Config.Set("CanvasLastAdress", openDialog.FileName);
         }
 
         private byte[] Pixels = new byte[4];
@@ -815,7 +939,7 @@ namespace Progretter
         private void Canvas_save_btn_Click(object sender, RoutedEventArgs e)
         {
             RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
-            ImageSave(bitmap);
+            ImageSave(bitmap, 0);
         }
 
         // 해당 객체를 이미지로 변환
@@ -840,26 +964,65 @@ namespace Progretter
         }
 
         // 해당 이미지 저장
-        private static void ImageSave(BitmapSource source)
+        private static void ImageSave(BitmapSource source, int mode) //mode 0 = 일반 저장, mode 1 = 파일에 자동 저장, mode 2 = 자동 저장 파일 생성
         {
-            SaveFileDialog saveDialog = new SaveFileDialog();
+            if (mode == 0)
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog();
 
-            // 이미지 포맷들
-            saveDialog.Filter = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp";
-            saveDialog.AddExtension = true;
+                // 이미지 포맷들
+                saveDialog.Filter = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp";
+                saveDialog.AddExtension = true;
 
-            if (saveDialog.ShowDialog() == true)
+                if (saveDialog.ShowDialog() == true)
+                {
+                    BitmapEncoder encoder = null;
+                    // 파일 생성
+                    FileStream stream = new FileStream(saveDialog.FileName, FileMode.Create, FileAccess.Write);
+
+                    // 파일 포맷
+                    string upper = saveDialog.SafeFileName.ToUpper();
+                    char[] format = upper.ToCharArray(saveDialog.SafeFileName.Length - 3, 3);
+                    upper = new string(format);
+
+                    // 해당 포맷에 맞게 인코더 생성
+                    switch (upper.ToString())
+                    {
+                        case "PNG":
+                            encoder = new PngBitmapEncoder();
+                            break;
+
+                        case "JPG":
+                            encoder = new JpegBitmapEncoder();
+                            break;
+
+                        case "GIF":
+                            encoder = new GifBitmapEncoder();
+                            break;
+
+                        case "BMP":
+                            encoder = new BmpBitmapEncoder();
+                            break;
+                    }
+
+                    // 인코더 프레임에 이미지 추가
+                    encoder.Frames.Add(BitmapFrame.Create(source));
+                    // 파일에 저장
+                    encoder.Save(stream);
+
+                    stream.Close();
+                }
+            }
+            else if (mode == 1)
             {
                 BitmapEncoder encoder = null;
                 // 파일 생성
-                FileStream stream = new FileStream(saveDialog.FileName, FileMode.Create, FileAccess.Write);
+                FileStream stream = new FileStream(Config.Get("CanvasLastAdress"), FileMode.Create, FileAccess.Write);
 
-                // 파일 포맷
-                string upper = saveDialog.SafeFileName.ToUpper();
-                char[] format = upper.ToCharArray(saveDialog.SafeFileName.Length - 3, 3);
+                string upper = Config.Get("CanvasLastAdress").ToUpper();
+                char[] format = upper.ToCharArray(Config.Get("CanvasLastAdress").Length - 3, 3);
                 upper = new string(format);
 
-                // 해당 포맷에 맞게 인코더 생성
                 switch (upper.ToString())
                 {
                     case "PNG":
@@ -878,6 +1041,20 @@ namespace Progretter
                         encoder = new BmpBitmapEncoder();
                         break;
                 }
+
+                // 인코더 프레임에 이미지 추가
+                encoder.Frames.Add(BitmapFrame.Create(source));
+                // 파일에 저장
+                encoder.Save(stream);
+
+                stream.Close();
+            }
+            else // mode == 2
+            {
+                // 파일 생성
+                FileStream stream = new FileStream(@"AutoSave\" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg", FileMode.Create, FileAccess.Write);
+
+                BitmapEncoder encoder = new JpegBitmapEncoder();
 
                 // 인코더 프레임에 이미지 추가
                 encoder.Frames.Add(BitmapFrame.Create(source));
@@ -979,6 +1156,7 @@ namespace Progretter
         {
             inkCanvas.Strokes.Clear();
             inkCanvas.Background = Brushes.White; //배경도 지우기
+            Config.Set("CanvasLastAdress", "");
         }
         #endregion
 
@@ -989,20 +1167,5 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
-
-        private void Schedule_CellColor_Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void Setting_Alarm_Chk_Checked(object sender, RoutedEventArgs e)
-        {
-            Setting_Alarm_Grid.Visibility = Visibility.Visible;
-        }
-
-        private void Setting_Alarm_Chk_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Setting_Alarm_Grid.Visibility = Visibility.Collapsed;
-        }
     }
 }
