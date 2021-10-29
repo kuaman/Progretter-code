@@ -96,6 +96,10 @@ namespace Progretter
             if (Config.Get("CanvasAutoLoad") == "true")
             {
                 Setting_Canvas_Autoload_Checkbox.IsChecked = true;
+                if (Config.Get("CanvasLastAdress") != "")
+                {
+                    ImageLoad(1);
+                }
             }
 
             if (Config.Get("CanvasAutoSave") == "true")
@@ -127,9 +131,9 @@ namespace Progretter
         #region Window_Closed
         private void Window_Closed(object sender, EventArgs e)
         {
-            if(Config.Get("ScheduleCloseSave") == "true")
+            if (Config.Get("ScheduleCloseSave") == "true")
             {
-                if(Schedule.ItemsSource != null)
+                if (Schedule.ItemsSource != null)
                 {
                     string path = @"AutoSave\" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
                     Schedules.ExportExcel((DataView)Schedule.ItemsSource, path);
@@ -151,7 +155,7 @@ namespace Progretter
 
             if (Config.Get("CanvasAutoSave") == "true")
             {
-                if(Config.Get("CanvasLastAdress") != "")
+                if (Config.Get("CanvasLastAdress") != "")
                 {
                     if (MessageBox.Show("그림판 변경사항을 저장하시겠습니까?", "그림판 자동 저장", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
@@ -255,99 +259,99 @@ namespace Progretter
 
         private void ImportExcel(object sender, RoutedEventArgs e)
         {
-        OpenFileDialog openFileDialog = new OpenFileDialog();
-        openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx|Excel 97-2003 File(*.xls)|*.xls|Csv File(*.csv)|*.csv";
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx|Excel 97-2003 File(*.xls)|*.xls|Csv File(*.csv)|*.csv";
             if (openFileDialog.ShowDialog() == true)
             {
                 Schedule.ItemsSource = Schedules.ImportExcel(openFileDialog.FileName).DefaultView;
             }
 
-                // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
-                /*                var path = openFileDialog.FileName;
+            // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
+            /*                var path = openFileDialog.FileName;
 
-                                Excel.Application xlApp;
-                                Excel.Workbook xlWorkBook;
-                                Excel.Worksheet xlWorkSheet;
-                                Excel.Range range;
+                            Excel.Application xlApp;
+                            Excel.Workbook xlWorkBook;
+                            Excel.Worksheet xlWorkSheet;
+                            Excel.Range range;
 
-                                string str;
-                                int rCnt = 0;
-                                int cCnt = 0;
-                                string sCellData = "";
-                                double dCellData;
+                            string str;
+                            int rCnt = 0;
+                            int cCnt = 0;
+                            string sCellData = "";
+                            double dCellData;
 
-                                xlApp = new Excel.Application();
+                            xlApp = new Excel.Application();
 
-                                try
+                            try
+                            {
+                                xlWorkBook = xlApp.Workbooks.Open(path, 0, true, 5, "", "", true, Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+                                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+                                range = xlWorkSheet.UsedRange;
+
+                                DataTable dt = new DataTable();
+
+                                // 첫 행을 제목으로
+                                for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
                                 {
-                                    xlWorkBook = xlApp.Workbooks.Open(path, 0, true, 5, "", "", true, Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-                                    xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+                                    str = (string)(range.Cells[1, cCnt] as Excel.Range).Value2;
+                                    dt.Columns.Add(str, typeof(string));
+                                }
 
-                                    range = xlWorkSheet.UsedRange;
-
-                                    DataTable dt = new DataTable();
-
-                                    // 첫 행을 제목으로
+                                for (rCnt = 2; rCnt <= range.Rows.Count; rCnt++)
+                                {
+                                    string sData = "";
                                     for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
                                     {
-                                        str = (string)(range.Cells[1, cCnt] as Excel.Range).Value2;
-                                        dt.Columns.Add(str, typeof(string));
-                                    }
-
-                                    for (rCnt = 2; rCnt <= range.Rows.Count; rCnt++)
-                                    {
-                                        string sData = "";
-                                        for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
+                                        try
                                         {
-                                            try
-                                            {
-                                                sCellData = (string)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
-                                                sData += sCellData + "|";
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                dCellData = (double)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
-                                                sData += dCellData.ToString() + "|";
-                                            }
+                                            sCellData = (string)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
+                                            sData += sCellData + "|";
                                         }
-                                        sData = sData.Remove(sData.Length - 1, 1);
-                                        dt.Rows.Add(sData.Split('|'));
+                                        catch (Exception ex)
+                                        {
+                                            dCellData = (double)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
+                                            sData += dCellData.ToString() + "|";
+                                        }
                                     }
-
-                                    Schedule.ItemsSource = dt.DefaultView;
-
-                                    xlWorkBook.Close(true, null, null);
-                                    xlApp.Quit();
-
-                                    releaseObject(xlWorkSheet);
-                                    releaseObject(xlWorkBook);
-                                    releaseObject(xlApp);
+                                    sData = sData.Remove(sData.Length - 1, 1);
+                                    dt.Rows.Add(sData.Split('|'));
                                 }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show("파일 열기 실패! : " + ex.Message);
-                                    return;
-                                }*/
+
+                                Schedule.ItemsSource = dt.DefaultView;
+
+                                xlWorkBook.Close(true, null, null);
+                                xlApp.Quit();
+
+                                releaseObject(xlWorkSheet);
+                                releaseObject(xlWorkBook);
+                                releaseObject(xlApp);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("파일 열기 실패! : " + ex.Message);
+                                return;
+                            }*/
         }
 
 
-/*        private void releaseObject(object obj) // Interop
-        {
-            try
-            {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
-                obj = null;
-            }
-            catch (Exception ex)
-            {
-                obj = null;
-                MessageBox.Show("Unable to release the Object " + ex.ToString());
-            }
-            finally
-            {
-                GC.Collect();
-            }
-        }*/
+        /*        private void releaseObject(object obj) // Interop
+                {
+                    try
+                    {
+                        System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                        obj = null;
+                    }
+                    catch (Exception ex)
+                    {
+                        obj = null;
+                        MessageBox.Show("Unable to release the Object " + ex.ToString());
+                    }
+                    finally
+                    {
+                        GC.Collect();
+                    }
+                }*/
 
 
         private void ExportToExcel(object sender, RoutedEventArgs e)
@@ -916,24 +920,47 @@ namespace Progretter
         #region 그림판
         private void Canvas_load_btn_Click(object sender, RoutedEventArgs e)
         {
-            inkCanvas.Strokes.Clear();
-            OpenFileDialog openDialog = new OpenFileDialog();
-            if (openDialog.ShowDialog() == true)
+            ImageLoad(0);
+        }
+
+        private void ImageLoad(int mode) // mode 0 = 일반 로드, mode 1 = 자동 로드
+        {
+            if (mode == 0)
             {
-                if (File.Exists(openDialog.FileName))
+                inkCanvas.Strokes.Clear();
+                OpenFileDialog openDialog = new OpenFileDialog();
+                if (openDialog.ShowDialog() == true)
+                {
+                    if (File.Exists(openDialog.FileName))
+                    {
+                        BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.None;
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                        bitmapImage.UriSource = new Uri(openDialog.FileName, UriKind.RelativeOrAbsolute);
+                        // InkCanvas의 배경으로 지정
+                        inkCanvas.Background = new ImageBrush(bitmapImage);
+                        bitmapImage.EndInit();
+                    }
+                }
+                Config.Set("CanvasLastAdress", openDialog.FileName);
+            }
+            else // mode 1
+            {
+                if (File.Exists(Config.Get("CanvasLastAdress")))
                 {
                     BitmapImage bitmapImage = new BitmapImage();
                     bitmapImage.BeginInit();
                     bitmapImage.CacheOption = BitmapCacheOption.None;
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                     bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                    bitmapImage.UriSource = new Uri(openDialog.FileName, UriKind.RelativeOrAbsolute);
+                    bitmapImage.UriSource = new Uri(Config.Get("CanvasLastAdress"), UriKind.RelativeOrAbsolute);
                     // InkCanvas의 배경으로 지정
                     inkCanvas.Background = new ImageBrush(bitmapImage);
                     bitmapImage.EndInit();
                 }
             }
-            Config.Set("CanvasLastAdress", openDialog.FileName);
         }
 
         private byte[] Pixels = new byte[4];
@@ -1014,6 +1041,8 @@ namespace Progretter
                     encoder.Save(stream);
 
                     stream.Close();
+
+                    Config.Set("CanvasLastAdress", saveDialog.FileName);
                 }
             }
             else if (mode == 1)
@@ -1054,8 +1083,9 @@ namespace Progretter
             }
             else // mode == 2
             {
+                string path = @"AutoSave\" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
                 // 파일 생성
-                FileStream stream = new FileStream(@"AutoSave\" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg", FileMode.Create, FileAccess.Write);
+                FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
 
                 BitmapEncoder encoder = new JpegBitmapEncoder();
 
@@ -1065,6 +1095,8 @@ namespace Progretter
                 encoder.Save(stream);
 
                 stream.Close();
+
+                Config.Set("CanvasLastAdress", path);
             }
         }
 
