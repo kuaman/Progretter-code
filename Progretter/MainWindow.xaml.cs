@@ -153,8 +153,11 @@ namespace Progretter
             {
                 if(Config.Get("CanvasLastAdress") != "")
                 {
-                    RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
-                    ImageSave(bitmap, 1);
+                    if (MessageBox.Show("그림판 변경사항을 저장하시겠습니까?", "그림판 자동 저장", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+                        ImageSave(bitmap, 1);
+                    }
                 }
                 else
                 {
