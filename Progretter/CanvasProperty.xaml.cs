@@ -37,7 +37,17 @@ namespace Progretter
             Green = colorpicker.SelectedColor.G;
             Blue = colorpicker.SelectedColor.B;
 
-            CPEvent(Alpha, Red, Green, Blue);
+            var handler = CPEvent;
+            if (null != handler)
+                CPEvent(Alpha, Red, Green, Blue);
+        }
+
+        public void colorpicker_ColorChange(byte A, byte R, byte G, byte B)
+        {
+            colorpicker.Color.A = A;
+            colorpicker.Color.RGB_R = R;
+            colorpicker.Color.RGB_G = G;
+            colorpicker.Color.RGB_B = B;
         }
 
         private int load = 0;
@@ -47,8 +57,9 @@ namespace Progretter
             if (load == 1)
             {
                 editmode = StrokeEditingMode.SelectedIndex;
-
-                EMEvent(editmode);
+                var handler = EMEvent;
+                if (null != handler)
+                    EMEvent(editmode);
             }
             else
             {

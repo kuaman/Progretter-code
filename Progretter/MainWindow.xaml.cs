@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 /*using Excel = Microsoft.Office.Interop.Excel;*/
+
 namespace Progretter
 {
     /// <summary>
@@ -625,13 +626,12 @@ namespace Progretter
 
         #region 계산기
         decimal Result_Value;
-        string Operator_Performed = " ";
+        string Operator_Performed = string.Empty;
         bool reset20 = false;
         bool PerformedOp;
 
         private void Cal_num(object sender, RoutedEventArgs e)
         {
-            // numbers button
             if (txtResult.Text == "0" || PerformedOp)
             {
                 txtResult.Clear();
@@ -641,6 +641,10 @@ namespace Progretter
             txtResult.Text += button.Content;
             reset20 = false;
             txtResult.Focus();
+            if (num1 != string.Empty)
+            {
+                num2 = txtResult.Text;
+            }
         }
 
         private void Cal_dot(object sender, RoutedEventArgs e)
@@ -654,7 +658,7 @@ namespace Progretter
             reset20 = false;
         }
 
-        private string num1;
+        private string num1 = string.Empty;
 
         private void Cal_op(object sender, RoutedEventArgs e)
         {
@@ -706,25 +710,24 @@ namespace Progretter
             // EQUALS BUTTON
             if (!PerformedOp)
             {
-                num2 = txtResult.Text;
                 switch (Operator_Performed)
                 {
                     case "+":
                         txtResult.Text = (Result_Value + decimal.Parse(txtResult.Text)).ToString();
                         if (!reset20)
-                            Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
+                            Cal_log_Add(Label_log.Content.ToString(), num2, txtResult.Text);
                         break;
 
                     case "-":
                         txtResult.Text = (Result_Value - decimal.Parse(txtResult.Text)).ToString();
                         if (!reset20)
-                            Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
+                            Cal_log_Add(Label_log.Content.ToString(), num2, txtResult.Text);
                         break;
 
                     case "×":
                         txtResult.Text = (Result_Value * decimal.Parse(txtResult.Text)).ToString();
                         if (!reset20)
-                            Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
+                            Cal_log_Add(Label_log.Content.ToString(), num2, txtResult.Text);
                         break;
 
                     case "÷":
@@ -732,7 +735,7 @@ namespace Progretter
                         {
                             txtResult.Text = (Result_Value / decimal.Parse(txtResult.Text)).ToString();
                             if (!reset20)
-                                Cal_log_Add(num1, Operator_Performed, num2, txtResult.Text);
+                                Cal_log_Add(Label_log.Content.ToString(), num2, txtResult.Text);
                         }
                         catch (Exception m)
                         {
@@ -884,9 +887,9 @@ namespace Progretter
                 PerformedOp = false;
             }
         }
-        private void Cal_log_Add(string num1, string op, string num2, string result)
+        private void Cal_log_Add(string label_log, string num2, string result)
         {
-            Cal_log.Items.Add(num1 + " " + op + " " + num2 + " " + "=" + " " + result);
+            Cal_log.Items.Add(label_log + " " + num2 + " " + "=" + " " + result);
         }
         private void Cal_log_remove_Click(object sender, RoutedEventArgs e)
         {
@@ -1127,10 +1130,10 @@ namespace Progretter
             return Color.FromArgb(Pixels[3], Pixels[2], Pixels[1], Pixels[0]);
         }
 
+        CanvasProperty canvasProperty = new CanvasProperty();
 
         private void Canvas_brush_property_Click(object sender, RoutedEventArgs e)
         {
-            CanvasProperty canvasProperty = new CanvasProperty();
             canvasProperty.CPEvent += ColorChange;
             canvasProperty.EMEvent += StrokeEditingModeChange;
             canvasProperty.ESEvent += StrokeSizeChange;
@@ -1184,7 +1187,7 @@ namespace Progretter
         {
             Point point = e.GetPosition(sender as Image);
             inkCanvas.DefaultDrawingAttributes.Color = GetPixelColor(point);
-            StrokeSizeChange(11);
+            canvasProperty.colorpicker_ColorChange(GetPixelColor(point).A, GetPixelColor(point).R, GetPixelColor(point).G, GetPixelColor(point).B);
         }
 
         private void Canvas_clear_btn_Click(object sender, RoutedEventArgs e)
