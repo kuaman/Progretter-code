@@ -35,7 +35,7 @@
                             <RowDefinition Height="3*"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Button x:Name="Tetris_btn" Content="테트리스" Click="Tetris_btn_Click" Grid.Row="3" Grid.ColumnSpan="2"/>
+                        <Button x:Name="Tetris_btn" Content="테트리스" Click="Tetris_btn_Click" Grid.Row="3"/>
                         <GroupBox Header="시간표 설정" BorderBrush="Black" Grid.ColumnSpan="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -67,6 +67,7 @@
                                 <CheckBox x:Name="Setting_Canvas_Autosave_Checkbox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autosave_Checkbox_Checked" Unchecked="Setting_Canvas_Autosave_Checkbox_Unchecked"/>
                             </Grid>
                         </GroupBox>
+                        <Button x:Name="Setting_Info_Btn" Content="Info" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Click="Setting_Info_Btn_Click"/>
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
@@ -253,7 +254,7 @@
                         </Grid.RowDefinitions>
                         <Label Content="기록" FontSize="18" Margin="120,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
                         <ListBox x:Name="Cal_log" Margin="10,10,10,10" Grid.Row="1" MouseDoubleClick="Cal_log_MouseDoubleClick" Grid.ColumnSpan="2"/>
-                        <Button x:Name="Cal_log_export" BorderBrush="{x:Null}" Content="기록 내보내기" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Stretch" Width="100" Click="Cal_log_export_Click"/>
+                        <Button x:Name="Cal_log_export" BorderBrush="{x:Null}" Content="기록 저장" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Stretch" Width="100" Click="Cal_log_export_Click"/>
                         <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" Click="Cal_log_remove_Click" Width="100" Grid.Column="1"/>
                     </Grid>
                     <Label x:Name="Label_log" Content="" FontSize="16"/>

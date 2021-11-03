@@ -250,6 +250,12 @@ namespace Progretter
         {
             Setting_Alarm_Grid.Visibility = Visibility.Collapsed;
         }
+
+        private void Setting_Info_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            Info info = new Info();
+            info.Show();
+        }
         #endregion
 
         #region 시간표
@@ -1129,6 +1135,7 @@ namespace Progretter
 
             return Color.FromArgb(Pixels[3], Pixels[2], Pixels[1], Pixels[0]);
         }
+
 
         CanvasProperty canvasProperty = new CanvasProperty();
 
