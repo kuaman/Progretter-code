@@ -10,6 +10,7 @@ namespace Progretter
         public CanvasProperty()
         {
             InitializeComponent();
+            ((MainWindow)Application.Current.MainWindow).colorsImage.MouseDown += new System.Windows.Input.MouseButtonEventHandler(ImageMouseDown);
         }
 
         public delegate void ColorPropertyDataHandler(byte A, byte R, byte G, byte B);
@@ -29,6 +30,13 @@ namespace Progretter
 
         public event EditSizeHandler ESEvent;
         private double slider_size = 1;
+
+
+        private void ImageMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Point point = e.GetPosition(sender as System.Windows.Controls.Image);
+            colorpicker_ColorChange(((MainWindow)Application.Current.MainWindow).GetPixelColor(point).A, ((MainWindow)Application.Current.MainWindow).GetPixelColor(point).R, ((MainWindow)Application.Current.MainWindow).GetPixelColor(point).G, ((MainWindow)Application.Current.MainWindow).GetPixelColor(point).B);
+        }
 
         private void colorpicker_ColorChanged(object sender, RoutedEventArgs e)
         {

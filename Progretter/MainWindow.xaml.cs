@@ -129,6 +129,28 @@ namespace Progretter
         }
         #endregion
 
+        #region Window_Closing
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (Config.Get("CanvasAutoSave") == "true")
+            {
+                if (Config.Get("CanvasLastAdress") != "")
+                {
+                    if (MessageBox.Show("그림판 변경사항을 저장하시겠습니까?", "그림판 자동 저장", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+                        ImageSave(bitmap, 1);
+                    }
+                }
+                else
+                {
+                    RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+                    ImageSave(bitmap, 2);
+                }
+            }
+        }
+        #endregion
+
         #region Window_Closed
         private void Window_Closed(object sender, EventArgs e)
         {
@@ -147,28 +169,10 @@ namespace Progretter
                 {
                     Config.Add("CalculatorLog", (string)item);
                 }
-
             }
             else
             {
                 Config.Set("CalculatorLog", string.Empty);
-            }
-
-            if (Config.Get("CanvasAutoSave") == "true")
-            {
-                if (Config.Get("CanvasLastAdress") != "")
-                {
-                    if (MessageBox.Show("그림판 변경사항을 저장하시겠습니까?", "그림판 자동 저장", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
-                        ImageSave(bitmap, 1);
-                    }
-                }
-                else
-                {
-                    RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
-                    ImageSave(bitmap, 2);
-                }
             }
         }
         #endregion
@@ -1092,7 +1096,14 @@ namespace Progretter
             }
             else // mode == 2
             {
-                string path = @"AutoSave\" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                DirectoryInfo di = new DirectoryInfo(@"AutoSave");
+
+                if (di.Exists == false)   //If New Folder not exits  
+                {
+                    di.Create();             //create Folder  
+                }
+
+                string path = "AutoSave/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg"; // AutoSave/가 맞음 (AutoSave\ X)
                 // 파일 생성
                 FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
 
@@ -1105,12 +1116,13 @@ namespace Progretter
 
                 stream.Close();
 
-                Config.Set("CanvasLastAdress", path);
+                if (Config.Get("CanvasAutoLoad") == "true")
+                    Config.Set("CanvasLastAdress", path);
             }
         }
 
         // 픽셀 값 얻어오기
-        private Color GetPixelColor(Point CurrentPoint)
+        public Color GetPixelColor(Point CurrentPoint)
         {
             BitmapSource CurrentSource = colorsImage.Source as BitmapSource;
 
@@ -1136,11 +1148,9 @@ namespace Progretter
             return Color.FromArgb(Pixels[3], Pixels[2], Pixels[1], Pixels[0]);
         }
 
-
-        CanvasProperty canvasProperty = new CanvasProperty();
-
         private void Canvas_brush_property_Click(object sender, RoutedEventArgs e)
         {
+            CanvasProperty canvasProperty = new CanvasProperty();
             canvasProperty.CPEvent += ColorChange;
             canvasProperty.EMEvent += StrokeEditingModeChange;
             canvasProperty.ESEvent += StrokeSizeChange;
@@ -1194,7 +1204,6 @@ namespace Progretter
         {
             Point point = e.GetPosition(sender as Image);
             inkCanvas.DefaultDrawingAttributes.Color = GetPixelColor(point);
-            canvasProperty.colorpicker_ColorChange(GetPixelColor(point).A, GetPixelColor(point).R, GetPixelColor(point).G, GetPixelColor(point).B);
         }
 
         private void Canvas_clear_btn_Click(object sender, RoutedEventArgs e)
