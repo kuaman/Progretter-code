@@ -1184,10 +1184,6 @@ namespace Progretter
                     break;
 
                 case 4:
-                    inkCanvas.EditingMode = InkCanvasEditingMode.InkAndGesture;
-                    break;
-
-                case 5:
                     inkCanvas.EditingMode = InkCanvasEditingMode.Select;
                     break;
             }

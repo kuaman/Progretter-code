@@ -99,12 +99,8 @@ namespace Progretter
                     StrokeEditingMode.SelectedIndex = 3;
                     break;
 
-                case "InkAndGesture":
-                    StrokeEditingMode.SelectedIndex = 4;
-                    break;
-
                 case "Select":
-                    StrokeEditingMode.SelectedIndex = 5;
+                    StrokeEditingMode.SelectedIndex = 4;
                     break;
             }
         }
