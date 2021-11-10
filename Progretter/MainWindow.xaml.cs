@@ -10,7 +10,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-/*using Excel = Microsoft.Office.Interop.Excel;*/
 
 namespace Progretter
 {
@@ -178,11 +177,6 @@ namespace Progretter
         #endregion
 
         #region 설정
-        private void chk_ScheduleCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("ScheduleIsCheckBox", "true");
-        }
-
         private void chk_ScheduleCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             Config.Set("ScheduleIsCheckBox", "false");
@@ -245,15 +239,6 @@ namespace Progretter
         {
             Config.Set("CanvasAutoLoad", "false");
         }
-        private void Setting_Alarm_Chk_Checked(object sender, RoutedEventArgs e)
-        {
-            Setting_Alarm_Grid.Visibility = Visibility.Visible;
-        }
-
-        private void Setting_Alarm_Chk_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Setting_Alarm_Grid.Visibility = Visibility.Collapsed;
-        }
 
         private void Setting_Info_Btn_Click(object sender, RoutedEventArgs e)
         {
@@ -263,11 +248,6 @@ namespace Progretter
         #endregion
 
         #region 시간표
-        private void Schedule_CellColor_Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void ImportExcel(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -276,94 +256,7 @@ namespace Progretter
             {
                 Schedule.ItemsSource = Schedules.ImportExcel(openFileDialog.FileName).DefaultView;
             }
-
-            // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
-            /*                var path = openFileDialog.FileName;
-
-                            Excel.Application xlApp;
-                            Excel.Workbook xlWorkBook;
-                            Excel.Worksheet xlWorkSheet;
-                            Excel.Range range;
-
-                            string str;
-                            int rCnt = 0;
-                            int cCnt = 0;
-                            string sCellData = "";
-                            double dCellData;
-
-                            xlApp = new Excel.Application();
-
-                            try
-                            {
-                                xlWorkBook = xlApp.Workbooks.Open(path, 0, true, 5, "", "", true, Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-                                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-
-                                range = xlWorkSheet.UsedRange;
-
-                                DataTable dt = new DataTable();
-
-                                // 첫 행을 제목으로
-                                for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
-                                {
-                                    str = (string)(range.Cells[1, cCnt] as Excel.Range).Value2;
-                                    dt.Columns.Add(str, typeof(string));
-                                }
-
-                                for (rCnt = 2; rCnt <= range.Rows.Count; rCnt++)
-                                {
-                                    string sData = "";
-                                    for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
-                                    {
-                                        try
-                                        {
-                                            sCellData = (string)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
-                                            sData += sCellData + "|";
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            dCellData = (double)(range.Cells[rCnt, cCnt] as Excel.Range).Value2;
-                                            sData += dCellData.ToString() + "|";
-                                        }
-                                    }
-                                    sData = sData.Remove(sData.Length - 1, 1);
-                                    dt.Rows.Add(sData.Split('|'));
-                                }
-
-                                Schedule.ItemsSource = dt.DefaultView;
-
-                                xlWorkBook.Close(true, null, null);
-                                xlApp.Quit();
-
-                                releaseObject(xlWorkSheet);
-                                releaseObject(xlWorkBook);
-                                releaseObject(xlApp);
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show("파일 열기 실패! : " + ex.Message);
-                                return;
-                            }*/
         }
-
-
-        /*        private void releaseObject(object obj) // Interop
-                {
-                    try
-                    {
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
-                        obj = null;
-                    }
-                    catch (Exception ex)
-                    {
-                        obj = null;
-                        MessageBox.Show("Unable to release the Object " + ex.ToString());
-                    }
-                    finally
-                    {
-                        GC.Collect();
-                    }
-                }*/
-
 
         private void ExportToExcel(object sender, RoutedEventArgs e)
         {
@@ -372,36 +265,6 @@ namespace Progretter
             if (saveFileDialog.ShowDialog() == true)
             {
                 Schedules.ExportExcel((DataView)Schedule.ItemsSource, saveFileDialog.FileName);
-
-                // 여기는 Interop 엑셀 있어야만 가능한 코드 (원래 코드 잘 작동함)
-                /*                string path = saveFileDialog.FileName;
-                                try
-                                {
-                                    var excelApp = new Excel.Application();
-                                    excelApp.Workbooks.Add();
-                                    Excel._Worksheet workSheet = (Excel._Worksheet)excelApp.ActiveSheet;
-                                    for (var i = 0; i < dt.Columns.Count; i++)
-                                    {
-                                        workSheet.Cells[1, i + 1] = dt.Columns[i].ColumnName;
-                                    }
-                                    for (var i = 0; i < dt.Rows.Count; i++)
-                                    {
-                                        for (var j = 0; j < dt.Columns.Count; j++)
-                                        {
-                                            workSheet.Cells[i + 2, j + 1] = dt.Rows[i][j];
-                                        }
-                                    }
-                                    if (File.Exists(path))
-                                    {
-                                        File.Delete(path);
-                                    }
-                                    workSheet.SaveAs2(path);
-                                    excelApp.Quit();
-                                }
-                                catch (Exception ex)
-                                {
-
-                                }*/
             }
         }
 
@@ -483,8 +346,6 @@ namespace Progretter
                 column.Content = (Convert.ToInt32(column.Content) - 1).ToString();
             }
         }
-
-
         #endregion
 
         #region 메모장

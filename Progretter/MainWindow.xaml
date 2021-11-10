@@ -19,76 +19,49 @@
                         <TextBlock Text="설정" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid>
+                <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Grid Background="#FFE5E5E5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Button x:Name="Tetris_btn" Content="테트리스" Click="Tetris_btn_Click" Grid.Row="3"/>
-                        <GroupBox Header="시간표 설정" BorderBrush="Black" Grid.ColumnSpan="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="6*"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <CheckBox x:Name="chk_ScheduleCheckBox" Content="일정 옆 체크박스 표시 (예정X)" Checked="chk_ScheduleCheckBox_Checked" Unchecked="chk_ScheduleCheckBox_Unchecked" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
-                                <Label Content="프로그램 시작 시 시간표 불러오기" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Bottom"/>
-                                <Label x:Name="Setting_Schedule_StartUp_Label" Grid.Row="2" Background="#FFD0D0D0" VerticalContentAlignment="Center"/>
-                                <Button x:Name="Setting_Schedule_StartUp_Btn" Content="불러오기" Grid.Column="1" Grid.Row="2" Margin="10,0,84,0" Click="Setting_Schedule_StartUp_Btn_Click" Grid.ColumnSpan="2" BorderBrush="{x:Null}"/>
-                                <Button x:Name="Setting_Schedule_StartUp_Reset_Btn" Content="초기화" Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" Click="Setting_Schedule_StartUp_Reset_Btn_Click" BorderBrush="{x:Null}"/>
-                                <CheckBox x:Name="Setting_Schedule_Close_Save_CheckBox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Center" Checked="Setting_Schedule_Close_Save_CheckBox_Checked" Unchecked="Setting_Schedule_Close_Save_CheckBox_Unchecked"/>
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox Header="계산기 설정" BorderBrush="Black" Grid.Row="1">
-                            <CheckBox x:Name="Setting_Cal_DeleteLog_CheckBox" Content="프로그램 종료 시 기록 자동 삭제" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Cal_DeleteLog_CheckBox_Checked" Unchecked="Setting_Cal_DeleteLog_CheckBox_Unchecked"/>
-                        </GroupBox>
-                        <GroupBox Header="일반 설정" Grid.Row="1" BorderBrush="Black" Grid.ColumnSpan="2" Margin="0,160,0,53" Grid.RowSpan="3"/>
-                        <GroupBox Header="그림판 설정" BorderBrush="Black" Grid.Row="1" Grid.Column="1" >
-                            <Grid>
-                                <CheckBox x:Name="Setting_Canvas_Autoload_Checkbox" Content="프로그램 시작 시 자동 로드" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autoload_Checkbox_Checked" Unchecked="Setting_Canvas_Autoload_Checkbox_Unchecked"/>
-                                <CheckBox x:Name="Setting_Canvas_Autosave_Checkbox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autosave_Checkbox_Checked" Unchecked="Setting_Canvas_Autosave_Checkbox_Unchecked"/>
-                            </Grid>
-                        </GroupBox>
-                        <Button x:Name="Setting_Info_Btn" Content="Info" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Click="Setting_Info_Btn_Click"/>
-                    </Grid>
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="9*"/>
-                            <RowDefinition Height="10*"/>
-                        </Grid.RowDefinitions>
-                        <CheckBox x:Name="Setting_Alarm_Chk" Content="알림 보이기 (예정X)" Checked="Setting_Alarm_Chk_Checked" Unchecked="Setting_Alarm_Chk_Unchecked" Margin="0,0,0,240" Grid.RowSpan="2"/>
-                        <Grid x:Name="Setting_Alarm_Grid" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button x:Name="Tetris_btn" Content="테트리스" Click="Tetris_btn_Click" Grid.Row="3"/>
+                    <GroupBox Header="시간표 설정" BorderBrush="Black" Grid.ColumnSpan="2">
+                        <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="6*"/>
                                 <ColumnDefinition/>
-                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="7*"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <Button Content="수정하기" VerticalAlignment="Center" Height="29" Grid.Row="1" Grid.ColumnSpan="2"/>
-                            <Slider HorizontalAlignment="Center" VerticalAlignment="Center" Width="15" Orientation="Vertical" Height="211" IsHitTestVisible="False" Focusable="False"/>
+                            <Label Content="프로그램 시작 시 시간표 불러오기" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+                            <Label x:Name="Setting_Schedule_StartUp_Label" Grid.Row="1" Background="#FFD0D0D0" VerticalContentAlignment="Center"/>
+                            <Button x:Name="Setting_Schedule_StartUp_Btn" Content="불러오기" Grid.Column="1" Click="Setting_Schedule_StartUp_Btn_Click" BorderBrush="{x:Null}" Grid.Row="1" Margin="10,0,0,0"/>
+                            <Button x:Name="Setting_Schedule_StartUp_Reset_Btn" Content="초기화" Grid.Column="2" Grid.Row="1" Margin="10,0,0,0" Click="Setting_Schedule_StartUp_Reset_Btn_Click" BorderBrush="{x:Null}"/>
+                            <CheckBox x:Name="Setting_Schedule_Close_Save_CheckBox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Center" Checked="Setting_Schedule_Close_Save_CheckBox_Checked" Unchecked="Setting_Schedule_Close_Save_CheckBox_Unchecked"/>
                         </Grid>
-                    </Grid>
+                    </GroupBox>
+                    <GroupBox Header="계산기 설정" BorderBrush="Black" Grid.Row="1">
+                        <CheckBox x:Name="Setting_Cal_DeleteLog_CheckBox" Content="프로그램 종료 시 기록 자동 삭제" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Cal_DeleteLog_CheckBox_Checked" Unchecked="Setting_Cal_DeleteLog_CheckBox_Unchecked"/>
+                    </GroupBox>
+                    <GroupBox Header="일반 설정" Grid.Row="1" BorderBrush="Black" Grid.ColumnSpan="2" Margin="0,160,0,53" Grid.RowSpan="3"/>
+                    <GroupBox Header="그림판 설정" BorderBrush="Black" Grid.Row="1" Grid.Column="1" >
+                        <Grid>
+                            <CheckBox x:Name="Setting_Canvas_Autoload_Checkbox" Content="프로그램 시작 시 자동 로드" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autoload_Checkbox_Checked" Unchecked="Setting_Canvas_Autoload_Checkbox_Unchecked"/>
+                            <CheckBox x:Name="Setting_Canvas_Autosave_Checkbox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autosave_Checkbox_Checked" Unchecked="Setting_Canvas_Autosave_Checkbox_Unchecked"/>
+                        </Grid>
+                    </GroupBox>
+                    <Button x:Name="Setting_Info_Btn" Content="Info" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Click="Setting_Info_Btn_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Width="120" Height="102">
@@ -131,11 +104,6 @@
                         <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3" BorderBrush="{x:Null}"/>
                         <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click" BorderBrush="{x:Null}"/>
-                        <ComboBox x:Name="Schedule_CellColor_Combo" Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,30,0" SelectionChanged="Schedule_CellColor_Combo_SelectionChanged">
-                            <ComboBoxItem Content="RED"/>
-                            <ComboBoxItem Content="YELLOW"/>
-                            <ComboBoxItem Content="NORMAL"/>
-                        </ComboBox>
                         <Label x:Name="row" Content="" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="column" Content="" HorizontalAlignment="Left" Margin="54,10,0,0" VerticalAlignment="Top"/>
                     </Grid>
@@ -290,9 +258,7 @@
         <StatusBar Grid.Row="1">
             <StatusBarItem x:Name="Timenow"/>
             <Separator/>
-            <StatusBarItem x:Name="S_Time" Content="1교시"/>
-            <Separator/>
-            <StatusBarItem x:Name="text"/>
+            <StatusBarItem Content="Made By Progretter"/>
         </StatusBar>
     </Grid>
 </Window>
