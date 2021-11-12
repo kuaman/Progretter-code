@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Progretter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" MinWidth="1000" MinHeight="600" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed">
+        Title="온라인 클래스 | Made By Progretter" Height="600" Width="1000" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" MinWidth="1000" MinHeight="600" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
