@@ -279,11 +279,14 @@ namespace Progretter
 
         private void Schedule_Row_Del_Btn_Click(object sender, RoutedEventArgs e)
         {
-            DataTable dt = new DataTable();
             if (Schedule.ItemsSource != null)
+            {
+                DataTable dt = new DataTable();
                 dt = ((DataView)Schedule.ItemsSource).ToTable();
-            dt.Rows.RemoveAt(dt.Rows.Count - 1);
-            Schedule.ItemsSource = dt.DefaultView;
+                if (dt.Rows.Count > 0)
+                    dt.Rows.RemoveAt(dt.Rows.Count - 1);
+                Schedule.ItemsSource = dt.DefaultView;
+            }
         }
 
         public string columnindex;
@@ -305,11 +308,20 @@ namespace Progretter
 
         private void Schedule_Column_Del_Btn_Click(object sender, RoutedEventArgs e)
         {
-            DataTable dt = new DataTable();
             if (Schedule.ItemsSource != null)
+            {
+                DataTable dt = new DataTable();
                 dt = ((DataView)Schedule.ItemsSource).ToTable();
-            dt.Columns.RemoveAt(dt.Columns.Count - 1);
-            Schedule.ItemsSource = dt.DefaultView;
+                if (dt.Columns.Count > 1)
+                {
+                    dt.Columns.RemoveAt(dt.Columns.Count - 1);
+                    Schedule.ItemsSource = dt.DefaultView;
+                }
+                else
+                {
+                    Schedule.ItemsSource = null;
+                }
+            }
         }
 
         private void Schedule_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) // 테스트 용 실사 불가능
