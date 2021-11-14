@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System;
 
 namespace Progretter
 {
@@ -10,6 +11,12 @@ namespace Progretter
         public CanvasProperty()
         {
             InitializeComponent();
+            if (Config.Get("CanvasStrokeSlider") != "")
+                StrokeSize.Value = Convert.ToDouble(Config.Get("CanvasStrokeSlider"));
+            if (Config.Get("CanvasEraseSlider") != "")
+                EraserSize.Value = Convert.ToDouble(Config.Get("CanvasEraseSlider"));
+            this.Left = ((MainWindow)Application.Current.MainWindow).Left + 984;
+            this.Top = ((MainWindow)Application.Current.MainWindow).Top;
             ((MainWindow)Application.Current.MainWindow).colorsImage.MouseDown += new System.Windows.Input.MouseButtonEventHandler(ImageMouseDown);
         }
 
@@ -26,10 +33,14 @@ namespace Progretter
         public event EditModeHandler EMEvent;
         private int editmode = 0;
 
-        public delegate void EditSizeHandler(double size);
+        public delegate void StrokeSizeHandler(double size);
 
-        public event EditSizeHandler ESEvent;
+        public event StrokeSizeHandler SSEvent;
         private double slider_size = 1;
+
+        public delegate void EraserSizeHandler(int mode, double size);
+
+        public event EraserSizeHandler ESEvent;
 
 
         private void ImageMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -59,9 +70,44 @@ namespace Progretter
         }
 
         private int load = 0;
+        private int erasermode = -1;
 
         private void StrokeEditingMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            if (StrokeEditingMode.SelectedIndex == 1)
+            {
+                if (Config.Get("CanvasEraseMode") == "")
+                {
+                    EraserMode.SelectedIndex = erasermode;
+                }
+                else
+                {
+                    EraserMode.SelectedIndex = Convert.ToInt32(Config.Get("CanvasEraseMode"));
+                }
+                StrokeSizeLabel.Visibility = Visibility.Collapsed;
+                StrokeSize.Visibility = Visibility.Collapsed;
+                CanvasCP.Visibility = Visibility.Collapsed;
+                CanvasEraser.Visibility = Visibility.Visible;
+            }
+            else if (CanvasCP != null && CanvasEraser != null)
+            {
+                erasermode = EraserMode.SelectedIndex;
+                EraserMode.SelectedIndex = -1;
+                if (StrokeEditingMode.SelectedIndex == 0)
+                {
+                    StrokeSizeLabel.Visibility = Visibility.Visible;
+                    StrokeSize.Visibility = Visibility.Visible;
+                    CanvasCP.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    StrokeSizeLabel.Visibility = Visibility.Collapsed;
+                    StrokeSize.Visibility = Visibility.Collapsed;
+                    CanvasCP.Visibility = Visibility.Collapsed;
+                }
+                CanvasEraser.Visibility = Visibility.Collapsed;
+            }
+
             if (load == 1)
             {
                 editmode = StrokeEditingMode.SelectedIndex;
@@ -75,7 +121,7 @@ namespace Progretter
             }
         }
 
-        public void RecEditingMode(byte A, byte R, byte G, byte B, string noweditmode)
+        public void RecEditingMode(byte A, byte R, byte G, byte B, string noweditmode) // 중간에
         {
             colorpicker.Color.A = A;
             colorpicker.Color.RGB_R = R;
@@ -85,22 +131,43 @@ namespace Progretter
             {
                 case "Ink":
                     StrokeEditingMode.SelectedIndex = 0;
+                    if (Config.Get("CanvasEraseMode") != "")
+                        erasermode = Convert.ToInt32(Config.Get("CanvasEraseMode"));
                     break;
 
                 case "EraseByPoint":
+                    StrokeSizeLabel.Visibility = Visibility.Collapsed;
+                    StrokeSize.Visibility = Visibility.Collapsed;
+                    CanvasCP.Visibility = Visibility.Collapsed;
+                    CanvasEraser.Visibility = Visibility.Visible;
                     StrokeEditingMode.SelectedIndex = 1;
+                    if (Config.Get("CanvasEraseMode") == "0") // 사각형
+                        EraserMode.SelectedIndex = 0;
+                    else
+                        EraserMode.SelectedIndex = 1;
                     break;
 
                 case "EraseByStroke":
-                    StrokeEditingMode.SelectedIndex = 2;
+                    StrokeSizeLabel.Visibility = Visibility.Collapsed;
+                    StrokeSize.Visibility = Visibility.Collapsed;
+                    CanvasCP.Visibility = Visibility.Collapsed;
+                    CanvasEraser.Visibility = Visibility.Visible;
+                    StrokeEditingMode.SelectedIndex = 1;
+                    EraserMode.SelectedIndex = 2;
+                    EraserSize.Visibility = Visibility.Collapsed;
+                    EraserLabel.Visibility = Visibility.Collapsed;
                     break;
 
                 case "GestureOnly":
-                    StrokeEditingMode.SelectedIndex = 3;
+                    StrokeEditingMode.SelectedIndex = 2;
+                    if (Config.Get("CanvasEraseMode") != "")
+                        erasermode = Convert.ToInt32(Config.Get("CanvasEraseMode"));
                     break;
 
                 case "Select":
-                    StrokeEditingMode.SelectedIndex = 4;
+                    StrokeEditingMode.SelectedIndex = 3;
+                    if (Config.Get("CanvasEraseMode") != "")
+                        erasermode = Convert.ToInt32(Config.Get("CanvasEraseMode"));
                     break;
             }
         }
@@ -108,9 +175,43 @@ namespace Progretter
         private void StrokeSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             slider_size = StrokeSize.Value;
-            var handler = ESEvent;
+            var handler = SSEvent;
             if (null != handler)
-                ESEvent(slider_size);
+            {
+                SSEvent(slider_size);
+                Config.Set("CanvasStrokeSlider", slider_size.ToString());
+            }
+        }
+
+        private void EraserMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (EraserMode.SelectedIndex >= 0)
+            {
+                if (EraserMode.SelectedIndex != 2)
+                {
+                    EraserSize.Visibility = Visibility.Visible;
+                    EraserLabel.Visibility = Visibility.Visible;
+                    Config.Set("CanvasEraseMode", EraserMode.SelectedIndex.ToString());
+                }
+                else
+                {
+                    EraserSize.Visibility = Visibility.Collapsed;
+                    EraserLabel.Visibility = Visibility.Collapsed;
+                }
+            }
+            var handler = ESEvent;
+            if (null != handler && EraserMode.SelectedIndex >= 0 && EraserSize != null)
+                ESEvent(EraserMode.SelectedIndex, EraserSize.Value);
+        }
+
+        private void EraserSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var handler = ESEvent;
+            if (null != handler && EraserMode.SelectedIndex >= 0 && EraserSize != null)
+            {
+                ESEvent(EraserMode.SelectedIndex, EraserSize.Value);
+                Config.Set("CanvasEraseSlider", EraserSize.Value.ToString());
+            }
         }
     }
 }

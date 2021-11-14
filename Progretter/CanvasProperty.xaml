@@ -6,32 +6,63 @@
         xmlns:local="clr-namespace:Progretter"
         xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
-        Title="CanvasProperty" Height="600" Width="320" ResizeMode="NoResize">
+        Title="CanvasProperty" Height="600" Width="320" ResizeMode="NoResize" WindowStartupLocation="Manual">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
             <RowDefinition/>
-            <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="붓 설정">
             <Grid>
-                <Label Width="100" Height="30" Margin="10,10,198,54" Content="붓 모드"/>
-                <ComboBox x:Name="StrokeEditingMode" Width="140" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0" SelectionChanged="StrokeEditingMode_SelectionChanged" SelectedIndex="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Width="100" Height="30" Content="붓 모드" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <ComboBox x:Name="StrokeEditingMode" VerticalAlignment="Center" HorizontalAlignment="Stretch" SelectionChanged="StrokeEditingMode_SelectionChanged" SelectedIndex="0" Grid.Column="1" Width="140">
                     <ComboBoxItem Content="펜"/>
-                    <ComboBoxItem Content="지우개 (사각형)"/>
-                    <ComboBoxItem Content="지우개 (스냅)"/>
+                    <ComboBoxItem Content="지우개"/>
                     <ComboBoxItem Content="제스처"/>
                     <ComboBoxItem Content="선택"/>
                 </ComboBox>
-                <Label Width="100" Height="30" Margin="10,54,198,10" Content="붓 크기"/>
-                <Slider x:Name="StrokeSize" HorizontalAlignment="Left" Margin="158,60,0,0" VerticalAlignment="Top" Width="140" ValueChanged="StrokeSize_ValueChanged" Maximum="50" Minimum="1"/>
+                <Label x:Name="StrokeSizeLabel" Width="100" Height="30" Content="붓 크기" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Slider x:Name="StrokeSize" HorizontalAlignment="Center" VerticalAlignment="Center" ValueChanged="StrokeSize_ValueChanged" Maximum="50" Minimum="1" Grid.Column="1" Grid.Row="1" Width="140"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="색 설정" Grid.Row="1">
-            <Grid>
-                <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged" Grid.Row="1"
+        <Grid x:Name="CanvasCP" Grid.Row="1">
+            <GroupBox Header="색 설정">
+                <Grid>
+                    <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged" Grid.Row="1"
                                          ColorState="{Binding Path=ColorState, Mode=TwoWay, Delay=10}"
                                          SecondColorState="{Binding Path=SecondColorState, Mode=TwoWay}" Grid.RowSpan="2"/>
-            </Grid>
-        </GroupBox>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Grid x:Name="CanvasEraser" Grid.Row="1" Height="120" Margin="0,0,0,340" Visibility="Collapsed">
+            <GroupBox Header="지우개 설정">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Width="100" Height="30" Content="지우개 모양" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="EraserMode" VerticalAlignment="Center" HorizontalAlignment="Stretch" SelectionChanged="EraserMode_SelectionChanged" Grid.Column="1" Width="140">
+                        <ComboBoxItem Content="사각형"/>
+                        <ComboBoxItem Content="원형"/>
+                        <ComboBoxItem Content="한번에 지우기"/>
+                    </ComboBox>
+                    <Label x:Name="EraserLabel" Width="100" Height="30" Content="지우개 크기" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Slider x:Name="EraserSize" HorizontalAlignment="Center" VerticalAlignment="Center" ValueChanged="EraserSize_ValueChanged" Maximum="100" Minimum="10" Grid.Column="1" Grid.Row="1" Width="140"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
     </Grid>
 </Window>

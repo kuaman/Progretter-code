@@ -1,11 +1,14 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using AutoUpdaterDotNET;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -60,6 +63,9 @@ namespace Progretter
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Assembly assembly = Assembly.GetEntryAssembly();
+            Setting_Version_Label.Content = $"현재 버전 : {assembly.GetName().Version}";
+
             Setting_Schedule_StartUp_Label.Content = Config.Get("ScheduleStartUpPath");
             if (Config.Get("ScheduleStartUpImport") == "true")
             {
@@ -135,16 +141,27 @@ namespace Progretter
             {
                 if (Config.Get("CanvasLastAdress") != "")
                 {
-                    if (MessageBox.Show("그림판 변경사항을 저장하시겠습니까?", "그림판 자동 저장", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (MessageBox.Show("그림판 변경사항을 이전 파일에 저장하시겠습니까?", "그림판 자동 저장", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
                         ImageSave(bitmap, 1);
+                    }
+                    else
+                    {
+                        RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+                        if (bitmap != null)
+                        {
+                            ImageSave(bitmap, 2);
+                        }
                     }
                 }
                 else
                 {
                     RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
-                    ImageSave(bitmap, 2);
+                    if (bitmap != null)
+                    {
+                        ImageSave(bitmap, 2);
+                    }
                 }
             }
         }
@@ -173,6 +190,9 @@ namespace Progretter
             {
                 Config.Set("CalculatorLog", string.Empty);
             }
+            Config.Set("CanvasStrokeSlider", "");
+            Config.Set("CanvasEraseMode", "");
+            Config.Set("CanvasEraseSlider", "");
         }
         #endregion
 
@@ -243,7 +263,13 @@ namespace Progretter
         private void Setting_Info_Btn_Click(object sender, RoutedEventArgs e)
         {
             Info info = new Info();
-            info.Show();
+            info.Owner = this;
+            info.ShowDialog();
+        }
+
+        private void Setting_Update_Btn_Click(object sender, RoutedEventArgs e) // UPDATE
+        {
+            AutoUpdater.Start(""); //XML RAW URL
         }
         #endregion
 
@@ -323,40 +349,25 @@ namespace Progretter
                 }
             }
         }
-
-        private void Schedule_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) // 테스트 용 실사 불가능
+        private void Schedule_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (Schedule.SelectedIndex != -1)
-            {
-                row.Content = Schedule.SelectedIndex.ToString();
-            }
-            else
-            {
-                if (Convert.ToInt32(row.Content) - 1 < 0)
-                {
-                    row.Content = 0;
-                }
-                else
-                {
-                    row.Content = (Convert.ToInt32(row.Content) - 1).ToString();
-                }
-            }
-            if (Schedule.CurrentColumn != null)
-            {
-                column.Content = Schedule.CurrentColumn.DisplayIndex.ToString();
-            }
-            else
-            {
+            Schedule_Cell_Row_Column();
+        }
+        private void Schedule_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Schedule_Cell_Row_Column();
+        }
+        private void Schedule_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            Schedule_Cell_Row_Column();
+        }
 
-            }
-            if (Convert.ToInt32(column.Content) - 1 < 0)
-            {
-                column.Content = 0;
-            }
+        private void Schedule_Cell_Row_Column()
+        {
+            if (Schedule.SelectedIndex > -1 && Schedule.CurrentColumn != null)
+                Schedule_Row_Column.Content = "행 : " + Schedule.SelectedIndex.ToString() + ", " + "열 : " + Schedule.CurrentColumn.DisplayIndex.ToString();
             else
-            {
-                column.Content = (Convert.ToInt32(column.Content) - 1).ToString();
-            }
+                Schedule_Row_Column.Content = "행 : " + ", " + "열 : ";
         }
         #endregion
 
@@ -871,12 +882,16 @@ namespace Progretter
             drawingContext.Close();
 
             // 비트맵으로 변환합니다.
-            RenderTargetBitmap target =
-                new RenderTargetBitmap((int)element.ActualWidth, (int)element.ActualHeight,
-                96, 96, PixelFormats.Pbgra32);
-
-            target.Render(drawingVisual);
-            return target;
+            if (element.ActualWidth > 0 && element.ActualHeight > 0)
+            {
+                RenderTargetBitmap target = new RenderTargetBitmap((int)element.ActualWidth, (int)element.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+                target.Render(drawingVisual);
+                return target;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         // 해당 이미지 저장
@@ -1020,13 +1035,13 @@ namespace Progretter
 
             return Color.FromArgb(Pixels[3], Pixels[2], Pixels[1], Pixels[0]);
         }
-
         private void Canvas_brush_property_Click(object sender, RoutedEventArgs e)
         {
             CanvasProperty canvasProperty = new CanvasProperty();
             canvasProperty.CPEvent += ColorChange;
             canvasProperty.EMEvent += StrokeEditingModeChange;
-            canvasProperty.ESEvent += StrokeSizeChange;
+            canvasProperty.SSEvent += StrokeSizeChange;
+            canvasProperty.ESEvent += EraseSizeChange;
             canvasProperty.RecEditingMode(inkCanvas.DefaultDrawingAttributes.Color.A, inkCanvas.DefaultDrawingAttributes.Color.R, inkCanvas.DefaultDrawingAttributes.Color.G, inkCanvas.DefaultDrawingAttributes.Color.B, inkCanvas.EditingMode.ToString());
             canvasProperty.Show();
         }
@@ -1044,20 +1059,15 @@ namespace Progretter
                     inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
                     break;
 
-                case 1:
-                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
-                    break;
-
                 case 2:
-                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByStroke;
-                    break;
-
-                case 3:
                     inkCanvas.EditingMode = InkCanvasEditingMode.GestureOnly;
                     break;
 
-                case 4:
+                case 3:
                     inkCanvas.EditingMode = InkCanvasEditingMode.Select;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -1066,6 +1076,31 @@ namespace Progretter
         {
             inkCanvas.DefaultDrawingAttributes.Width = size;
             inkCanvas.DefaultDrawingAttributes.Height = size;
+        }
+
+        private void EraseSizeChange(int mode, double size)
+        {
+            switch (mode)
+            {
+                case 0:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.None;
+                    inkCanvas.EraserShape = new RectangleStylusShape(size, size);
+                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
+                    break;
+
+                case 1:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.None;
+                    inkCanvas.EraserShape = new EllipseStylusShape(size, size);
+                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
+                    break;
+
+                case 2:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.EraseByStroke;
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         // 잉크 색상 변경

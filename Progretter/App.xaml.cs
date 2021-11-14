@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading;
+using System.Windows;
 
 namespace Progretter
 {
@@ -7,11 +8,22 @@ namespace Progretter
     /// </summary>
     public partial class App : Application
     {
+        Mutex mutex;
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
             ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+            string mutexName = "program";
+            bool createNew;
+
+            mutex = new Mutex(true, mutexName, out createNew);
+
+            if (!createNew)
+            {
+                Shutdown();
+            }
         }
     }
 }
