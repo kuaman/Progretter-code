@@ -60,7 +60,6 @@ namespace Progretter
         #endregion
 
         #region Window_Loaded
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Assembly assembly = Assembly.GetEntryAssembly();
@@ -102,7 +101,7 @@ namespace Progretter
             if (Config.Get("CanvasAutoLoad") == "true")
             {
                 Setting_Canvas_Autoload_Checkbox.IsChecked = true;
-                if (Config.Get("CanvasLastAdress") != "")
+                if (Config.Get("CanvasLastPath") != "")
                 {
                     ImageLoad(1);
                 }
@@ -139,28 +138,31 @@ namespace Progretter
         {
             if (Config.Get("CanvasAutoSave") == "true")
             {
-                if (Config.Get("CanvasLastAdress") != "")
+                if (Config.Get("CanvasLastPath") == "") // 빈 상태로 그릴 때
                 {
-                    if (MessageBox.Show("그림판 변경사항을 이전 파일에 저장하시겠습니까?", "그림판 자동 저장", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (isCanvasmod == 1 || inkCanvas.Strokes.Count > 0) //+그릴떄 활성화
                     {
                         RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
-                        ImageSave(bitmap, 1);
-                    }
-                    else
-                    {
-                        RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
-                        if (bitmap != null)
-                        {
-                            ImageSave(bitmap, 2);
-                        }
+                        ImageSave(bitmap, 2);
                     }
                 }
                 else
                 {
-                    RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
-                    if (bitmap != null)
+                    if (inkCanvas.Strokes.Count > 0)
                     {
-                        ImageSave(bitmap, 2);
+                        if (isCanvasmod == 0)
+                        {
+                            RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+                            ImageSave(bitmap, 2);
+                        }
+                        else
+                        {
+                            if (MessageBox.Show("그림판 변경사항을 이전 파일에 저장하시겠습니까?", "그림판 자동 저장", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            {
+                                RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
+                                ImageSave(bitmap, 1);
+                            }
+                        }
                     }
                 }
             }
@@ -287,7 +289,7 @@ namespace Progretter
         private void ExportToExcel(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Excel file (*.xlsx)|*.xlsx|Csv File(*.csv)|*.csv";
+            saveFileDialog.Filter = "Excel file (*.xlsx)|*.xlsx";
             if (saveFileDialog.ShowDialog() == true)
             {
                 Schedules.ExportExcel((DataView)Schedule.ItemsSource, saveFileDialog.FileName);
@@ -826,6 +828,7 @@ namespace Progretter
             {
                 inkCanvas.Strokes.Clear();
                 OpenFileDialog openDialog = new OpenFileDialog();
+                openDialog.Filter = "Image Files(*.PNG; *.JPG; *.GIF; *.BMP;)| *.PNG; *.JPG; *.GIF; *.BMP";
                 if (openDialog.ShowDialog() == true)
                 {
                     if (File.Exists(openDialog.FileName))
@@ -841,26 +844,34 @@ namespace Progretter
                         bitmapImage.EndInit();
                     }
                 }
-                Config.Set("CanvasLastAdress", openDialog.FileName);
+                Config.Set("CanvasLastPath", openDialog.FileName);
             }
             else // mode 1
             {
-                if (File.Exists(Config.Get("CanvasLastAdress")))
+                if (File.Exists(Config.Get("CanvasLastPath")))
                 {
                     BitmapImage bitmapImage = new BitmapImage();
                     bitmapImage.BeginInit();
                     bitmapImage.CacheOption = BitmapCacheOption.None;
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                     bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                    bitmapImage.UriSource = new Uri(Config.Get("CanvasLastAdress"), UriKind.RelativeOrAbsolute);
+                    bitmapImage.UriSource = new Uri(Config.Get("CanvasLastPath"), UriKind.RelativeOrAbsolute);
                     // InkCanvas의 배경으로 지정
                     inkCanvas.Background = new ImageBrush(bitmapImage);
                     bitmapImage.EndInit();
                 }
+                else
+                {
+                    MessageBox.Show("그림판 자동 로드에 실패하였습니다.", "파일 존재 오류");
+                    Config.Set("CanvasLastPath", "");
+                }
             }
+            isCanvasmod = 1;
         }
 
         private byte[] Pixels = new byte[4];
+
+        private int isCanvasmod = 0;
 
         // 이미지 캡쳐
         private void Canvas_save_btn_Click(object sender, RoutedEventArgs e)
@@ -882,59 +893,129 @@ namespace Progretter
             drawingContext.Close();
 
             // 비트맵으로 변환합니다.
-            if (element.ActualWidth > 0 && element.ActualHeight > 0)
-            {
-                RenderTargetBitmap target = new RenderTargetBitmap((int)element.ActualWidth, (int)element.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-                target.Render(drawingVisual);
-                return target;
-            }
-            else
-            {
-                return null;
-            }
+            RenderTargetBitmap target = new RenderTargetBitmap((int)element.ActualWidth, (int)element.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            target.Render(drawingVisual);
+            return target;
         }
 
         // 해당 이미지 저장
         private static void ImageSave(BitmapSource source, int mode) //mode 0 = 일반 저장, mode 1 = 파일에 자동 저장, mode 2 = 자동 저장 파일 생성
         {
-            if (mode == 0)
+            if (source != null)
             {
-                SaveFileDialog saveDialog = new SaveFileDialog();
+                if (mode == 0)
+                {
+                    SaveFileDialog saveDialog = new SaveFileDialog();
 
-                // 이미지 포맷들
-                saveDialog.Filter = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp";
-                saveDialog.AddExtension = true;
+                    // 이미지 포맷들
+                    saveDialog.Filter = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp";
+                    saveDialog.AddExtension = true;
 
-                if (saveDialog.ShowDialog() == true)
+                    if (saveDialog.ShowDialog() == true)
+                    {
+                        BitmapEncoder encoder = null;
+                        // 파일 생성
+                        FileStream stream = new FileStream(saveDialog.FileName, FileMode.Create, FileAccess.Write);
+
+                        // 파일 포맷
+                        string upper = saveDialog.SafeFileName.ToUpper();
+                        char[] format = upper.ToCharArray(saveDialog.SafeFileName.Length - 3, 3);
+                        upper = new string(format);
+
+                        // 해당 포맷에 맞게 인코더 생성
+                        switch (upper.ToString())
+                        {
+                            case "PNG":
+                                encoder = new PngBitmapEncoder();
+                                break;
+
+                            case "JPG":
+                                encoder = new JpegBitmapEncoder();
+                                break;
+
+                            case "GIF":
+                                encoder = new GifBitmapEncoder();
+                                break;
+
+                            case "BMP":
+                                encoder = new BmpBitmapEncoder();
+                                break;
+                        }
+
+                        // 인코더 프레임에 이미지 추가
+                        encoder.Frames.Add(BitmapFrame.Create(source));
+                        // 파일에 저장
+                        encoder.Save(stream);
+
+                        stream.Close();
+
+                        Config.Set("CanvasLastPath", saveDialog.FileName);
+                    }
+                }
+                else if (mode == 1)
                 {
                     BitmapEncoder encoder = null;
                     // 파일 생성
-                    FileStream stream = new FileStream(saveDialog.FileName, FileMode.Create, FileAccess.Write);
-
-                    // 파일 포맷
-                    string upper = saveDialog.SafeFileName.ToUpper();
-                    char[] format = upper.ToCharArray(saveDialog.SafeFileName.Length - 3, 3);
-                    upper = new string(format);
-
-                    // 해당 포맷에 맞게 인코더 생성
-                    switch (upper.ToString())
+                    if (File.Exists(Config.Get("CanvasLastPath")))
                     {
-                        case "PNG":
-                            encoder = new PngBitmapEncoder();
-                            break;
+                        FileStream stream = new FileStream(Config.Get("CanvasLastPath"), FileMode.Create, FileAccess.Write);
 
-                        case "JPG":
-                            encoder = new JpegBitmapEncoder();
-                            break;
+                        string upper = Config.Get("CanvasLastPath").ToUpper();
+                        char[] format = upper.ToCharArray(Config.Get("CanvasLastPath").Length - 3, 3);
+                        upper = new string(format);
 
-                        case "GIF":
-                            encoder = new GifBitmapEncoder();
-                            break;
+                        switch (upper.ToString())
+                        {
+                            case "PNG":
+                                encoder = new PngBitmapEncoder();
+                                break;
 
-                        case "BMP":
-                            encoder = new BmpBitmapEncoder();
-                            break;
+                            case "JPG":
+                                encoder = new JpegBitmapEncoder();
+                                break;
+
+                            case "GIF":
+                                encoder = new GifBitmapEncoder();
+                                break;
+
+                            case "BMP":
+                                encoder = new BmpBitmapEncoder();
+                                break;
+
+                            default:
+                                MessageBox.Show("'파일에 자동 저장'을 사용하려면 파일 확장자가 .PNG, .JPG, .GIF, .BMP 중 하나여야 합니다. \nAutoSave폴더에 자동 저장됩니다.", "확장자 오류");
+                                ImageSave(source, 2);
+                                break;
+                        }
+
+                        // 인코더 프레임에 이미지 추가
+                        encoder.Frames.Add(BitmapFrame.Create(source));
+                        // 파일에 저장
+                        encoder.Save(stream);
+
+                        stream.Close();
                     }
+                    else
+                    {
+                        MessageBox.Show("'파일에 자동 저장'을 사용하려면 파일이 존재해야 합니다. \nAutoSave폴더에 자동 저장됩니다.", "파일 존재 오류");
+                        Config.Set("CanvasLastPath", "");
+                        ImageSave(source, 2);
+                    }
+                }
+                else // mode == 2
+                {
+                    DirectoryInfo di = new DirectoryInfo(@"AutoSave");
+
+                    if (!di.Exists)   //If New Folder not exits  
+                    {
+                        di.Create();             //create Folder
+                    }
+
+                    string path = "AutoSave/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg"; // AutoSave/가 맞음 (AutoSave\ X)
+                                                                                                  // 파일 생성
+                    FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
+
+                    BitmapEncoder encoder = new JpegBitmapEncoder();
 
                     // 인코더 프레임에 이미지 추가
                     encoder.Frames.Add(BitmapFrame.Create(source));
@@ -943,69 +1024,8 @@ namespace Progretter
 
                     stream.Close();
 
-                    Config.Set("CanvasLastAdress", saveDialog.FileName);
+                    Config.Set("CanvasLastPath", path);
                 }
-            }
-            else if (mode == 1)
-            {
-                BitmapEncoder encoder = null;
-                // 파일 생성
-                FileStream stream = new FileStream(Config.Get("CanvasLastAdress"), FileMode.Create, FileAccess.Write);
-
-                string upper = Config.Get("CanvasLastAdress").ToUpper();
-                char[] format = upper.ToCharArray(Config.Get("CanvasLastAdress").Length - 3, 3);
-                upper = new string(format);
-
-                switch (upper.ToString())
-                {
-                    case "PNG":
-                        encoder = new PngBitmapEncoder();
-                        break;
-
-                    case "JPG":
-                        encoder = new JpegBitmapEncoder();
-                        break;
-
-                    case "GIF":
-                        encoder = new GifBitmapEncoder();
-                        break;
-
-                    case "BMP":
-                        encoder = new BmpBitmapEncoder();
-                        break;
-                }
-
-                // 인코더 프레임에 이미지 추가
-                encoder.Frames.Add(BitmapFrame.Create(source));
-                // 파일에 저장
-                encoder.Save(stream);
-
-                stream.Close();
-            }
-            else // mode == 2
-            {
-                DirectoryInfo di = new DirectoryInfo(@"AutoSave");
-
-                if (di.Exists == false)   //If New Folder not exits  
-                {
-                    di.Create();             //create Folder  
-                }
-
-                string path = "AutoSave/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg"; // AutoSave/가 맞음 (AutoSave\ X)
-                // 파일 생성
-                FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
-
-                BitmapEncoder encoder = new JpegBitmapEncoder();
-
-                // 인코더 프레임에 이미지 추가
-                encoder.Frames.Add(BitmapFrame.Create(source));
-                // 파일에 저장
-                encoder.Save(stream);
-
-                stream.Close();
-
-                if (Config.Get("CanvasAutoLoad") == "true")
-                    Config.Set("CanvasLastAdress", path);
             }
         }
 
@@ -1035,6 +1055,7 @@ namespace Progretter
 
             return Color.FromArgb(Pixels[3], Pixels[2], Pixels[1], Pixels[0]);
         }
+
         private void Canvas_brush_property_Click(object sender, RoutedEventArgs e)
         {
             CanvasProperty canvasProperty = new CanvasProperty();
@@ -1114,7 +1135,8 @@ namespace Progretter
         {
             inkCanvas.Strokes.Clear();
             inkCanvas.Background = Brushes.White; //배경도 지우기
-            Config.Set("CanvasLastAdress", "");
+            isCanvasmod = 0;
+            Config.Set("CanvasLastPath", "");
         }
         #endregion
 

@@ -45,7 +45,7 @@ namespace Progretter
                 //If no data in Excel file  
                 if (FirstRow)
                 {
-                    MessageBox.Show("빈 파일!", "Error");
+                    MessageBox.Show("빈 파일!", "시간표 불러오기 오류");
                 }
             }
             return dt;

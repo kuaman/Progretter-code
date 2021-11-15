@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Progretter"
         xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
-        Title="CanvasProperty" Height="600" Width="320" ResizeMode="NoResize" WindowStartupLocation="Manual">
+        Title="그림판 속성" Height="600" Width="320" ResizeMode="NoResize" WindowStartupLocation="Manual">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
