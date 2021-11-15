@@ -1058,6 +1058,18 @@ namespace Progretter
 
         private void Canvas_brush_property_Click(object sender, RoutedEventArgs e)
         {
+            foreach (Window openForm in Application.Current.Windows)
+            {
+                if (openForm.Title == "그림판 속성") // 열린 창의 이름 검사
+                {
+                    if (openForm.WindowState == WindowState.Minimized)
+                    {  // 창을 최소화시켜 하단에 내려놓았는지 검사
+                        openForm.WindowState = WindowState.Normal;
+                    }
+                    openForm.Activate();
+                    return;
+                }
+            }
             CanvasProperty canvasProperty = new CanvasProperty();
             canvasProperty.CPEvent += ColorChange;
             canvasProperty.EMEvent += StrokeEditingModeChange;
