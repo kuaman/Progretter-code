@@ -1159,5 +1159,10 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
+
+        private void Setting_Reset_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

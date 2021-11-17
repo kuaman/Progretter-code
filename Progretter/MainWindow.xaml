@@ -30,7 +30,7 @@
                         <RowDefinition Height="3*"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Button x:Name="Tetris_btn" Content="테트리스" Click="Tetris_btn_Click" Grid.Row="3"/>
+                    <Button x:Name="Tetris_btn" Content="테트리스" Click="Tetris_btn_Click" Grid.Row="3" ToolTip="Easter Egg"/>
                     <GroupBox Header="시간표 설정" BorderBrush="Black" Grid.ColumnSpan="2">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -48,11 +48,11 @@
                             <Label x:Name="Setting_Schedule_StartUp_Label" Grid.Row="1" Background="#FFD0D0D0" VerticalContentAlignment="Center"/>
                             <Button x:Name="Setting_Schedule_StartUp_Btn" Content="불러오기" Grid.Column="1" Click="Setting_Schedule_StartUp_Btn_Click" BorderBrush="{x:Null}" Grid.Row="1" Margin="10,0,0,0"/>
                             <Button x:Name="Setting_Schedule_StartUp_Reset_Btn" Content="초기화" Grid.Column="2" Grid.Row="1" Margin="10,0,0,0" Click="Setting_Schedule_StartUp_Reset_Btn_Click" BorderBrush="{x:Null}"/>
-                            <CheckBox x:Name="Setting_Schedule_Close_Save_CheckBox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Center" Checked="Setting_Schedule_Close_Save_CheckBox_Checked" Unchecked="Setting_Schedule_Close_Save_CheckBox_Unchecked"/>
+                            <CheckBox x:Name="Setting_Schedule_Close_Save_CheckBox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Center" Checked="Setting_Schedule_Close_Save_CheckBox_Checked" Unchecked="Setting_Schedule_Close_Save_CheckBox_Unchecked" ToolTip="종료될 때 AutoSave 폴더에 자동 저장됩니다."/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="계산기 설정" BorderBrush="Black" Grid.Row="1">
-                        <CheckBox x:Name="Setting_Cal_DeleteLog_CheckBox" Content="프로그램 종료 시 기록 자동 삭제" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Cal_DeleteLog_CheckBox_Checked" Unchecked="Setting_Cal_DeleteLog_CheckBox_Unchecked"/>
+                        <CheckBox x:Name="Setting_Cal_DeleteLog_CheckBox" Content="프로그램 종료 시 기록 자동 삭제" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Cal_DeleteLog_CheckBox_Checked" Unchecked="Setting_Cal_DeleteLog_CheckBox_Unchecked" ToolTip="계산기 기록을 삭제해 줍니다."/>
                     </GroupBox>
                     <GroupBox Header="일반 설정" Grid.Row="1" BorderBrush="Black" Grid.ColumnSpan="2" Margin="0,160,0,53" Grid.RowSpan="3">
                         <Grid>
@@ -62,21 +62,23 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
-                            <Button x:Name="Setting_Update_Btn" Grid.Column="2" Content="업데이트 확인" Grid.Row="2" Click="Setting_Update_Btn_Click"/>
-                            <Label x:Name="Setting_Version_Label" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Grid.Column="1"/>
+                            <Button x:Name="Setting_Update_Btn" Grid.Column="2" Content="업데이트 확인" Grid.Row="2" Click="Setting_Update_Btn_Click" Margin="0,10,0,0" Grid.RowSpan="2" ToolTip="업데이트가 있는지 확인합니다."/>
+                            <Label x:Name="Setting_Version_Label" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Grid.RowSpan="2"/>
+                            <Button x:Name="Setting_Reset_Btn" Grid.Column="2" Content="설정 초기화" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" ToolTip="설정을 초기화하고 프로그램을 재시작합니다." Click="Setting_Reset_Btn_Click"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="그림판 설정" BorderBrush="Black" Grid.Row="1" Grid.Column="1" >
                         <Grid>
-                            <CheckBox x:Name="Setting_Canvas_Autoload_Checkbox" Content="프로그램 시작 시 자동 로드" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autoload_Checkbox_Checked" Unchecked="Setting_Canvas_Autoload_Checkbox_Unchecked"/>
-                            <CheckBox x:Name="Setting_Canvas_Autosave_Checkbox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autosave_Checkbox_Checked" Unchecked="Setting_Canvas_Autosave_Checkbox_Unchecked"/>
+                            <CheckBox x:Name="Setting_Canvas_Autoload_Checkbox" Content="프로그램 시작 시 자동 로드" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autoload_Checkbox_Checked" Unchecked="Setting_Canvas_Autoload_Checkbox_Unchecked" ToolTip="그림 파일을 자동으로 불러옵니다."/>
+                            <CheckBox x:Name="Setting_Canvas_Autosave_Checkbox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autosave_Checkbox_Checked" Unchecked="Setting_Canvas_Autosave_Checkbox_Unchecked" ToolTip="종료될 때 AutoSave 폴더에 저장합니다."/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="Setting_Info_Btn" Content="Info" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Click="Setting_Info_Btn_Click"/>
+                    <Button x:Name="Setting_Info_Btn" Content="프로그램 정보" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Click="Setting_Info_Btn_Click" ToolTip="프로그램에 대한 정보창을 띄웁니다."/>
                 </Grid>
             </TabItem>
             <TabItem Width="120" Height="102">
@@ -104,8 +106,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="Schedule_import" Content="불러오기" Click="ImportExcel" BorderBrush="{x:Null}"/>
-                        <Button x:Name="Schedule_export" Content="내보내기" Click="ExportToExcel" Grid.Column="1" BorderBrush="{x:Null}"/>
+                        <Button x:Name="Schedule_import" Content="불러오기" Click="ImportExcel" BorderBrush="{x:Null}" ToolTip="Excel 파일을 불러옵니다. (.xlsx, .xls, .csv)"/>
+                        <Button x:Name="Schedule_export" Content="내보내기" Click="ExportToExcel" Grid.Column="1" BorderBrush="{x:Null}" ToolTip="Excel 파일(.xlsx)로 내보냅니다."/>
                     </Grid>
                     <Grid Background="#FFDDDDDD" Margin="0,3,0,0">
                         <Grid.ColumnDefinitions>
@@ -115,10 +117,10 @@
                             <ColumnDefinition Width="130"/>
                             <ColumnDefinition Width="130"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="Schedule_Row_Add_Btn" Content="행 추가하기" Click="Schedule_Row_Add_Btn_Click" Grid.Column="1" BorderBrush="{x:Null}"/>
-                        <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click" BorderBrush="{x:Null}"/>
-                        <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3" BorderBrush="{x:Null}"/>
-                        <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click" BorderBrush="{x:Null}"/>
+                        <Button x:Name="Schedule_Row_Add_Btn" Content="행 추가하기" Click="Schedule_Row_Add_Btn_Click" Grid.Column="1" BorderBrush="{x:Null}" ToolTip="시간표의 행을 추가합니다."/>
+                        <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click" BorderBrush="{x:Null}" ToolTip="시간표의 열을 추가합니다."/>
+                        <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3" BorderBrush="{x:Null}" ToolTip="시간표의 마지막 행을 삭제합니다."/>
+                        <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click" BorderBrush="{x:Null}" ToolTip="시간표의 마지막 열을 삭제합니다."/>
                         <Label x:Name="Schedule_Row_Column" Content="" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     </Grid>
                 </Grid>
@@ -142,30 +144,30 @@
                         </Grid.ColumnDefinitions>
                         <ComboBox x:Name="text_family_combo" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged" Width="130" HorizontalAlignment="Left" Grid.Column="2" Margin="12,0,0,0"/>
                         <ComboBox x:Name="text_size_combo" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged" Width="80" HorizontalAlignment="Left" Margin="150,0,0,0" IsEditable="True" KeyDown="text_size_KeyDown" IsTextSearchCaseSensitive="False" Grid.Column="2"/>
-                        <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="251,0,0,0" HorizontalAlignment="Left" Grid.Column="2"/>
-                        <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="286,0,0,0" HorizontalAlignment="Left" Grid.Column="2"/>
-                        <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="321,0,0,0" HorizontalAlignment="Left" Grid.Column="2">
+                        <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="251,0,0,0" HorizontalAlignment="Left" Grid.Column="2" ToolTip="굵게"/>
+                        <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="286,0,0,0" HorizontalAlignment="Left" Grid.Column="2" ToolTip="기울게"/>
+                        <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="321,0,0,0" HorizontalAlignment="Left" Grid.Column="2" ToolTip="밑줄">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock Text="U" TextDecorations="Underline"/>
                             </StackPanel>
                         </ToggleButton>
-                        <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="356,0,0,0" HorizontalAlignment="Left" Grid.Column="2">
+                        <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="356,0,0,0" HorizontalAlignment="Left" Grid.Column="2" ToolTip="취소선">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock Text="S" TextDecorations="Strikethrough"/>
                             </StackPanel>
                         </ToggleButton>
                         <Button x:Name="text_load_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_load_Btn_Click">
-                            <Image Source="/Resources/load.png"/>
+                            <Image Source="/Resources/load.png" ToolTip="열기"/>
                         </Button>
                         <Button x:Name="text_save_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_save_Btn_Click" Grid.Column="1">
-                            <Image Source="/Resources/save.png"/>
+                            <Image Source="/Resources/save.png" ToolTip="저장"/>
                         </Button>
                         <Button x:Name="text_delete_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click" Grid.Column="5">
-                            <Image Source="/Resources/deletetext.png"/>
+                            <Image Source="/Resources/deletetext.png" ToolTip="모두 지우기"/>
                         </Button>
                         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Grid.Column="2" HorizontalAlignment="Left" Background="DimGray" Margin="6,2,0,2"/>
                         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Grid.Column="2" HorizontalAlignment="Left" Background="DimGray" Margin="240,2,0,2"/>
-                        <Button x:Name="text_theme_Btn" BorderBrush="{x:Null}" Content="테마변경" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,10,0" Click="text_theme_Btn_Click"/>
+                        <Button x:Name="text_theme_Btn" BorderBrush="{x:Null}" Content="테마변경" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,10,0" Click="text_theme_Btn_Click" ToolTip="배경과 글자 색깔을 바꿔줍니다."/>
                     </Grid>
                     <TextBox x:Name="Text" DockPanel.Dock="Bottom" Text="" UndoLimit="200" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True"/>
                 </DockPanel>
@@ -236,8 +238,8 @@
                         </Grid.RowDefinitions>
                         <Label Content="기록" FontSize="18" Margin="120,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
                         <ListBox x:Name="Cal_log" Margin="10,10,10,10" Grid.Row="1" MouseDoubleClick="Cal_log_MouseDoubleClick" Grid.ColumnSpan="2"/>
-                        <Button x:Name="Cal_log_export" BorderBrush="{x:Null}" Content="기록 저장" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Stretch" Width="100" Click="Cal_log_export_Click"/>
-                        <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" Click="Cal_log_remove_Click" Width="100" Grid.Column="1"/>
+                        <Button x:Name="Cal_log_export" BorderBrush="{x:Null}" Content="기록 저장" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Stretch" Width="100" Click="Cal_log_export_Click" ToolTip="계산기 기록을 텍스트 파일로 저장합니다."/>
+                        <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" Click="Cal_log_remove_Click" Width="100" Grid.Column="1" ToolTip="기록을 모두 삭제합니다."/>
                     </Grid>
                     <Label x:Name="Label_log" Content="" FontSize="16"/>
                 </Grid>
@@ -252,16 +254,16 @@
                 <DockPanel Background="#FFE5E5E5">
                     <StackPanel DockPanel.Dock="Top" Height="36" Orientation="Horizontal">
                         <Button x:Name="Canvas_load_btn" Click="Canvas_load_btn_Click" BorderBrush="{x:Null}">
-                            <Image Source="/Resources/load.png"/>
+                            <Image Source="/Resources/load.png" ToolTip="열기"/>
                         </Button>
                         <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Click="Canvas_save_btn_Click" BorderBrush="{x:Null}">
-                            <Image Source="/Resources/save.png"/>
+                            <Image Source="/Resources/save.png" ToolTip="저장"/>
                         </Button>
                         <Button x:Name="Canvas_brush_property" Margin="10,0,0,0" Click="Canvas_brush_property_Click" BorderBrush="{x:Null}">
-                            <Image Source="/Resources/brush.png"/>
+                            <Image Source="/Resources/brush.png" ToolTip="붓 속성창 열기"/>
                         </Button>
                         <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Click="Canvas_clear_btn_Click" BorderBrush="{x:Null}">
-                            <Image Source="/Resources/deletetext.png"/>
+                            <Image Source="/Resources/deletetext.png" ToolTip="모두 지우기"/>
                         </Button>
                         <Image x:Name="colorsImage" Source="/Resources/colors.png" Margin="10,0,0,0" MouseDown="Image_MouseDown"/>
                     </StackPanel>
