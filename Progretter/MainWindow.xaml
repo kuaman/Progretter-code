@@ -106,7 +106,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="Schedule_import" Content="불러오기" Click="ImportExcel" BorderBrush="{x:Null}" ToolTip="Excel 파일을 불러옵니다. (.xlsx, .xls, .csv)"/>
+                        <Button x:Name="Schedule_import" Content="불러오기" Click="ImportExcel" BorderBrush="{x:Null}" ToolTip="Excel 파일을 불러옵니다. (.xlsx)"/>
                         <Button x:Name="Schedule_export" Content="내보내기" Click="ExportToExcel" Grid.Column="1" BorderBrush="{x:Null}" ToolTip="Excel 파일(.xlsx)로 내보냅니다."/>
                     </Grid>
                     <Grid Background="#FFDDDDDD" Margin="0,3,0,0">

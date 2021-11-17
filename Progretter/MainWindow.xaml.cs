@@ -207,7 +207,7 @@ namespace Progretter
         private void Setting_Schedule_StartUp_Btn_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx|Excel 97-2003 File(*.xls)|*.xls|Csv File(*.csv)|*.csv";
+            openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx";
             if (openFileDialog.ShowDialog() == true)
             {
                 Setting_Schedule_StartUp_Label.Content = openFileDialog.FileName;
@@ -279,7 +279,7 @@ namespace Progretter
         private void ImportExcel(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx|Excel 97-2003 File(*.xls)|*.xls|Csv File(*.csv)|*.csv";
+            openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx";
             if (openFileDialog.ShowDialog() == true)
             {
                 Schedule.ItemsSource = Schedules.ImportExcel(openFileDialog.FileName).DefaultView;
