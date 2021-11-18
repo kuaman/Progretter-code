@@ -82,11 +82,6 @@ namespace Progretter
                     Cal_log.Items.Add(item);
             }
 
-            if (Config.Get("ScheduleIsCheckBox") == "true")
-            {
-
-            }
-
             if (Config.Get("TextTheme") == "1")
             {
                 Text.Background = Brushes.Black;
@@ -199,10 +194,6 @@ namespace Progretter
         #endregion
 
         #region 설정
-        private void chk_ScheduleCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("ScheduleIsCheckBox", "false");
-        }
 
         private void Setting_Schedule_StartUp_Btn_Click(object sender, RoutedEventArgs e)
         {
@@ -268,7 +259,23 @@ namespace Progretter
             info.Owner = this;
             info.ShowDialog();
         }
-
+        private void Setting_Reset_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            Config.Set("ScheduleStartUpImport", "false");
+            Config.Set("ScheduleStartUpPath", "");
+            Config.Set("ScheduleCloseSave", "false");
+            Config.Set("TextTheme", "0");
+            Config.Set("CaculatorDeleteLog", "false");
+            Config.Set("CalculatorLog", "");
+            Config.Set("CanvasStrokeSlider", "");
+            Config.Set("CanvasEraseMode", "");
+            Config.Set("CanvasEraseSlider", "");
+            Config.Set("CanvasAutoLoad", "false");
+            Config.Set("CanvasAutoSave", "false");
+            Config.Set("CanvasLastPath", "");
+            System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            Application.Current.Shutdown();
+        }
         private void Setting_Update_Btn_Click(object sender, RoutedEventArgs e) // UPDATE
         {
             AutoUpdater.Start(""); //XML RAW URL
@@ -1159,23 +1166,5 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
-
-        private void Setting_Reset_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            Config.Set("ScheduleStartUpImport", "false");
-            Config.Set("ScheduleStartUpPath", "");
-            Config.Set("ScheduleCloseSave", "false");
-            Config.Set("TextTheme", "0");
-            Config.Set("CaculatorDeleteLog", "false");
-            Config.Set("CalculatorLog", "");
-            Config.Set("CanvasStrokeSlider", "");
-            Config.Set("CanvasEraseMode", "");
-            Config.Set("CanvasEraseSlider", "");
-            Config.Set("CanvasAutoLoad", "false");
-            Config.Set("CanvasAutoSave", "false");
-            Config.Set("CanvasLastPath", "");
-            System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-            Application.Current.Shutdown();
-        }
     }
 }
