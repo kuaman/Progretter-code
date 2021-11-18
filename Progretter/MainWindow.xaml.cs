@@ -1162,7 +1162,20 @@ namespace Progretter
 
         private void Setting_Reset_Btn_Click(object sender, RoutedEventArgs e)
         {
-            
+            Config.Set("ScheduleStartUpImport", "false");
+            Config.Set("ScheduleStartUpPath", "");
+            Config.Set("ScheduleCloseSace", "false");
+            Config.Set("TextTheme", "0");
+            Config.Set("CaculatorDeleteLog", "false");
+            Config.Set("CalculatorLog", "");
+            Config.Set("CanvasStrokeSlider", "");
+            Config.Set("CanvasEraseMode", "");
+            Config.Set("CanvasEraseSlider", "");
+            Config.Set("CanvasAutoLoad", "false");
+            Config.Set("CanvasAutoSave", "false");
+            Config.Set("CanvasLastPath", "");
+            System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            Application.Current.Shutdown();
         }
     }
 }
