@@ -62,14 +62,16 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="5*"/>
                                 <RowDefinition Height="2*"/>
-                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="1*"/>
                                 <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
-                            <Button x:Name="Setting_Update_Btn" Grid.Column="2" Content="업데이트 확인" Grid.Row="2" Click="Setting_Update_Btn_Click" Margin="0,10,0,0" Grid.RowSpan="2" ToolTip="업데이트가 있는지 확인합니다."/>
-                            <Label x:Name="Setting_Version_Label" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Grid.RowSpan="2"/>
-                            <Button x:Name="Setting_Reset_Btn" Grid.Column="2" Content="설정 초기화" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" ToolTip="설정을 초기화하고 프로그램을 재시작합니다." Click="Setting_Reset_Btn_Click"/>
+                            <Button x:Name="Setting_Update_Btn" Grid.Column="2" Content="업데이트 확인" Grid.Row="4" Click="Setting_Update_Btn_Click" ToolTip="업데이트가 있는지 확인합니다."/>
+                            <Label x:Name="Setting_Version_Label" Grid.Row="4" Grid.Column="1"/>
+                            <Button x:Name="Setting_Reset_Btn" Grid.Column="2" Content="설정 초기화" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" ToolTip="설정을 초기화하고 프로그램을 재시작합니다." Click="Setting_Reset_Btn_Click"/>
+                            <Button x:Name="Setting_AS_Folder_Btn" Grid.Column="2" Content="저장 폴더 열기" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="AutoSave 폴더를 엽니다." Click="Setting_AS_Folder_Btn_Click"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="그림판 설정" BorderBrush="Black" Grid.Row="1" Grid.Column="1" >

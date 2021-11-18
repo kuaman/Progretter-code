@@ -4,11 +4,13 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows10.0.17763.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>프로그래터 아이콘.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\progretter.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="calculator.png" />
+    <None Remove="canvasproperty.ico" />
+    <None Remove="info.ico" />
     <None Remove="memo.png" />
     <None Remove="option.png" />
     <None Remove="paintbrush.png" />
@@ -22,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Resources\progretter.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
     <PackageReference Include="ClosedXML" Version="0.95.4" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.1" />
@@ -29,6 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\canvasproperty.ico" />
+    <Resource Include="Resources\info.ico" />
     <Resource Include="Resources\brush.png" />
     <Resource Include="Resources\calculator.png" />
     <Resource Include="Resources\colors.png" />

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Progretter"
         mc:Ignorable="d"
-        Title="정보" Height="450" Width="600" WindowStartupLocation="CenterOwner">
+        Title="정보" Height="450" Width="600" WindowStartupLocation="CenterOwner" Icon="/Resources/info.ico" >
     <Grid Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

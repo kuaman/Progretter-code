@@ -1,4 +1,4 @@
-﻿<Window x:Class="Progretter.CanvasProperty"
+﻿<Window x:Name="___이름_없음_" x:Class="Progretter.CanvasProperty"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Progretter"
         xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
-        Title="그림판 속성" Height="600" Width="320" ResizeMode="NoResize" WindowStartupLocation="Manual">
+        Title="그림판 속성" Height="600" Width="320" ResizeMode="NoResize" WindowStartupLocation="Manual" Icon="/Resources/canvasproperty.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>

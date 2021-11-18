@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Diagnostics;
 
 namespace Progretter
 {
@@ -273,7 +274,7 @@ namespace Progretter
             Config.Set("CanvasAutoLoad", "false");
             Config.Set("CanvasAutoSave", "false");
             Config.Set("CanvasLastPath", "");
-            System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            Process.Start(Process.GetCurrentProcess().MainModule.FileName);
             Application.Current.Shutdown();
         }
         private void Setting_Update_Btn_Click(object sender, RoutedEventArgs e) // UPDATE
@@ -1166,5 +1167,20 @@ namespace Progretter
             tetris.Show();
         }
         #endregion
+
+        private void Setting_AS_Folder_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            DirectoryInfo di = new DirectoryInfo(@"AutoSave");
+
+            if (!di.Exists)   //If New Folder not exits  
+            {
+                di.Create();             //create Folder
+            }
+            ProcessStartInfo startInfo = new ProcessStartInfo(AppDomain.CurrentDomain.BaseDirectory + @"\AutoSave")
+            {
+                UseShellExecute = true
+            };
+            Process.Start(startInfo);
+        }
     }
 }
