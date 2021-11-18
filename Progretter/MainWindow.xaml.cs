@@ -1164,7 +1164,7 @@ namespace Progretter
         {
             Config.Set("ScheduleStartUpImport", "false");
             Config.Set("ScheduleStartUpPath", "");
-            Config.Set("ScheduleCloseSace", "false");
+            Config.Set("ScheduleCloseSave", "false");
             Config.Set("TextTheme", "0");
             Config.Set("CaculatorDeleteLog", "false");
             Config.Set("CalculatorLog", "");
