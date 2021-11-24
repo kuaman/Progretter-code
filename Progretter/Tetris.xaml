@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Progretter"
         mc:Ignorable="d"
-        Title="테트리스" Height="463" Width="467" HorizontalAlignment="Left" VerticalAlignment="Top" ResizeMode="NoResize" Closed="Window_Closed">
+        Title="테트리스" Height="463" Width="467" HorizontalAlignment="Left" VerticalAlignment="Top" ResizeMode="NoResize" Closed="Window_Closed" Icon="/Resources/tetris.ico">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFE0E0E0" Offset="0"/>

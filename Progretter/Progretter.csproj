@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\progretter.ico</ApplicationIcon>
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <None Remove="Resources\save.png" />
     <None Remove="Resources\schedule.png" />
     <None Remove="schedule.png" />
+    <None Remove="tetris.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +48,7 @@
     <Resource Include="Resources\paintbrush.png" />
     <Resource Include="Resources\save.png" />
     <Resource Include="Resources\schedule.png" />
+    <Resource Include="Resources\tetris.ico" />
   </ItemGroup>
 
   <ItemGroup>

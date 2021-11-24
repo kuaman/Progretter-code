@@ -45,6 +45,7 @@ namespace Progretter
                         break;
                 }
                 Notification("시간 변경 알림", "지금은 수학시간 5분 전 입니다.");*/
+
             }
         }
 
@@ -126,6 +127,9 @@ namespace Progretter
             List<string> listSize = new List<string>() { "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "32", "48", "54", "72", "88", "96", "128", "144", "240", "288", "324", "480", "500" };
             text_size_combo.ItemsSource = listSize;
             text_size_combo.SelectedIndex = 4;
+
+            AutoUpdater.Start(); //XML RAW URL
+            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
         }
         #endregion
 
@@ -195,7 +199,6 @@ namespace Progretter
         #endregion
 
         #region 설정
-
         private void Setting_Schedule_StartUp_Btn_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -260,26 +263,48 @@ namespace Progretter
             info.Owner = this;
             info.ShowDialog();
         }
+        private void Setting_AS_Folder_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            DirectoryInfo di = new DirectoryInfo(@"AutoSave");
+
+            if (!di.Exists)   //If New Folder not exits  
+            {
+                di.Create();             //create Folder
+            }
+            ProcessStartInfo startInfo = new ProcessStartInfo(AppDomain.CurrentDomain.BaseDirectory + @"\AutoSave")
+            {
+                UseShellExecute = true
+            };
+            Process.Start(startInfo);
+        }
+
         private void Setting_Reset_Btn_Click(object sender, RoutedEventArgs e)
         {
-            Config.Set("ScheduleStartUpImport", "false");
-            Config.Set("ScheduleStartUpPath", "");
-            Config.Set("ScheduleCloseSave", "false");
-            Config.Set("TextTheme", "0");
-            Config.Set("CaculatorDeleteLog", "false");
-            Config.Set("CalculatorLog", "");
-            Config.Set("CanvasStrokeSlider", "");
-            Config.Set("CanvasEraseMode", "");
-            Config.Set("CanvasEraseSlider", "");
-            Config.Set("CanvasAutoLoad", "false");
-            Config.Set("CanvasAutoSave", "false");
-            Config.Set("CanvasLastPath", "");
-            Process.Start(Process.GetCurrentProcess().MainModule.FileName);
-            Application.Current.Shutdown();
+            if (MessageBox.Show("모든 설정을 초기화 하시겠습니까?", "설정 초기화", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Config.Set("ScheduleStartUpImport", "false");
+                Config.Set("ScheduleStartUpPath", "");
+                Config.Set("ScheduleCloseSave", "false");
+                Config.Set("TextTheme", "0");
+                Config.Set("CaculatorDeleteLog", "false");
+                Config.Set("CalculatorLog", "");
+                Config.Set("CanvasStrokeSlider", "");
+                Config.Set("CanvasEraseMode", "");
+                Config.Set("CanvasEraseSlider", "");
+                Config.Set("CanvasAutoLoad", "false");
+                Config.Set("CanvasAutoSave", "false");
+                Config.Set("CanvasLastPath", "");
+                Process.Start(Process.GetCurrentProcess().MainModule.FileName);
+                Application.Current.Shutdown();
+            }
         }
+
+        private int update = 0;
         private void Setting_Update_Btn_Click(object sender, RoutedEventArgs e) // UPDATE
         {
-            AutoUpdater.Start(""); //XML RAW URL
+            update = 1;
+            AutoUpdater.Start(); //XML RAW URL
+            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
         }
         #endregion
 
@@ -1153,10 +1178,13 @@ namespace Progretter
 
         private void Canvas_clear_btn_Click(object sender, RoutedEventArgs e)
         {
-            inkCanvas.Strokes.Clear();
-            inkCanvas.Background = Brushes.White; //배경도 지우기
-            isCanvasmod = 0;
-            Config.Set("CanvasLastPath", "");
+            if (MessageBox.Show("그림판을 비우시겠습니까?", "그림판 비우기", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                inkCanvas.Strokes.Clear();
+                inkCanvas.Background = Brushes.White; //배경도 지우기
+                isCanvasmod = 0;
+                Config.Set("CanvasLastPath", "");
+            }
         }
         #endregion
 
@@ -1168,19 +1196,28 @@ namespace Progretter
         }
         #endregion
 
-        private void Setting_AS_Folder_Btn_Click(object sender, RoutedEventArgs e)
+        #region Update
+        private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
         {
-            DirectoryInfo di = new DirectoryInfo(@"AutoSave");
-
-            if (!di.Exists)   //If New Folder not exits  
+            if (args.Error == null)
             {
-                di.Create();             //create Folder
+                if (args.IsUpdateAvailable)
+                {
+                    if (MessageBox.Show($@"프로그래터 {args.CurrentVersion} 버전이 사용가능합니다. 현재 {args.InstalledVersion} 버전을 사용하고 있습니다. 업데이트 하시겠습니까?", "업데이트 사용가능", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                    {
+                        AutoUpdater.Start(); //XML RAW URL
+                    }
+                }
+                else
+                {
+                    if (update == 1)
+                    {
+                        Notification("프로그래터 업데이트", "사용 가능한 업데이트가 없습니다.\n다시 시도해 주십시오");
+                        update = 0;
+                    }
+                }
             }
-            ProcessStartInfo startInfo = new ProcessStartInfo(AppDomain.CurrentDomain.BaseDirectory + @"\AutoSave")
-            {
-                UseShellExecute = true
-            };
-            Process.Start(startInfo);
         }
+        #endregion
     }
 }
