@@ -157,7 +157,7 @@ namespace Progretter
             text_size_combo.ItemsSource = listSize;
             text_size_combo.SelectedIndex = 4;
 
-            AutoUpdater.Start(); //XML RAW URL
+            AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
             AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
         }
         #endregion
@@ -332,7 +332,7 @@ namespace Progretter
         private void Setting_Update_Btn_Click(object sender, RoutedEventArgs e) // UPDATE
         {
             update = 1;
-            AutoUpdater.Start(); //XML RAW URL
+            AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
             AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
         }
         #endregion
@@ -1237,7 +1237,7 @@ namespace Progretter
                 {
                     if (MessageBox.Show($@"프로그래터 {args.CurrentVersion} 버전이 사용가능합니다. 현재 {args.InstalledVersion} 버전을 사용하고 있습니다. 업데이트 하시겠습니까?", "업데이트 사용가능", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                     {
-                        AutoUpdater.Start(); //XML RAW URL
+                        AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
                     }
                 }
                 else
