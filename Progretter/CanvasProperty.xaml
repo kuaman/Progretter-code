@@ -36,9 +36,9 @@
         <Grid x:Name="CanvasCP" Grid.Row="1">
             <GroupBox Header="색 설정">
                 <Grid>
-                    <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged" Grid.Row="1"
-                                         ColorState="{Binding Path=ColorState, Mode=TwoWay, Delay=10}"
-                                         SecondColorState="{Binding Path=SecondColorState, Mode=TwoWay}" Grid.RowSpan="2"/>
+                    <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged"
+                                         ColorState="{Binding ElementName=maindisplay, Path=ColorState, Mode=TwoWay, Delay=10}"
+                                         SecondColorState="{Binding ElementName=maindisplay, Path=SecondColorState, Mode=TwoWay}" Grid.Row="1"/>
                 </Grid>
             </GroupBox>
         </Grid>

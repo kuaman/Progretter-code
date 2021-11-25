@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -13,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using System.Diagnostics;
 
 namespace Progretter
 {
@@ -57,6 +57,36 @@ namespace Progretter
                 .AddText($"{Title}")
                 .AddText($"{Contents}")
                 .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
+        }
+
+        private void tabcontrol_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabcontrol.SelectedIndex != 4)
+            {
+                foreach (Window openForm in Application.Current.Windows)
+                {
+                    if (openForm.Title == "그림판 속성") // 열린 창의 이름 검사
+                    {
+                        openForm.WindowState = WindowState.Minimized;
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                foreach (Window openForm in Application.Current.Windows)
+                {
+                    if (openForm.Title == "그림판 속성") // 열린 창의 이름 검사
+                    {
+                        if (openForm.WindowState == WindowState.Minimized)
+                        {  // 창을 최소화시켜 하단에 내려놓았는지 검사
+                            openForm.WindowState = WindowState.Normal;
+                        }
+                        openForm.Activate();
+                        return;
+                    }
+                }
+            }
         }
         #endregion
 
@@ -1107,7 +1137,8 @@ namespace Progretter
             canvasProperty.EMEvent += StrokeEditingModeChange;
             canvasProperty.SSEvent += StrokeSizeChange;
             canvasProperty.ESEvent += EraseSizeChange;
-            canvasProperty.RecEditingMode(inkCanvas.DefaultDrawingAttributes.Color.A, inkCanvas.DefaultDrawingAttributes.Color.R, inkCanvas.DefaultDrawingAttributes.Color.G, inkCanvas.DefaultDrawingAttributes.Color.B, inkCanvas.EditingMode.ToString());
+            canvasProperty.RecEditingMode(inkCanvas.EditingMode.ToString());
+            canvasProperty.colorpicker_ColorChange(inkCanvas.DefaultDrawingAttributes.Color.A, inkCanvas.DefaultDrawingAttributes.Color.R, inkCanvas.DefaultDrawingAttributes.Color.G, inkCanvas.DefaultDrawingAttributes.Color.B);
             canvasProperty.Show();
         }
 

@@ -67,6 +67,7 @@ namespace Progretter
             colorpicker.Color.RGB_R = R;
             colorpicker.Color.RGB_G = G;
             colorpicker.Color.RGB_B = B;
+
         }
 
         private int load = 0;
@@ -121,18 +122,16 @@ namespace Progretter
             }
         }
 
-        public void RecEditingMode(byte A, byte R, byte G, byte B, string noweditmode) // 중간에
+        public void RecEditingMode(string noweditmode)
         {
-            colorpicker.Color.A = A;
-            colorpicker.Color.RGB_R = R;
-            colorpicker.Color.RGB_G = G;
-            colorpicker.Color.RGB_B = B;
             switch (noweditmode)
             {
                 case "Ink":
                     StrokeEditingMode.SelectedIndex = 0;
                     if (Config.Get("CanvasEraseMode") != "")
+                    {
                         erasermode = Convert.ToInt32(Config.Get("CanvasEraseMode"));
+                    }
                     break;
 
                 case "EraseByPoint":

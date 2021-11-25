@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\progretter.ico</ApplicationIcon>
+    <ApplicationManifest>C:\Users\min\Downloads\app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
