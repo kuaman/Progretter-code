@@ -1,4 +1,4 @@
-﻿<Window x:Name="___이름_없음_" x:Class="Progretter.CanvasProperty"
+﻿<Window x:Class="Progretter.CanvasProperty"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -60,7 +60,7 @@
                         <ComboBoxItem Content="한번에 지우기"/>
                     </ComboBox>
                     <Label x:Name="EraserLabel" Width="100" Height="30" Content="지우개 크기" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <Slider x:Name="EraserSize" HorizontalAlignment="Center" VerticalAlignment="Center" ValueChanged="EraserSize_ValueChanged" Maximum="100" Minimum="10" Grid.Column="1" Grid.Row="1" Width="140"/>
+                    <Slider x:Name="EraserSize" HorizontalAlignment="Center" VerticalAlignment="Center" ValueChanged="EraserSize_ValueChanged" Maximum="100" Minimum="8" Grid.Column="1" Grid.Row="1" Width="140"/>
                 </Grid>
             </GroupBox>
         </Grid>

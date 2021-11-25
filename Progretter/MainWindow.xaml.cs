@@ -45,7 +45,6 @@ namespace Progretter
                         break;
                 }
                 Notification("시간 변경 알림", "지금은 수학시간 5분 전 입니다.");*/
-
             }
         }
 
@@ -1150,7 +1149,7 @@ namespace Progretter
             {
                 case 0:
                     inkCanvas.EditingMode = InkCanvasEditingMode.None;
-                    inkCanvas.EraserShape = new RectangleStylusShape(size, size);
+                    inkCanvas.EraserShape = new RectangleStylusShape(size, size); // size Default value = 8
                     inkCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
                     break;
 
@@ -1161,6 +1160,8 @@ namespace Progretter
                     break;
 
                 case 2:
+                    inkCanvas.EditingMode = InkCanvasEditingMode.None;
+                    inkCanvas.EraserShape = new RectangleStylusShape(8, 8);
                     inkCanvas.EditingMode = InkCanvasEditingMode.EraseByStroke;
                     break;
 

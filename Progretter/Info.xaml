@@ -21,10 +21,15 @@
         <TextBlock TextWrapping="Wrap" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" Grid.Row="2" Grid.Column="1">
             <Run/><LineBreak/><Run/><LineBreak/>
             <Run Text="제작 : 프로그래터 동아리 ( 김민서, 어주현, 송찬솔, 최남구, 윤상원, 방인배 선생님 )"/><LineBreak/><LineBreak/>
-            <Run Text="제작기간 : 2021.4.12 ~ 2021.12.01"/><LineBreak/><LineBreak/>
+            <Run Text="제작기간 : 2021.4.12 ~ 2021.11.25"/><LineBreak/><LineBreak/>
             <Run Text="개발 목적 : 온라인 수업을 보조하는 교육용 프로그램을 만들기"/><LineBreak/><LineBreak/>
             <Run Text="개발 변혁 : "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/kuaman/Progretter-code">Progretter-code Github</Hyperlink><LineBreak/><LineBreak/>
-            <Run Text="Special Thanks : "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://stackoverflow.com/">Stack Overflow</Hyperlink><Run Text=", "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://www.sourcecodester.com/c/11758/tetris-c-wpf.html">Tetris by Antonis Ntit</Hyperlink><LineBreak/><LineBreak/>
+            <Run Text="Special Thanks : "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://stackoverflow.com/">Stack Overflow</Hyperlink><Run Text=", "/>
+            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://www.sourcecodester.com/c/11758/tetris-c-wpf.html">Tetris by Antonis Ntit</Hyperlink><Run Text=", "/>
+            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/ravibpatel/AutoUpdater.NET">Autoupdater.NET</Hyperlink><Run Text=", "/><LineBreak/>
+            <Run Text="                      "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/ClosedXML/ClosedXML">ClosedXML</Hyperlink><Run Text=", "/>
+            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/CommunityToolkit/WindowsCommunityToolkit">UWP Notifications</Hyperlink><Run Text=", "/>
+            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/PixiEditor/ColorPicker">ColorPicker by PixiEditor</Hyperlink>
         </TextBlock>
     </Grid>
 </Window>
