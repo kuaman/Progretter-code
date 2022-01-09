@@ -5,24 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Progretter"
         mc:Ignorable="d"
-        Title="정보" Height="450" Width="600" WindowStartupLocation="CenterOwner" Icon="/Resources/info.ico" >
+        Title="프로그램 정보" Height="450" Width="600" WindowStartupLocation="CenterOwner" Icon="/Resources/info.ico" >
     <Grid Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="18*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="36*"/>
+            <RowDefinition Height="32*"/>
         </Grid.RowDefinitions>
-        <TextBlock TextWrapping="Wrap" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" FontSize="22" TextAlignment="Center" Grid.Row="1" Grid.Column="1"><Run Language="ko-kr" Text="프로그래터"/></TextBlock>
-        <TextBlock TextWrapping="Wrap" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" Grid.Row="2" Grid.Column="1">
+        <TextBlock TextWrapping="Wrap" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" FontSize="24" TextAlignment="Center" Grid.Row="1" Grid.Column="1" FontFamily="Hancom Gothic"><Run Language="ko-kr" Text="프로그래터"/></TextBlock>
+        <TextBlock TextWrapping="Wrap" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" FontSize="14" FontFamily="Hancom Gothic">
             <Run/><LineBreak/><Run/><LineBreak/>
             <Run Text="제작 : 프로그래터 동아리 ( 김민서, 어주현, 송찬솔, 최남구, 윤상원, 방인배 선생님 )"/><LineBreak/><LineBreak/>
-            <Run Text="제작기간 : 2021.4.12 ~ 2021.11.25"/><LineBreak/><LineBreak/>
-            <Run Text="개발 목적 : 온라인 수업을 보조하는 교육용 프로그램을 만들기"/><LineBreak/><LineBreak/>
+            <Run Text="제작기간 : 2021.4.12 ~ 2021.11.25" BaselineAlignment="Subscript" ToolTip="제작기간은 첫 릴리즈 버전 기준"/>*<LineBreak/><LineBreak/>
+            <Run Text="개발 목적 : 온라인 수업 보조 프로그램"/><LineBreak/><LineBreak/>
             <Run Text="개발 변혁 : "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/kuaman/Progretter-code">Progretter-code Github</Hyperlink><LineBreak/><LineBreak/>
             <Run Text="Special Thanks : "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://stackoverflow.com/">Stack Overflow</Hyperlink><Run Text=", "/>
             <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://www.sourcecodester.com/c/11758/tetris-c-wpf.html">Tetris by Antonis Ntit</Hyperlink><Run Text=", "/>
