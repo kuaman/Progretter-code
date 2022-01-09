@@ -158,7 +158,6 @@ namespace Progretter
             text_size_combo.SelectedIndex = 4;
 
             AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
-            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
         }
         #endregion
 
@@ -333,7 +332,7 @@ namespace Progretter
         {
             update = 1;
             AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
-            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
+/*            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;*/
         }
         #endregion
 
@@ -1229,7 +1228,7 @@ namespace Progretter
         #endregion
 
         #region Update
-        private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
+/*        private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
         {
             if (args.Error == null)
             {
@@ -1249,7 +1248,7 @@ namespace Progretter
                     }
                 }
             }
-        }
+        }*/
         #endregion
     }
 }
