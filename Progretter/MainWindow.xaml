@@ -19,68 +19,83 @@
                         <TextBlock Text="설정" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="160"/>
-                        <RowDefinition Height="160"/>
-                        <RowDefinition Height="160"/>
+                        <RowDefinition/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <GroupBox Header="시간표 설정" BorderBrush="Black" Grid.ColumnSpan="2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="6*"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Label Content="프로그램 시작 시 시간표 불러오기" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
-                            <Label x:Name="Setting_Schedule_StartUp_Label" Grid.Row="1" Background="#FFD0D0D0" VerticalContentAlignment="Center"/>
-                            <Button x:Name="Setting_Schedule_StartUp_Btn" Content="불러오기" Grid.Column="1" Click="Setting_Schedule_StartUp_Btn_Click" BorderBrush="{x:Null}" Grid.Row="1" Margin="10,0,0,0"/>
-                            <Button x:Name="Setting_Schedule_StartUp_Reset_Btn" Content="초기화" Grid.Column="2" Grid.Row="1" Margin="10,0,0,0" Click="Setting_Schedule_StartUp_Reset_Btn_Click" BorderBrush="{x:Null}"/>
-                            <CheckBox x:Name="Setting_Schedule_Close_Save_CheckBox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Center" Checked="Setting_Schedule_Close_Save_CheckBox_Checked" Unchecked="Setting_Schedule_Close_Save_CheckBox_Unchecked" ToolTip="종료될 때 AutoSave 폴더에 자동 저장됩니다."/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="계산기 설정" BorderBrush="Black" Grid.Row="1">
-                        <CheckBox x:Name="Setting_Cal_DeleteLog_CheckBox" Content="프로그램 종료 시 기록 자동 삭제" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Cal_DeleteLog_CheckBox_Checked" Unchecked="Setting_Cal_DeleteLog_CheckBox_Unchecked" ToolTip="계산기 기록을 삭제해 줍니다."/>
-                    </GroupBox>
-                    <GroupBox Header="그림판 설정" BorderBrush="Black" Grid.Row="1" Grid.Column="1" >
-                        <Grid>
-                            <CheckBox x:Name="Setting_Canvas_Autoload_Checkbox" Content="프로그램 시작 시 자동 로드" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autoload_Checkbox_Checked" Unchecked="Setting_Canvas_Autoload_Checkbox_Unchecked" ToolTip="그림 파일을 자동으로 불러옵니다."/>
-                            <CheckBox x:Name="Setting_Canvas_Autosave_Checkbox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autosave_Checkbox_Checked" Unchecked="Setting_Canvas_Autosave_Checkbox_Unchecked" ToolTip="종료될 때 AutoSave 폴더에 저장합니다."/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="일반 설정" Grid.Row="2" BorderBrush="Black" Grid.ColumnSpan="2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5*"/>
-                                <ColumnDefinition Width="180"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="2*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="2*"/>
-                            </Grid.RowDefinitions>
-                            <Button x:Name="Setting_AS_Folder_Btn" Grid.Column="2" Content="저장 폴더 열기" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="AutoSave 폴더를 엽니다." Click="Setting_AS_Folder_Btn_Click"/>
-                            <Button x:Name="Setting_Reset_Btn" Grid.Column="2" Content="설정 초기화" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" ToolTip="설정을 초기화하고 프로그램을 재시작합니다." Click="Setting_Reset_Btn_Click"/>
-                            <Label x:Name="Setting_Version_Label" Grid.Row="4" Grid.Column="1" FontSize="14" FontFamily="Hancom Gothic" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="0,0,10,0" />
-                            <Button x:Name="Setting_Update_Btn" Grid.Column="2" Content="업데이트 확인" Grid.Row="4" Click="Setting_Update_Btn_Click" ToolTip="업데이트가 있는지 확인합니다."/>
-                        </Grid>
-                    </GroupBox>
-                    <Button x:Name="Tetris_btn" Content="???" Click="Tetris_btn_Click" Grid.Row="3" ToolTip="Easter Egg (Tetris)"/>
-                    <Button x:Name="Setting_Info_Btn" Content="프로그램 정보" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Click="Setting_Info_Btn_Click" ToolTip="프로그램에 대한 정보창을 띄웁니다."/>
+                    <UniformGrid Grid.ColumnSpan="2" Columns="2">
+                        <GroupBox Header="시간표 설정" BorderBrush="Black" Grid.ColumnSpan="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Label Content="프로그램 시작 시 시간표 불러오기" VerticalAlignment="Top" Grid.Row="1" Margin="10,-5,0,0"/>
+                                <Label x:Name="Setting_Schedule_StartUp_Label" Grid.Row="1" Background="#FFD0D0D0" VerticalContentAlignment="Center" Margin="10,21,0,12"/>
+                                <Button x:Name="Setting_Schedule_StartUp_Btn" Content="불러오기" Grid.Column="1" Click="Setting_Schedule_StartUp_Btn_Click" BorderBrush="{x:Null}" Grid.Row="1" Margin="10,21,0,10"/>
+                                <Button x:Name="Setting_Schedule_StartUp_Reset_Btn" Content="초기화" Grid.Column="2" Grid.Row="1" Margin="5,21,0,10" Click="Setting_Schedule_StartUp_Reset_Btn_Click" BorderBrush="{x:Null}"/>
+                                <CheckBox x:Name="Setting_Schedule_Close_Save_CheckBox" Content="프로그램 종료 시 자동 저장" Grid.Row="2" VerticalAlignment="Top" Checked="Setting_Schedule_Close_Save_CheckBox_Checked" Unchecked="Setting_Schedule_Close_Save_CheckBox_Unchecked" ToolTip="종료될 때 AutoSave 폴더에 자동 저장됩니다." Margin="10,10,0,0"/>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="계산기 설정" BorderBrush="Black" Grid.Row="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CheckBox x:Name="Setting_Cal_DeleteLog_CheckBox" Content="프로그램 종료 시 기록 자동 삭제" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Cal_DeleteLog_CheckBox_Checked" Unchecked="Setting_Cal_DeleteLog_CheckBox_Unchecked" ToolTip="계산기 기록을 삭제해 줍니다." Grid.Row="1"/>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="그림판 설정" BorderBrush="Black" Grid.Row="1" Grid.Column="1" >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CheckBox x:Name="Setting_Canvas_Autoload_Checkbox" Content="프로그램 시작 시 자동 로드" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autoload_Checkbox_Checked" Unchecked="Setting_Canvas_Autoload_Checkbox_Unchecked" ToolTip="그림 파일을 자동으로 불러옵니다." Grid.Row="1"/>
+                                <CheckBox x:Name="Setting_Canvas_Autosave_Checkbox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autosave_Checkbox_Checked" Unchecked="Setting_Canvas_Autosave_Checkbox_Unchecked" ToolTip="종료될 때 AutoSave 폴더에 저장합니다." Grid.Row="1"/>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="일반 설정" Grid.Row="2" BorderBrush="Black" Grid.ColumnSpan="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="110"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="2*"/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="Setting_AS_Folder_Btn" Grid.Column="2" Content="저장 폴더 열기" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="AutoSave 폴더를 엽니다." Click="Setting_AS_Folder_Btn_Click" Grid.Row="1"/>
+                                <Button x:Name="Setting_Reset_Btn" Grid.Column="2" Content="설정 초기화" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" ToolTip="설정을 초기화하고 프로그램을 재시작합니다." Click="Setting_Reset_Btn_Click"/>
+                                <Label x:Name="Setting_Version_Label" Grid.Row="5" Grid.Column="1" FontSize="14" FontFamily="Hancom Gothic" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="0,0,10,0" />
+                                <Button x:Name="Setting_Update_Btn" Grid.Column="2" Content="업데이트 확인" Grid.Row="5" Click="Setting_Update_Btn_Click" ToolTip="업데이트가 있는지 확인합니다."/>
+                            </Grid>
+                        </GroupBox>
+                    </UniformGrid>
+                    <Button x:Name="Tetris_btn" Content="???" Click="Tetris_btn_Click" ToolTip="Easter Egg (Tetris)" Grid.Row="1"/>
+                    <Button x:Name="Setting_Info_Btn" Content="프로그램 정보" Click="Setting_Info_Btn_Click" ToolTip="프로그램에 대한 정보창을 띄웁니다." Grid.Row="1" Grid.Column="1"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="ScheduleTab" Width="120" Height="102">
