@@ -26,11 +26,41 @@ namespace Progretter
         public MainWindow()
         {
             InitializeComponent();
+            InitialConfig();
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
+
+        private void InitialConfig()
+        {
+            if (File.Exists(Pgpath + @"\app.config"))
+            {
+                AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", Pgpath + @"\app.config");
+            }
+            else
+            {
+                AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", Pgpath + @"\app.config");
+                Config.Set("ScheduleStartUpImport", "false");
+                Config.Set("ScheduleStartUpPath", "");
+                Config.Set("ScheduleCloseSave", "false");
+                Config.Set("TextTheme", "0");
+                Config.Set("CaculatorDeleteLog", "false");
+                Config.Set("CalculatorLog", "");
+                Config.Set("CanvasStrokeSlider", "");
+                Config.Set("CanvasEraseMode", "");
+                Config.Set("CanvasEraseSlider", "");
+                Config.Set("CanvasAutoLoad", "false");
+                Config.Set("CanvasAutoSave", "false");
+                Config.Set("CanvasLastPath", "");
+                Process.Start(Process.GetCurrentProcess().MainModule.FileName);
+                Application.Current.Shutdown();
+            }
+
+        }
+        private string Pgpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter";
+        private string ASpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave";
 
         // 현재 시간 표시
         private void Timer_Tick(object sender, EventArgs e)
@@ -204,7 +234,7 @@ namespace Progretter
             {
                 if (Schedule.ItemsSource != null)
                 {
-                    string path = @"AutoSave\" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                    string path = ASpath + @"\" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
                     Schedules.ExportExcel((DataView)Schedule.ItemsSource, path);
                 }
             }
@@ -293,13 +323,13 @@ namespace Progretter
         }
         private void Setting_AS_Folder_Btn_Click(object sender, RoutedEventArgs e)
         {
-            DirectoryInfo di = new DirectoryInfo(@"AutoSave");
+            DirectoryInfo di = new DirectoryInfo(ASpath);
 
             if (!di.Exists)   //If New Folder not exits  
             {
                 di.Create();             //create Folder
             }
-            ProcessStartInfo startInfo = new ProcessStartInfo(AppDomain.CurrentDomain.BaseDirectory + @"\AutoSave")
+            ProcessStartInfo startInfo = new ProcessStartInfo(ASpath)
             {
                 UseShellExecute = true
             };
@@ -332,7 +362,7 @@ namespace Progretter
         {
             update = 1;
             AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
-/*            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;*/
+            /*            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;*/
         }
         #endregion
 
@@ -578,6 +608,22 @@ namespace Progretter
                 case MessageBoxResult.No:
                     break;
             }
+        }
+        private void TextBox_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                if (files != null && files.Length > 0)
+                {
+                    Text.Text = File.ReadAllText(files[0]);
+                }
+            }
+        }
+
+        private void TextBox_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
         }
         #endregion
 
@@ -1044,7 +1090,7 @@ namespace Progretter
                                 break;
 
                             default:
-                                MessageBox.Show("'파일에 자동 저장'을 사용하려면 파일 확장자가 .PNG, .JPG, .GIF, .BMP 중 하나여야 합니다. \nAutoSave폴더에 자동 저장됩니다.", "확장자 오류");
+                                MessageBox.Show("'파일에 자동 저장'을 사용하려면 파일 확장자가 .PNG, .JPG, .GIF, .BMP 중 하나여야 합니다. \n문서\\Progretter\\AutoSave폴더에 자동 저장됩니다.", "확장자 오류");
                                 ImageSave(source, 2);
                                 break;
                         }
@@ -1058,22 +1104,22 @@ namespace Progretter
                     }
                     else
                     {
-                        MessageBox.Show("'파일에 자동 저장'을 사용하려면 파일이 존재해야 합니다. \nAutoSave폴더에 자동 저장됩니다.", "파일 존재 오류");
+                        MessageBox.Show("'파일에 자동 저장'을 사용하려면 파일이 존재해야 합니다. \n문서\\Progretter\\AutoSave폴더에 자동 저장됩니다.", "파일 존재 오류");
                         Config.Set("CanvasLastPath", "");
                         ImageSave(source, 2);
                     }
                 }
                 else // mode == 2
                 {
-                    DirectoryInfo di = new DirectoryInfo(@"AutoSave");
+                    DirectoryInfo di = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave");
 
                     if (!di.Exists)   //If New Folder not exits  
                     {
                         di.Create();             //create Folder
                     }
 
-                    string path = "AutoSave/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg"; // AutoSave/가 맞음 (AutoSave\ X)
-                                                                                                  // 파일 생성
+                    string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Progretter/AutoSave/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg"; // AutoSave/가 맞음 (AutoSave\ X)
+                                                                                                                                                                                 // 파일 생성
                     FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
 
                     BitmapEncoder encoder = new JpegBitmapEncoder();
@@ -1228,27 +1274,27 @@ namespace Progretter
         #endregion
 
         #region Update
-/*        private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
-        {
-            if (args.Error == null)
-            {
-                if (args.IsUpdateAvailable)
+        /*        private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
                 {
-                    if (MessageBox.Show($@"프로그래터 {args.CurrentVersion} 버전이 사용가능합니다. 현재 {args.InstalledVersion} 버전을 사용하고 있습니다. 업데이트 하시겠습니까?", "업데이트 사용가능", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                    if (args.Error == null)
                     {
-                        AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
+                        if (args.IsUpdateAvailable)
+                        {
+                            if (MessageBox.Show($@"프로그래터 {args.CurrentVersion} 버전이 사용가능합니다. 현재 {args.InstalledVersion} 버전을 사용하고 있습니다. 업데이트 하시겠습니까?", "업데이트 사용가능", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                            {
+                                AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
+                            }
+                        }
+                        else
+                        {
+                            if (update == 1)
+                            {
+                                Notification("프로그래터 업데이트", "사용 가능한 업데이트가 없습니다.\n다시 시도해 주십시오");
+                                update = 0;
+                            }
+                        }
                     }
-                }
-                else
-                {
-                    if (update == 1)
-                    {
-                        Notification("프로그래터 업데이트", "사용 가능한 업데이트가 없습니다.\n다시 시도해 주십시오");
-                        update = 0;
-                    }
-                }
-            }
-        }*/
+                }*/
         #endregion
     }
 }
