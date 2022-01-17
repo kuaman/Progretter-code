@@ -35,13 +35,13 @@ namespace Progretter
 
         private void InitialConfig()
         {
-            if (File.Exists(Pgpath + @"\app.config"))
+            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", Pgpath + @"\app.config");
+            AppConfig.Change(Pgpath + @"\app.config");
+
+            if (!File.Exists(Pgpath + @"\app.config"))
             {
                 AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", Pgpath + @"\app.config");
-            }
-            else
-            {
-                AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", Pgpath + @"\app.config");
+                AppConfig.Change(Pgpath + @"\app.config");
                 Config.Set("ScheduleStartUpImport", "false");
                 Config.Set("ScheduleStartUpPath", "");
                 Config.Set("ScheduleCloseSave", "false");
@@ -58,6 +58,12 @@ namespace Progretter
                 Application.Current.Shutdown();
             }
 
+            DirectoryInfo di = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave");
+
+            if (!di.Exists)
+            {
+                di.Create();
+            }
         }
         private string Pgpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter";
         private string ASpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave";
@@ -325,7 +331,7 @@ namespace Progretter
         {
             DirectoryInfo di = new DirectoryInfo(ASpath);
 
-            if (!di.Exists)   //If New Folder not exits  
+            if (!di.Exists)   //If New Folder not exists
             {
                 di.Create();             //create Folder
             }
@@ -357,10 +363,8 @@ namespace Progretter
             }
         }
 
-        private int update = 0;
         private void Setting_Update_Btn_Click(object sender, RoutedEventArgs e) // UPDATE
         {
-            update = 1;
             AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
             /*            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;*/
         }
@@ -1287,11 +1291,8 @@ namespace Progretter
                         }
                         else
                         {
-                            if (update == 1)
-                            {
-                                Notification("프로그래터 업데이트", "사용 가능한 업데이트가 없습니다.\n다시 시도해 주십시오");
-                                update = 0;
-                            }
+                            Notification("프로그래터 업데이트", "사용 가능한 업데이트가 없습니다.\n다시 시도해 주십시오");
+                            update = 0;
                         }
                     }
                 }*/
