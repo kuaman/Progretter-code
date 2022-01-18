@@ -1292,7 +1292,6 @@ namespace Progretter
                         else
                         {
                             Notification("프로그래터 업데이트", "사용 가능한 업데이트가 없습니다.\n다시 시도해 주십시오");
-                            update = 0;
                         }
                     }
                 }*/
