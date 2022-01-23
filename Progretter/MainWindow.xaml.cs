@@ -46,7 +46,8 @@ namespace Progretter
                 Config.Set("ScheduleStartUpPath", "");
                 Config.Set("ScheduleCloseSave", "false");
                 Config.Set("TextTheme", "0");
-                Config.Set("CaculatorDeleteLog", "false");
+                Config.Set("TextDragAllExtension", "false");
+                Config.Set("CalculatorDeleteLog", "false");
                 Config.Set("CalculatorLog", "");
                 Config.Set("CanvasStrokeSlider", "");
                 Config.Set("CanvasEraseMode", "");
@@ -153,6 +154,11 @@ namespace Progretter
             {
                 Text.Background = Brushes.Black;
                 Text.Foreground = Brushes.White;
+            }
+
+            if (Config.Get("TextDragAllExtension") == "true")
+            {
+                Setting_Note_DragAllExtension_CheckBox.IsChecked = true;
             }
 
             if (Config.Get("CalculatorDeleteLog") == "true")
@@ -292,6 +298,16 @@ namespace Progretter
             Config.Set("ScheduleCloseSave", "false");
         }
 
+        private void Setting_Note_DragAllExtension_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("TextDragAllExtension", "true");
+        }
+
+        private void Setting_Note_DragAllExtension_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Config.Set("TextDragAllExtension", "false");
+        }
+
         private void Setting_Cal_DeleteLog_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             Config.Set("CalculatorDeleteLog", "true");
@@ -350,7 +366,8 @@ namespace Progretter
                 Config.Set("ScheduleStartUpPath", "");
                 Config.Set("ScheduleCloseSave", "false");
                 Config.Set("TextTheme", "0");
-                Config.Set("CaculatorDeleteLog", "false");
+                Config.Set("TextDragAllExtension", "false");
+                Config.Set("CalculatorDeleteLog", "false");
                 Config.Set("CalculatorLog", "");
                 Config.Set("CanvasStrokeSlider", "");
                 Config.Set("CanvasEraseMode", "");
@@ -617,10 +634,21 @@ namespace Progretter
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
-                if (files != null && files.Length > 0)
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (var file in files)
                 {
-                    Text.Text = File.ReadAllText(files[0]);
+                    var ext = Path.GetExtension(file);
+                    if (ext.Equals(".txt", StringComparison.CurrentCultureIgnoreCase) || (Config.Get("TextDragAllExtension") == "true"))
+                    {
+                        if (files != null && files.Length > 0)
+                        {
+                            Text.Text = File.ReadAllText(files[0]);
+                        }
+                    }
+                    else    // .txt 확장자가 아니면서 옵션이 활성화되지 않았을 경우
+                    {
+                        MessageBox.Show("파일의 확장자가 .txt가 아닙니다. \n계속 로드하려면 설정에서 \"모든 확장자 사용\"을 활성화해주세요.", "확장자 주의!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    }
                 }
             }
         }
