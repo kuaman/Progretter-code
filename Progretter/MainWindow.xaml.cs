@@ -150,10 +150,20 @@ namespace Progretter
                     Cal_log.Items.Add(item);
             }
 
-            if (Config.Get("TextTheme") == "1")
+            switch (Config.Get("TextTheme"))
             {
-                Text.Background = Brushes.Black;
-                Text.Foreground = Brushes.White;
+                case "1":
+                    Text.Background = Brushes.Black;
+                    Text.Foreground = Brushes.White;
+                    break;
+
+                case "2":
+                    Text.Background = Brushes.ForestGreen;
+                    Text.Foreground = Brushes.White;
+                    break;
+
+                default:
+                    break;
             }
 
             if (Config.Get("TextDragAllExtension") == "true")
@@ -604,17 +614,25 @@ namespace Progretter
 
         private void text_theme_Btn_Click(object sender, RoutedEventArgs e)
         {
-            if (Config.Get("TextTheme") == "0")
+            switch (Config.Get("TextTheme"))
             {
-                Text.Background = Brushes.Black;
-                Text.Foreground = Brushes.White;
-                Config.Set("TextTheme", "1");
-            }
-            else
-            {
-                Text.Background = Brushes.White;
-                Text.Foreground = Brushes.Black;
-                Config.Set("TextTheme", "0");
+                case "0":
+                    Text.Background = Brushes.Black;
+                    Text.Foreground = Brushes.White;
+                    Config.Set("TextTheme", "1");
+                    break;
+
+                case "1":
+                    Text.Background = Brushes.ForestGreen;
+                    Text.Foreground = Brushes.White;
+                    Config.Set("TextTheme", "2");
+                    break;
+
+                case "2":
+                    Text.Background = Brushes.White;
+                    Text.Foreground = Brushes.Black;
+                    Config.Set("TextTheme", "0");
+                    break;
             }
         }
 
@@ -656,6 +674,14 @@ namespace Progretter
         private void TextBox_PreviewDragOver(object sender, DragEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private void App_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F11)
+            {
+                WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            }
         }
         #endregion
 
