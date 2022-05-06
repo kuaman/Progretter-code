@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Progretter"
         mc:Ignorable="d"
-        Title="시간표 열 추가" Height="150" Width="300" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" KeyDown="Window_KeyDown">
-    <Grid>
-        <Button x:Name="confirm" Content="확인" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" BorderBrush="{x:Null}" Height="24" Margin="0,50,20,0" Click="Button_Click"/>
-        <TextBox x:Name="TextBox1" HorizontalAlignment="Left" Margin="20,50,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="160" Height="24" FontSize="14"/>
-        <Label Content="열 제목" HorizontalAlignment="Left" Margin="20,15,0,0" VerticalAlignment="Top" Width="80" Height="24"/>
-    </Grid>
+        Title="시간표 열 추가" Height="120" Width="300" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" KeyDown="Window_KeyDown">
+    <Canvas>
+        <Button x:Name="Btn_confirm" Content="확인" HorizontalAlignment="Left" VerticalAlignment="Center" Width="70" BorderBrush="{x:Null}" Height="24" Click="Button_Click" Canvas.Left="206" Canvas.Top="42"/>
+        <TextBox x:Name="TextBox1" HorizontalAlignment="Left" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="140" Height="24" FontSize="14" Canvas.Left="14" Canvas.Top="43"/>
+        <Label Content="열 제목" HorizontalAlignment="Center" VerticalAlignment="Top" Width="80" Height="24" Canvas.Left="14" Canvas.Top="10"/>
+    </Canvas>
 </Window>

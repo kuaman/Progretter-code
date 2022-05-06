@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Progretter
 {
@@ -12,11 +11,11 @@ namespace Progretter
         {
             InitializeComponent();
             if (Config.Get("CanvasStrokeSlider") != "")
-                StrokeSize.Value = Convert.ToDouble(Config.Get("CanvasStrokeSlider"));
+                StrokeSize.Value = System.Convert.ToDouble(Config.Get("CanvasStrokeSlider"));
             if (Config.Get("CanvasEraseSlider") != "")
-                EraserSize.Value = Convert.ToDouble(Config.Get("CanvasEraseSlider"));
-            this.Left = ((MainWindow)Application.Current.MainWindow).Left + 984;
-            this.Top = ((MainWindow)Application.Current.MainWindow).Top;
+                EraserSize.Value = System.Convert.ToDouble(Config.Get("CanvasEraseSlider"));
+            Left = ((MainWindow)Application.Current.MainWindow).Left + 984;
+            Top = ((MainWindow)Application.Current.MainWindow).Top;
             ((MainWindow)Application.Current.MainWindow).colorsImage.MouseDown += new System.Windows.Input.MouseButtonEventHandler(ImageMouseDown);
         }
 
@@ -70,7 +69,7 @@ namespace Progretter
 
         }
 
-        private int load = 0;
+        private bool load = false;
         private int erasermode = -1;
 
         private void StrokeEditingMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -83,7 +82,7 @@ namespace Progretter
                 }
                 else
                 {
-                    EraserMode.SelectedIndex = Convert.ToInt32(Config.Get("CanvasEraseMode"));
+                    EraserMode.SelectedIndex = System.Convert.ToInt32(Config.Get("CanvasEraseMode"));
                 }
                 StrokeSizeLabel.Visibility = Visibility.Collapsed;
                 StrokeSize.Visibility = Visibility.Collapsed;
@@ -109,7 +108,7 @@ namespace Progretter
                 CanvasEraser.Visibility = Visibility.Collapsed;
             }
 
-            if (load == 1)
+            if (load)
             {
                 editmode = StrokeEditingMode.SelectedIndex;
                 var handler = EMEvent;
@@ -118,7 +117,7 @@ namespace Progretter
             }
             else
             {
-                load = 1;
+                load = true;
             }
         }
 
@@ -130,7 +129,7 @@ namespace Progretter
                     StrokeEditingMode.SelectedIndex = 0;
                     if (Config.Get("CanvasEraseMode") != "")
                     {
-                        erasermode = Convert.ToInt32(Config.Get("CanvasEraseMode"));
+                        erasermode = System.Convert.ToInt32(Config.Get("CanvasEraseMode"));
                     }
                     break;
 
@@ -160,13 +159,13 @@ namespace Progretter
                 case "GestureOnly":
                     StrokeEditingMode.SelectedIndex = 2;
                     if (Config.Get("CanvasEraseMode") != "")
-                        erasermode = Convert.ToInt32(Config.Get("CanvasEraseMode"));
+                        erasermode = System.Convert.ToInt32(Config.Get("CanvasEraseMode"));
                     break;
 
                 case "Select":
                     StrokeEditingMode.SelectedIndex = 3;
                     if (Config.Get("CanvasEraseMode") != "")
-                        erasermode = Convert.ToInt32(Config.Get("CanvasEraseMode"));
+                        erasermode = System.Convert.ToInt32(Config.Get("CanvasEraseMode"));
                     break;
             }
         }

@@ -35,11 +35,9 @@
         </GroupBox>
         <Grid x:Name="CanvasCP" Grid.Row="1">
             <GroupBox Header="색 설정">
-                <Grid>
-                    <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged"
+                <colorpicker:StandardColorPicker x:Name="colorpicker" ColorChanged="colorpicker_ColorChanged"
                                          ColorState="{Binding ElementName=maindisplay, Path=ColorState, Mode=TwoWay, Delay=10}"
-                                         SecondColorState="{Binding ElementName=maindisplay, Path=SecondColorState, Mode=TwoWay}" Grid.Row="1"/>
-                </Grid>
+                                         SecondColorState="{Binding ElementName=maindisplay, Path=SecondColorState, Mode=TwoWay}"/>
             </GroupBox>
         </Grid>
         <Grid x:Name="CanvasEraser" Grid.Row="1" Height="120" Margin="0,0,0,340" Visibility="Collapsed">

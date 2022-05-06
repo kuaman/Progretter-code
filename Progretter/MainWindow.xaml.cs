@@ -27,8 +27,7 @@ namespace Progretter
         {
             InitializeComponent();
             InitialConfig();
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 1);
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(750) };
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -59,30 +58,29 @@ namespace Progretter
                 Application.Current.Shutdown();
             }
 
-            DirectoryInfo di = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave");
+            DirectoryInfo di = new(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave");
 
             if (!di.Exists)
             {
                 di.Create();
             }
         }
-        private string Pgpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter";
-        private string ASpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave";
+        private readonly string Pgpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter";
+        private readonly string ASpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave";
 
         // 현재 시간 표시
         private void Timer_Tick(object sender, EventArgs e)
         {
             Timenow.Content = DateTime.Now.ToString();
-
-            if (DateTime.Now.Second == 0)
-            {
-                /*switch (DateTime.Now.Hour) //현재 속한 교시 + 그에 맞는 알림
-                {
-                    case period && rest5min:
-                        break;
-                }
-                Notification("시간 변경 알림", "지금은 수학시간 5분 전 입니다.");*/
-            }
+            /*            if (DateTime.Now.Second == 0)
+                        {
+                            switch (DateTime.Now.Hour) //현재 속한 교시 + 그에 맞는 알림
+                            {
+                                case period && rest5min:
+                                    break;
+                            }
+                            Notification("시간 변경 알림", "지금은 수학시간 5분 전 입니다.");
+                        }*/
         }
 
         private void Notification(string Title, string Contents)
@@ -220,7 +218,7 @@ namespace Progretter
             {
                 if (Config.Get("CanvasLastPath") == "") // 빈 상태로 그릴 때
                 {
-                    if (isCanvasmod == 1 || inkCanvas.Strokes.Count > 0) //+그릴떄 활성화
+                    if (isCanvasmod || inkCanvas.Strokes.Count > 0) //+그릴떄 활성화
                     {
                         RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
                         ImageSave(bitmap, 2);
@@ -230,7 +228,7 @@ namespace Progretter
                 {
                     if (inkCanvas.Strokes.Count > 0)
                     {
-                        if (isCanvasmod == 0)
+                        if (!isCanvasmod)
                         {
                             RenderTargetBitmap bitmap = ConverterBitmapImage(inkCanvas);
                             ImageSave(bitmap, 2);
@@ -675,14 +673,6 @@ namespace Progretter
         {
             e.Handled = true;
         }
-
-        private void App_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.F11)
-            {
-                WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-            }
-        }
         #endregion
 
         #region 계산기
@@ -1031,12 +1021,12 @@ namespace Progretter
                     Config.Set("CanvasLastPath", "");
                 }
             }
-            isCanvasmod = 1;
+            isCanvasmod = true;
         }
 
         private byte[] Pixels = new byte[4];
 
-        private int isCanvasmod = 0;
+        private bool isCanvasmod = false;
 
         // 이미지 캡쳐
         private void Canvas_save_btn_Click(object sender, RoutedEventArgs e)
@@ -1317,7 +1307,7 @@ namespace Progretter
             {
                 inkCanvas.Strokes.Clear();
                 inkCanvas.Background = Brushes.White; //배경도 지우기
-                isCanvasmod = 0;
+                isCanvasmod = false;
                 Config.Set("CanvasLastPath", "");
             }
         }
@@ -1349,6 +1339,27 @@ namespace Progretter
                         }
                     }
                 }*/
+        #endregion
+
+        #region Function
+        private void App_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.F11:
+                    WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+                    break;
+
+                case Key.Up:
+                    if (tabcontrol.SelectedIndex != 0)
+                        tabcontrol.SelectedIndex -= 1;
+                    break;
+                case Key.Down:
+                    if (tabcontrol.SelectedIndex != 4)
+                        tabcontrol.SelectedIndex += 1;
+                    break;
+            }
+        }
         #endregion
     }
 }
