@@ -6,309 +6,369 @@
         xmlns:local="clr-namespace:Progretter"
         mc:Ignorable="d"
         Title="온라인 클래스 도우미" Height="600" Width="1000" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" MinWidth="1000" MinHeight="600" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed" PreviewKeyDown="App_KeyDown">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="24"/>
-        </Grid.RowDefinitions>
-        <TabControl x:Name="tabcontrol" Margin="10" TabStripPlacement="Left" SelectedIndex="1" SelectionChanged="tabcontrol_SelectionChanged">
-            <TabItem x:Name="SettingTab" Width="120" Height="102">
-                <TabItem.Header>
-                    <StackPanel>
-                        <Image Source="/Resources/option.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="60"/>
-                        <TextBlock Text="설정" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition Height="50"/>
-                    </Grid.RowDefinitions>
-                    <GroupBox Header="시간표 설정" BorderBrush="Black">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10*"/>
-                                    <ColumnDefinition Width="3*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="60"/>
-                                    <RowDefinition Height="60"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Label Content="프로그램 시작 시 시간표 불러오기" VerticalAlignment="Top" Margin="10,0,0,0" Grid.Row="1"/>
-                                <Label x:Name="Setting_Schedule_StartUp_Label" Grid.Row="1" Background="#FFD0D0D0" VerticalContentAlignment="Center" Margin="10,26,0,4" Height="30"/>
-                                <Button x:Name="Setting_Schedule_StartUp_Btn" Content="불러오기" Grid.Column="1" Click="Setting_Schedule_StartUp_Btn_Click" BorderBrush="{x:Null}" Grid.Row="1" Margin="10,26,5,4" Height="30"/>
-                                <Button x:Name="Setting_Schedule_StartUp_Reset_Btn" Content="초기화" Grid.Column="2" Grid.Row="1" Margin="5,26,0,4" Click="Setting_Schedule_StartUp_Reset_Btn_Click" BorderBrush="{x:Null}" Height="30"/>
-                                <CheckBox x:Name="Setting_Schedule_Close_Save_CheckBox" Content="프로그램 종료 시 자동 저장" Grid.Row="2" VerticalAlignment="Top" Checked="Setting_Schedule_Close_Save_CheckBox_Checked" Unchecked="Setting_Schedule_Close_Save_CheckBox_Unchecked" ToolTip="종료될 때 AutoSave 폴더에 자동 저장됩니다." Margin="10,10,0,0"/>
-                            </Grid>
-                        </GroupBox>
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <GroupBox Header="메모장 설정" BorderBrush="Black">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30"/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <CheckBox x:Name="Setting_Note_DragAllExtension_CheckBox" Content="드래그&amp;드롭에서 모든 확장자 사용" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Note_DragAllExtension_CheckBox_Checked" Unchecked="Setting_Note_DragAllExtension_CheckBox_Unchecked" ToolTip="메모장의 드래그&amp;드롭 기능에서 모든 확장자를 사용가능하게 합니다." Grid.Row="1"/>
-                                </Grid>
-                            </GroupBox>
-                            <GroupBox Header="계산기 설정" BorderBrush="Black" Grid.Row="1">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30"/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <CheckBox x:Name="Setting_Cal_DeleteLog_CheckBox" Content="프로그램 종료 시 기록 자동 삭제" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Cal_DeleteLog_CheckBox_Checked" Unchecked="Setting_Cal_DeleteLog_CheckBox_Unchecked" ToolTip="계산기 기록을 삭제해 줍니다." Grid.Row="1"/>
-                                </Grid>
-                            </GroupBox>
-                        </Grid>
-                        <GroupBox Header="그림판 설정" BorderBrush="Black" Grid.Row="1" >
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="2*"/>
-                                </Grid.RowDefinitions>
-                                <CheckBox x:Name="Setting_Canvas_Autoload_Checkbox" Content="프로그램 시작 시 자동 로드" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autoload_Checkbox_Checked" Unchecked="Setting_Canvas_Autoload_Checkbox_Unchecked" ToolTip="그림 파일을 자동으로 불러옵니다." Grid.Row="1"/>
-                                <CheckBox x:Name="Setting_Canvas_Autosave_Checkbox" Content="프로그램 종료 시 자동 저장" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Checked="Setting_Canvas_Autosave_Checkbox_Checked" Unchecked="Setting_Canvas_Autosave_Checkbox_Unchecked" ToolTip="종료될 때 AutoSave 폴더에 저장합니다." Grid.Row="1"/>
-                            </Grid>
-                        </GroupBox>
-                    <GroupBox Header="일반 설정" BorderBrush="Black" Grid.Row="1" Grid.Column="1">
-                        <Grid>
+    <DockPanel Grid.Row="0">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="설정">
+                <MenuItem Header="일반 설정" Click="Menu_Setting_General"/>
+            </MenuItem>
+            <MenuItem Header="도움말">
+                <MenuItem Header="컴퓨터 정보" Click="Menu_Help_PCInfo"/>
+                <MenuItem Header="제품 정보" Click="Menu_Help_ProductInfo"/>
+                <MenuItem Header="업데이트 확인" Click="Menu_Help_Update"/>
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="24"/>
+            </Grid.RowDefinitions>
+            <TabControl x:Name="tabcontrol" DockPanel.Dock="Bottom" Margin="10,0,10,10" TabStripPlacement="Left" SelectedIndex="1" SelectionChanged="tabcontrol_SelectionChanged">
+                <TabItem x:Name="AlarmTab" Width="120" Height="100">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Viewbox Width="60" Height="60">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="Black" Data="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22A9,9 0 0,0 21,13A9,9 0 0,0 12,4M12.5,8H11V14L15.75,16.85L16.5,15.62L12.5,13.25V8M7.88,3.39L6.6,1.86L2,5.71L3.29,7.24L7.88,3.39M22,5.72L17.4,1.86L16.11,3.39L20.71,7.25L22,5.72Z" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock Text="알람" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Background="#FFF0F0F0">
+                        <Grid Margin="10">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="160"/>
-                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="7*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="6*"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="20"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="20"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="40"/>
                             </Grid.RowDefinitions>
-                            <Button x:Name="Setting_AS_Folder_Btn" Grid.Column="2" Content="저장 폴더 열기" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="AutoSave 폴더를 엽니다." Click="Setting_AS_Folder_Btn_Click" Grid.Row="1"/>
-                            <Button x:Name="Setting_Reset_Btn" Grid.Column="2" Content="설정 초기화" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" ToolTip="설정을 초기화하고 프로그램을 재시작합니다." Click="Setting_Reset_Btn_Click"/>
-                            <Label x:Name="Setting_Version_Label" Grid.Row="5" Grid.Column="1" FontSize="14" FontFamily="Hancom Gothic" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="0,0,10,0" />
-                            <Button x:Name="Setting_Update_Btn" Grid.Column="2" Content="업데이트 확인" Grid.Row="5" Click="Setting_Update_Btn_Click" ToolTip="업데이트가 있는지 확인합니다."/>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="32"/>
+                                    <RowDefinition Height="32"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CheckBox x:Name="Alarm" Content="알람 (Alarm)" Margin="10,10,0,0" Checked="Alarm_Checked"/>
+                                <CheckBox x:Name="Todo" Content="할 일 (To Do)" Margin="10,7,0,0" Grid.Row="1" Checked="Todo_Checked"/>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="7*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="58*"/>
+                                    <RowDefinition Height="20*"/>
+                                    <RowDefinition Height="71*"/>
+                                </Grid.RowDefinitions>
+                                <TextBox x:Name="Alarm_Title" HorizontalAlignment="Left" Margin="15,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="347" Grid.Column="1" Height="18"/>
+                                <TextBox x:Name="Alarm_Contents" HorizontalAlignment="Left" Margin="15,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="347" Grid.Column="1" Height="100" Grid.Row="1"/>
+                                <ComboBox x:Name="alarm_Day" BorderBrush="{x:Null}" Width="48" HorizontalAlignment="Left" IsEditable="True" VerticalContentAlignment="Center" Grid.Column="1" Margin="15,6,0,9" Grid.Row="2"/>
+                                <ComboBox x:Name="alarm_Hour" BorderBrush="{x:Null}"  Width="48" HorizontalAlignment="Left" IsEditable="True" VerticalContentAlignment="Center" Margin="106,6,0,9" Grid.Column="1" Grid.Row="2"/>
+                                <ComboBox x:Name="alarm_Minutes" BorderBrush="{x:Null}" Width="48" HorizontalAlignment="Left" IsEditable="True" VerticalContentAlignment="Center" Grid.Column="1" Margin="198,5,0,9" Grid.Row="2"/>
+                                <ComboBox x:Name="alarm_Second" BorderBrush="{x:Null}" Width="48" HorizontalAlignment="Left" IsEditable="True" VerticalContentAlignment="Center" Grid.Column="1" Margin="278,5,0,9" Grid.Row="2"/>
+                                <Label Content="제목 (Title)" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Height="26" Width="68"/>
+                                <Label Content="내용 (Contents)" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" Height="26" Width="94" Grid.Row="1"/>
+                                <Label Content="시간 설정 (Time Setting)" HorizontalAlignment="Left" VerticalAlignment="Center" Height="26" Width="144" Grid.Row="2" Grid.ColumnSpan="2" Margin="10,0,0,0"/>
+                                <Label Content="일" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="68,0,0,0" Grid.Row="2"/>
+                                <Label Content="시간" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="159,0,0,0" Grid.Row="2"/>
+                                <Label Content="분" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="251,0,0,0" Grid.Row="2"/>
+                                <Label Content="초" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="331,0,0,0" Grid.Row="2"/>
+                            </Grid>
+                            <Grid Grid.Row="2" Grid.Column="1" Margin="0,3,0,0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="180"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="180"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Content="모두 제거" Click="Alarm_RemoveAll" Grid.Column="1" BorderBrush="{x:Null}"/>
+                                <Button Content="추가" Click="Alarm_Add" Grid.Column="3" BorderBrush="{x:Null}"/>
+                            </Grid>
+                            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="10">
+                                <Run Text="알람 (Alarm) : 설정된 시간 이후 소리가 나오는 알람을 추가합니다."/><LineBreak/><LineBreak/>
+                                <Run Text="할 일 (To Do) : 설정된 시간까지 소리가 없는 알림을 띄웁니다."/>
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Margin="10">
+                                <Run Text="제목 (Title) : 알람의 제목을 설정합니다."/><LineBreak/>
+                                <Run Text="내용 (Contents) : 알람의 내용을 설정합니다."/><LineBreak/>
+                                <Run Text="시간 설정 (Time Setting) : 알람의 시간을 설정합니다. [일/시간/분/초]  (최대 3일)"/><LineBreak/><LineBreak/>
+                                <Run Text="모두 제거 : 온라인 클래스 도우미에서 설정한 알람을 모두 지웁니다."/><LineBreak/>
+                                <Run Text="추가 : 설정한 알람을 추가합니다."/>
+                            </TextBlock>
                         </Grid>
-                    </GroupBox>
-                    <Button x:Name="Tetris_btn" Content="???" BorderBrush="{x:Null}" Click="Tetris_btn_Click" ToolTip="Easter Egg (Tetris)" Grid.Row="2"/>
-                    <Button x:Name="Setting_Info_Btn" Content="프로그램 정보" BorderBrush="{x:Null}" Click="Setting_Info_Btn_Click" ToolTip="프로그램에 대한 정보창을 띄웁니다." Grid.Row="2" Grid.Column="1"/>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="ScheduleTab" Width="120" Height="102">
-                <TabItem.Header>
-                    <StackPanel>
-                        <Image Source="/Resources/schedule.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60"/>
-                        <TextBlock Text="시간표" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid Background="#FFE5E5E5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition/>
-                        <RowDefinition Height="50"/>
-                    </Grid.RowDefinitions>
-                    <Grid Background="#FFDDDDDD" Margin="0,3,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="130"/>
-                            <ColumnDefinition Width="130"/>
-                            <ColumnDefinition Width="130"/>
-                            <ColumnDefinition Width="130"/>
-                        </Grid.ColumnDefinitions>
-                        <Label x:Name="Schedule_Row_Column" Content="" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                        <Button x:Name="Schedule_Row_Add_Btn" Content="행 추가하기" Click="Schedule_Row_Add_Btn_Click" Grid.Column="1" BorderBrush="{x:Null}" ToolTip="시간표의 행을 추가합니다."/>
-                        <Button x:Name="Schedule_Column_Add_Btn" Content="열 추가하기" Grid.Column="2" Click="Schedule_Column_Add_Btn_Click" BorderBrush="{x:Null}" ToolTip="시간표의 열을 추가합니다."/>
-                        <Button x:Name="Schedule_Row_Del_Btn" Content="행 삭제하기" Click="Schedule_Row_Del_Btn_Click" Grid.Column="3" BorderBrush="{x:Null}" ToolTip="시간표의 마지막 행을 삭제합니다."/>
-                        <Button x:Name="Schedule_Column_Del_Btn" Content="열 삭제하기" Grid.Column="4" Click="Schedule_Column_Del_Btn_Click" BorderBrush="{x:Null}" ToolTip="시간표의 마지막 열을 삭제합니다."/>
                     </Grid>
-                    <DataGrid x:Name="Schedule" ColumnWidth="*" FontSize="16" Grid.Row="1" CanUserAddRows="False" SelectedCellsChanged="Schedule_SelectedCellsChanged" SelectionChanged="Schedule_SelectionChanged" GotFocus="Schedule_GotFocus" HeadersVisibility="Column">
-                        <DataGrid.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+                </TabItem>
+                <TabItem x:Name="ScheduleTab" Width="120" Height="100">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Viewbox Width="60" Height="60">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="Black" Data="M4,3H20A2,2 0 0,1 22,5V20A2,2 0 0,1 20,22H4A2,2 0 0,1 2,20V5A2,2 0 0,1 4,3M4,7V10H8V7H4M10,7V10H14V7H10M20,10V7H16V10H20M4,12V15H8V12H4M4,20H8V17H4V20M10,12V15H14V12H10M10,20H14V17H10V20M20,20V17H16V20H20M20,12H16V15H20V12Z" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock Text="시간표" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Background="#FFF0F0F0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="24"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" >
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="Schedule_Import" Click="ImportExcel" BorderBrush="{x:Null}" ToolTip="Excel 파일을 불러옵니다. (.xlsx)">
+                                    <Viewbox Width="28" Height="28">
+                                        <Canvas Width="26" Height="26">
+                                            <Path Fill="Black" Data="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                                        </Canvas>
+                                    </Viewbox>
+                                </Button>
+                                <Button x:Name="Schedule_Export" Click="ExportToExcel" BorderBrush="{x:Null}" ToolTip="Excel 파일(.xlsx)로 내보냅니다." Margin="10,0,0,0">
+                                    <Viewbox Width="28" Height="28">
+                                        <Canvas Width="24" Height="24">
+                                            <Path Fill="Black" Data="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" />
+                                        </Canvas>
+                                    </Viewbox>
+                                </Button>
+                                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" HorizontalAlignment="Left" Background="DimGray" Margin="10,2,0,2"/>
+                                <Button x:Name="Schedule_Row_Add_Btn" Click="Schedule_Row_Add_Btn_Click" BorderBrush="{x:Null}" ToolTip="시간표의 행을 추가합니다." Margin="10,0,0,0">
+                                    <Viewbox Width="28" Height="28">
+                                        <Canvas Width="26" Height="26">
+                                            <Path Fill="#FF4D8E12" Data="M22,10A2,2 0 0,1 20,12H4A2,2 0 0,1 2,10V3H4V5H8V3H10V5H14V3H16V5H20V3H22V10M4,10H8V7H4V10M10,10H14V7H10V10M20,10V7H16V10H20M11,14H13V17H16V19H13V22H11V19H8V17H11V14Z" />
+                                        </Canvas>
+                                    </Viewbox>
+                                </Button>
+                                <Button x:Name="Schedule_Column_Add_Btn" Click="Schedule_Column_Add_Btn_Click" BorderBrush="{x:Null}" ToolTip="시간표의 열을 추가합니다." Margin="10,0,0,0">
+                                    <Viewbox Width="28" Height="28">
+                                        <Canvas Width="26" Height="26">
+                                            <Path Fill="#FF4D8E12" Data="M11,2A2,2 0 0,1 13,4V20A2,2 0 0,1 11,22H2V2H11M4,10V14H11V10H4M4,16V20H11V16H4M4,4V8H11V4H4M15,11H18V8H20V11H23V13H20V16H18V13H15V11Z" />
+                                        </Canvas>
+                                    </Viewbox>
+                                </Button>
+                                <Button x:Name="Schedule_Row_Del_Btn"  Click="Schedule_Row_Del_Btn_Click" BorderBrush="{x:Null}" ToolTip="시간표의 마지막 행을 삭제합니다." Margin="10,0,0,0">
+                                    <Viewbox Width="28" Height="28">
+                                        <Canvas Width="26" Height="26">
+                                            <Path Fill="#FFDE0C0D" Data="M9.41,13L12,15.59L14.59,13L16,14.41L13.41,17L16,19.59L14.59,21L12,18.41L9.41,21L8,19.59L10.59,17L8,14.41L9.41,13M22,9A2,2 0 0,1 20,11H4A2,2 0 0,1 2,9V6A2,2 0 0,1 4,4H20A2,2 0 0,1 22,6V9M4,9H8V6H4V9M10,9H14V6H10V9M16,9H20V6H16V9Z" />
+                                        </Canvas>
+                                    </Viewbox>
+                                </Button>
+                                <Button x:Name="Schedule_Column_Del_Btn" Click="Schedule_Column_Del_Btn_Click" BorderBrush="{x:Null}" ToolTip="시간표의 마지막 열을 삭제합니다." Margin="10,0,0,0">
+                                    <Viewbox Width="28" Height="28">
+                                        <Canvas Width="26" Height="26">
+                                            <Path Fill="#FFDE0C0D" Data="M4,2H11A2,2 0 0,1 13,4V20A2,2 0 0,1 11,22H4A2,2 0 0,1 2,20V4A2,2 0 0,1 4,2M4,10V14H11V10H4M4,16V20H11V16H4M4,4V8H11V4H4M17.59,12L15,9.41L16.41,8L19,10.59L21.59,8L23,9.41L20.41,12L23,14.59L21.59,16L19,13.41L16.41,16L15,14.59L17.59,12Z" />
+                                        </Canvas>
+                                    </Viewbox>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <DataGrid x:Name="Schedule" ColumnWidth="*" FontSize="16" CanUserAddRows="False" SelectedCellsChanged="Schedule_SelectedCellsChanged" SelectionChanged="Schedule_SelectionChanged" GotFocus="Schedule_GotFocus" HeadersVisibility="Column">
+                                <DataGrid.Resources>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
 
-                            <Style TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                            </Style>
-                        </DataGrid.Resources>
-                    </DataGrid>
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button x:Name="Schedule_Import" Content="불러오기" Click="ImportExcel" BorderBrush="{x:Null}" ToolTip="Excel 파일을 불러옵니다. (.xlsx)"/>
-                        <Button x:Name="Schedule_Export" Content="내보내기" Click="ExportToExcel" Grid.Column="1" BorderBrush="{x:Null}" ToolTip="Excel 파일(.xlsx)로 내보냅니다."/>
+                                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.Resources>
+                            </DataGrid>
+                        </Grid>
+                        <Grid Background="#FFDDDDDD" Grid.Row="2" Height="30">
+                            <Label x:Name="Schedule_Row_Column" Content="" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="NotepadTab" Width="120" Height="102">
-                <TabItem.Header>
-                    <StackPanel>
-                        <Image Source="/Resources/memo.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60"/>
-                        <TextBlock Text="메모장" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" />
-                    </StackPanel>
-                </TabItem.Header>
-                <DockPanel>
-                    <Grid x:Name="TextTool" DockPanel.Dock="Top" Background="#FFF0F0F0" Height="24">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition Width="390"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="30"/>
-                        </Grid.ColumnDefinitions>
-                        <Button x:Name="text_load_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_load_Btn_Click">
-                            <Image Source="/Resources/load.png" ToolTip="열기"/>
-                        </Button>
-                        <Button x:Name="text_save_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_save_Btn_Click" Grid.Column="1">
-                            <Image Source="/Resources/save.png" ToolTip="저장"/>
-                        </Button>
-                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Grid.Column="2" HorizontalAlignment="Left" Background="DimGray" Margin="6,2,0,2"/>
-                        <ComboBox x:Name="text_family_combo" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged" Width="130" HorizontalAlignment="Left" Grid.Column="2" Margin="12,0,0,0"/>
-                        <ComboBox x:Name="text_size_combo" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged" Width="80" HorizontalAlignment="Left" Margin="150,0,0,0" IsEditable="True" KeyDown="text_size_KeyDown" IsTextSearchCaseSensitive="False" Grid.Column="2"/>
-                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Grid.Column="2" HorizontalAlignment="Left" Background="DimGray" Margin="240,2,0,2"/>
-                        <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="251,0,0,0" HorizontalAlignment="Left" Grid.Column="2" ToolTip="굵게"/>
-                        <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="286,0,0,0" HorizontalAlignment="Left" Grid.Column="2" ToolTip="기울게"/>
-                        <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="321,0,0,0" HorizontalAlignment="Left" Grid.Column="2" ToolTip="밑줄">
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="U" TextDecorations="Underline"/>
-                            </StackPanel>
-                        </ToggleButton>
-                        <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="356,0,0,0" HorizontalAlignment="Left" Grid.Column="2" ToolTip="취소선">
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="S" TextDecorations="Strikethrough"/>
-                            </StackPanel>
-                        </ToggleButton>
-                        <Button x:Name="text_theme_Btn" BorderBrush="{x:Null}" Content="테마변경" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,10,0" Click="text_theme_Btn_Click" ToolTip="배경과 글자 색깔을 바꿔줍니다."/>
-                        <Button x:Name="text_delete_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click" Grid.Column="5">
-                            <Image Source="/Resources/deletetext.png" ToolTip="모두 지우기"/>
-                        </Button>
-                    </Grid>
-                    <TextBox x:Name="Text" DockPanel.Dock="Bottom" Text="" UndoLimit="200" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" AllowDrop="True" PreviewDragOver="TextBox_PreviewDragOver" Drop="TextBox_Drop"/>
-                </DockPanel>
-            </TabItem>
-            <TabItem x:Name="CalculatorTab" Width="120" Height="102" KeyDown="Calculator_KeyDown">
-                <TabItem.Header>
-                    <StackPanel>
-                        <Image Source="/Resources/calculator.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60"/>
-                        <TextBlock Text="계산기" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition Height="78"/>
-                        <RowDefinition Height="410"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="560"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Label x:Name="Label_log" Content="" FontSize="16" Margin="0,-5,0,0"/>
-                    <TextBox x:Name="txtResult" TextWrapping="Wrap" Text="0" FontSize="48" AllowDrop="False" IsReadOnly="True" TextChanged="txtResult_TextChanged" TextAlignment="Right" Background="WhiteSmoke" BorderBrush="{x:Null}" Grid.Row="1" IsUndoEnabled="False"/>
-                    <Grid Background="#FFF3F3F3" Grid.Row="2">
+                </TabItem>
+                <TabItem x:Name="NotepadTab" Width="120" Height="100">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Viewbox Width="60" Height="60">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="Black" Data="M17,9H7V7H17M17,13H7V11H17M14,17H7V15H14M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock Text="메모장" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <DockPanel>
+                        <Grid x:Name="TextTool" DockPanel.Dock="Top" Background="#FFF0F0F0" Height="30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="390"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="30"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="text_load_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_load_Btn_Click" Margin="0,2,0,2">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="Black" Data="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                                </Canvas>
+                            </Button>
+                            <Button x:Name="text_save_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_save_Btn_Click" Grid.Column="1" Margin="0,2,0,2">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="Black" Data="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" />
+                                </Canvas>
+                            </Button>
+                            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Grid.Column="2" HorizontalAlignment="Left" Background="DimGray" Margin="6,2,0,2"/>
+                            <ComboBox x:Name="text_family_combo" BorderBrush="{x:Null}" SelectionChanged="text_family_combo_SelectionChanged" Width="130" HorizontalAlignment="Left" Grid.Column="2" Margin="12,2,0,2" VerticalContentAlignment="Center"/>
+                            <ComboBox x:Name="text_size_combo" BorderBrush="{x:Null}" SelectionChanged="text_size_combo_SelectionChanged" Width="80" HorizontalAlignment="Left" Margin="150,2,0,2" IsEditable="True" KeyDown="text_size_KeyDown" IsTextSearchCaseSensitive="False" Grid.Column="2" VerticalContentAlignment="Center"/>
+                            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Grid.Column="2" HorizontalAlignment="Left" Background="DimGray" Margin="240,2,0,2"/>
+                            <ToggleButton x:Name="bold_Btn" Checked="bold_Btn_Checked" Unchecked="bold_Btn_Unchecked" Content="Bold" FontWeight="Bold" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="251,2,0,2" HorizontalAlignment="Left" Grid.Column="2" ToolTip="굵게"/>
+                            <ToggleButton x:Name="Italic_Btn" Checked="Italic_Btn_Checked" Unchecked="Italic_Btn_Unchecked" Content="l" FontStyle="Italic" BorderBrush="{x:Null}" BorderThickness="1" Width="30" Margin="286,2,0,2" HorizontalAlignment="Left" Grid.Column="2" ToolTip="기울게"/>
+                            <ToggleButton x:Name="underline_Btn" Checked="underline_Btn_Checked" Unchecked="underline_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="321,2,0,2" HorizontalAlignment="Left" Grid.Column="2" ToolTip="밑줄">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="U" TextDecorations="Underline"/>
+                                </StackPanel>
+                            </ToggleButton>
+                            <ToggleButton x:Name="strikethrough_Btn" Checked="strikethrough_Btn_Checked" Unchecked="strikethrough_Btn_Unchecked" BorderBrush="{x:Null}" BorderThickness="1" FontSize="14" Width="30" Margin="356,2,0,2" HorizontalAlignment="Left" Grid.Column="2" ToolTip="취소선">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="S" TextDecorations="Strikethrough"/>
+                                </StackPanel>
+                            </ToggleButton>
+                            <Button x:Name="text_theme_Btn" BorderBrush="{x:Null}" Content="테마변경" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,2,10,2" Click="text_theme_Btn_Click" ToolTip="배경과 글자 색깔을 바꿔줍니다."/>
+                            <Button x:Name="text_delete_Btn" BorderBrush="{x:Null}" BorderThickness="1" Click="text_delete_Btn_Click" Grid.Column="5" Margin="0,2,0,2">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="#FF4D4D4D" Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                                </Canvas>
+                            </Button>
+                        </Grid>
+                        <TextBox x:Name="Text" DockPanel.Dock="Bottom" Text="" UndoLimit="200" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" AllowDrop="True" PreviewDragOver="TextBox_PreviewDragOver" Drop="TextBox_Drop"/>
+                    </DockPanel>
+                </TabItem>
+                <TabItem x:Name="CalculatorTab" Width="120" Height="100" KeyDown="Calculator_KeyDown">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Viewbox Width="60" Height="60">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="Black" Data="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M19 19H5V5H19V19M6.2 7.7H11.2V9.2H6.2V7.7M13 15.8H18V17.3H13V15.8M13 13.2H18V14.7H13V13.2M8 18H9.5V16H11.5V14.5H9.5V12.5H8V14.5H6V16H8V18M14.1 10.9L15.5 9.5L16.9 10.9L18 9.9L16.6 8.5L18 7.1L16.9 6L15.5 7.4L14.1 6L13 7.1L14.4 8.5L13 9.9L14.1 10.9Z" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock Text="계산기" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="76"/>
+                            <RowDefinition Height="400"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="560"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Row="0" Grid.Column="0" Margin="5" FontSize="28" Click="Cal_plusminus" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="±"/>
-                        <Button Grid.Row="0" Grid.Column="1" Margin="5" FontSize="22" Click="Cal_CE" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="CE"/>
-                        <Button x:Name="CalC" Grid.Row="0" Grid.Column="2" Margin="5" FontSize="22" Click="Cal_C" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="C"/>
-                        <Button x:Name="CalBack" Grid.Row="0" Grid.Column="3" Margin="5" FontSize="24" Click="Cal_back" BorderBrush="{x:Null}" Background="#FFC1D8F0" Content="⌫"/>
-                        <Button x:Name="Cal7" Grid.Row="1" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="7"/>
-                        <Button x:Name="Cal8" Grid.Row="1" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="8"/>
-                        <Button x:Name="Cal9" Grid.Row="1" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="9"/>
-                        <Button x:Name="CalPlus" Grid.Row="1" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="+"/>
-                        <Button x:Name="Cal4" Grid.Row="2" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="4"/>
-                        <Button x:Name="Cal5" Grid.Row="2" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="5"/>
-                        <Button x:Name="Cal6" Grid.Row="2" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="6"/>
-                        <Button x:Name="CalSub" Grid.Row="2" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="-"/>
-                        <Button x:Name="Cal1" Grid.Row="3" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="1"/>
-                        <Button x:Name="Cal2" Grid.Row="3" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="2"/>
-                        <Button x:Name="Cal3" Grid.Row="3" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="3"/>
-                        <Button x:Name="CalMul" Grid.Row="3" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="×"/>
-                        <Button x:Name="CalPer" Grid.Row="4" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_dot" BorderBrush="{x:Null}" Content="."/>
-                        <Button x:Name="Cal0" Grid.Row="4" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="0"/>
-                        <Button x:Name="Cal_equal_btn" Grid.Row="4" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_equal" BorderBrush="{x:Null}" Content="="/>
-                        <Button x:Name="CalDiv" Grid.Row="4" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="÷"/>
+                        <Label x:Name="Label_log" Content="" FontSize="16" Margin="0,-5,0,0"/>
+                        <TextBox x:Name="txtResult" TextWrapping="Wrap" Text="0" FontSize="48" AllowDrop="False" IsReadOnly="True" TextChanged="txtResult_TextChanged" TextAlignment="Right" Background="WhiteSmoke" BorderBrush="{x:Null}" Grid.Row="1" IsUndoEnabled="False"/>
+                        <Grid Background="#FFF3F3F3" Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Row="0" Grid.Column="0" Margin="5" FontSize="28" Click="Cal_plusminus" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="±"/>
+                            <Button Grid.Row="0" Grid.Column="1" Margin="5" FontSize="22" Click="Cal_CE" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="CE"/>
+                            <Button x:Name="CalC" Grid.Row="0" Grid.Column="2" Margin="5" FontSize="22" Click="Cal_C" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="C"/>
+                            <Button x:Name="CalBack" Grid.Row="0" Grid.Column="3" Margin="5" FontSize="24" Click="Cal_back" BorderBrush="{x:Null}" Background="#FFC1D8F0" Content="⌫"/>
+                            <Button x:Name="Cal7" Grid.Row="1" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="7"/>
+                            <Button x:Name="Cal8" Grid.Row="1" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="8"/>
+                            <Button x:Name="Cal9" Grid.Row="1" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="9"/>
+                            <Button x:Name="CalPlus" Grid.Row="1" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="+"/>
+                            <Button x:Name="Cal4" Grid.Row="2" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="4"/>
+                            <Button x:Name="Cal5" Grid.Row="2" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="5"/>
+                            <Button x:Name="Cal6" Grid.Row="2" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="6"/>
+                            <Button x:Name="CalSub" Grid.Row="2" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="-"/>
+                            <Button x:Name="Cal1" Grid.Row="3" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="1"/>
+                            <Button x:Name="Cal2" Grid.Row="3" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="2"/>
+                            <Button x:Name="Cal3" Grid.Row="3" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="3"/>
+                            <Button x:Name="CalMul" Grid.Row="3" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="×"/>
+                            <Button x:Name="CalPer" Grid.Row="4" Grid.Column="0" Margin="5" FontSize="24" Click="Cal_dot" BorderBrush="{x:Null}" Content="."/>
+                            <Button x:Name="Cal0" Grid.Row="4" Grid.Column="1" Margin="5" FontSize="24" Click="Cal_num" BorderBrush="{x:Null}" Content="0"/>
+                            <Button x:Name="Cal_equal_btn" Grid.Row="4" Grid.Column="2" Margin="5" FontSize="24" Click="Cal_equal" BorderBrush="{x:Null}" Content="="/>
+                            <Button x:Name="CalDiv" Grid.Row="4" Grid.Column="3" Margin="5" FontSize="36" Click="Cal_op" BorderBrush="{x:Null}" Background="#FFFFEBC8" Content="÷"/>
+                        </Grid>
+                        <Grid Background="#FFF0F0F0" Grid.Column="1" Grid.RowSpan="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="15*"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Content="기록" FontSize="18" VerticalAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+                            <ListBox x:Name="Cal_log" Margin="10,10,10,10" Grid.Row="1" MouseDoubleClick="Cal_log_MouseDoubleClick" Grid.ColumnSpan="2"/>
+                            <Button x:Name="Cal_log_export" BorderBrush="{x:Null}" Content="기록 저장" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Click="Cal_log_export_Click" ToolTip="계산기 기록을 텍스트 파일로 저장합니다." Margin="10,0,10,0"/>
+                            <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Stretch" BorderBrush="{x:Null}" Click="Cal_log_remove_Click" Grid.Column="1" ToolTip="기록을 모두 삭제합니다." Margin="10,0,10,0"/>
+                        </Grid>
                     </Grid>
-                    <Grid Background="#FFF0F0F0" Grid.Column="1" Grid.RowSpan="3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="15*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Label Content="기록" FontSize="18" VerticalAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
-                        <ListBox x:Name="Cal_log" Margin="10,10,10,10" Grid.Row="1" MouseDoubleClick="Cal_log_MouseDoubleClick" Grid.ColumnSpan="2"/>
-                        <Button x:Name="Cal_log_export" BorderBrush="{x:Null}" Content="기록 저장" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Click="Cal_log_export_Click" ToolTip="계산기 기록을 텍스트 파일로 저장합니다." Margin="10,0,10,0"/>
-                        <Button x:Name="Cal_log_remove" Content="기록 삭제" Grid.Row="2" HorizontalAlignment="Stretch" BorderBrush="{x:Null}" Click="Cal_log_remove_Click" Grid.Column="1" ToolTip="기록을 모두 삭제합니다." Margin="10,0,10,0"/>
-                    </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="PaintTab" Width="120" Height="102">
-                <TabItem.Header>
-                    <StackPanel>
-                        <Image Source="/Resources/paintbrush.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60"/>
-                        <TextBlock Text="그림판" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <DockPanel Background="#FFE5E5E5">
-                    <StackPanel DockPanel.Dock="Top" Height="36" Orientation="Horizontal">
-                        <Button x:Name="Canvas_load_btn" Click="Canvas_load_btn_Click" BorderBrush="{x:Null}">
-                            <Image Source="/Resources/load.png" ToolTip="열기"/>
-                        </Button>
-                        <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Click="Canvas_save_btn_Click" BorderBrush="{x:Null}">
-                            <Image Source="/Resources/save.png" ToolTip="저장"/>
-                        </Button>
-                        <Button x:Name="Canvas_brush_property" Margin="10,0,0,0" Click="Canvas_brush_property_Click" BorderBrush="{x:Null}">
-                            <Image Source="/Resources/brush.png" ToolTip="붓 속성창 열기"/>
-                        </Button>
-                        <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Click="Canvas_clear_btn_Click" BorderBrush="{x:Null}">
-                            <Image Source="/Resources/deletetext.png" ToolTip="모두 지우기"/>
-                        </Button>
-                        <Image x:Name="colorsImage" Source="/Resources/colors.png" Margin="10,0,0,0" MouseDown="Image_MouseDown"/>
-                    </StackPanel>
-                    <InkCanvas x:Name="inkCanvas"/>
-                </DockPanel>
-            </TabItem>
-        </TabControl>
-        <StatusBar Grid.Row="1">
-            <StatusBarItem x:Name="Timenow"/>
-            <Separator/>
-            <StatusBarItem Content="Made By Progretter"/>
-        </StatusBar>
-    </Grid>
+                </TabItem>
+                <TabItem x:Name="PaintTab" Width="120" Height="100">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Viewbox Width="60" Height="60">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="Black" Data="M12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2C17.5,2 22,6 22,11A6,6 0 0,1 16,17H14.2C13.9,17 13.7,17.2 13.7,17.5C13.7,17.6 13.8,17.7 13.8,17.8C14.2,18.3 14.4,18.9 14.4,19.5C14.5,20.9 13.4,22 12,22M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C12.3,20 12.5,19.8 12.5,19.5C12.5,19.3 12.4,19.2 12.4,19.1C12,18.6 11.8,18.1 11.8,17.5C11.8,16.1 12.9,15 14.3,15H16A4,4 0 0,0 20,11C20,7.1 16.4,4 12,4M6.5,10C7.3,10 8,10.7 8,11.5C8,12.3 7.3,13 6.5,13C5.7,13 5,12.3 5,11.5C5,10.7 5.7,10 6.5,10M9.5,6C10.3,6 11,6.7 11,7.5C11,8.3 10.3,9 9.5,9C8.7,9 8,8.3 8,7.5C8,6.7 8.7,6 9.5,6M14.5,6C15.3,6 16,6.7 16,7.5C16,8.3 15.3,9 14.5,9C13.7,9 13,8.3 13,7.5C13,6.7 13.7,6 14.5,6M17.5,10C18.3,10 19,10.7 19,11.5C19,12.3 18.3,13 17.5,13C16.7,13 16,12.3 16,11.5C16,10.7 16.7,10 17.5,10Z" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock Text="그림판" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <DockPanel Background="#FFF0F0F0">
+                        <StackPanel DockPanel.Dock="Top" Height="30" Orientation="Horizontal">
+                            <Button x:Name="Canvas_load_btn" Click="Canvas_load_btn_Click" BorderBrush="{x:Null}">
+                                <Viewbox Width="28" Height="28">
+                                    <Canvas Width="26" Height="26">
+                                        <Path Fill="Black" Data="M14,3V5H17.59L7.76,14.83L9.17,16.26L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                            <Button x:Name="Canvas_save_btn" Margin="10,0,0,0" Click="Canvas_save_btn_Click" BorderBrush="{x:Null}">
+                                <Viewbox Width="28" Height="28">
+                                    <Canvas Width="26" Height="26">
+                                        <Path Fill="Black" Data="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                            <Button x:Name="Canvas_brush_property" Margin="10,0,0,0" Click="Canvas_brush_property_Click" BorderBrush="{x:Null}">
+                                <Viewbox Width="28" Height="28">
+                                    <Canvas Width="26" Height="26">
+                                        <Path Fill="Black" Data="M22,22H10V20H22V22M2,22V20H9V22H2M18,18V10H22V18H18M18,3H22V9H18V3M2,18V3H16V18H2M9,14.56A3,3 0 0,0 12,11.56C12,9.56 9,6.19 9,6.19C9,6.19 6,9.56 6,11.56A3,3 0 0,0 9,14.56Z" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                            <Button x:Name="Canvas_clear_btn" Margin="10,0,0,0" Click="Canvas_clear_btn_Click" BorderBrush="{x:Null}">
+                                <Viewbox Width="28" Height="28">
+                                    <Canvas Width="26" Height="26">
+                                        <Path Fill="Black" Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                            <Image x:Name="colorsImage" Source="/Resources/colors.png" Margin="10,0,0,0" MouseDown="Image_MouseDown"/>
+                        </StackPanel>
+                        <InkCanvas x:Name="inkCanvas"/>
+                    </DockPanel>
+                </TabItem>
+            </TabControl>
+            <StatusBar Grid.Row="1">
+                <StatusBarItem x:Name="Timenow"/>
+                <Separator/>
+                <StatusBarItem Content="Made By Progretter"/>
+            </StatusBar>
+        </Grid>
+    </DockPanel>
 </Window>

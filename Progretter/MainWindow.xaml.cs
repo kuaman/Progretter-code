@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Ink;
@@ -30,6 +29,9 @@ namespace Progretter
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(750) };
             timer.Tick += Timer_Tick;
             timer.Start();
+            Uri BaseUri = new Uri("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml");
+            AutoUpdater.AppCastURL = BaseUri.AbsoluteUri;
+            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
         }
 
         private void InitialConfig()
@@ -65,33 +67,15 @@ namespace Progretter
                 di.Create();
             }
         }
-        private readonly string Pgpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter";
-        private readonly string ASpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave";
+        public readonly string Pgpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter";
+        public readonly string ASpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Progretter\AutoSave";
+
+        public bool NoUpdate_Noti = false;
 
         // 현재 시간 표시
         private void Timer_Tick(object sender, EventArgs e)
         {
             Timenow.Content = DateTime.Now.ToString();
-            /*            if (DateTime.Now.Second == 0)
-                        {
-                            switch (DateTime.Now.Hour) //현재 속한 교시 + 그에 맞는 알림
-                            {
-                                case period && rest5min:
-                                    break;
-                            }
-                            Notification("시간 변경 알림", "지금은 수학시간 5분 전 입니다.");
-                        }*/
-        }
-
-        private void Notification(string Title, string Contents)
-        {
-            // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
-            new ToastContentBuilder()
-                .AddArgument("action", "viewConversation")
-                .AddArgument("conversationId", 9813)
-                .AddText($"{Title}")
-                .AddText($"{Contents}")
-                .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
         }
 
         private void tabcontrol_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -128,18 +112,9 @@ namespace Progretter
         #region Window_Loaded
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Assembly assembly = Assembly.GetEntryAssembly();
-            Setting_Version_Label.Content = $"현재 버전 : {assembly.GetName().Version}";
-
-            Setting_Schedule_StartUp_Label.Content = Config.Get("ScheduleStartUpPath");
             if (Config.Get("ScheduleStartUpImport") == "true")
             {
                 Schedule.ItemsSource = Schedules.ImportExcel(Config.Get("ScheduleStartUpPath")).DefaultView;
-            }
-
-            if (Config.Get("ScheduleCloseSave") == "true")
-            {
-                Setting_Schedule_Close_Save_CheckBox.IsChecked = true;
             }
 
             foreach (var item in Config.Get("CalculatorLog").ToString().Split(new char[] { ',' }))
@@ -164,29 +139,32 @@ namespace Progretter
                     break;
             }
 
-            if (Config.Get("TextDragAllExtension") == "true")
-            {
-                Setting_Note_DragAllExtension_CheckBox.IsChecked = true;
-            }
-
-            if (Config.Get("CalculatorDeleteLog") == "true")
-            {
-                Setting_Cal_DeleteLog_CheckBox.IsChecked = true;
-            }
-
             if (Config.Get("CanvasAutoLoad") == "true")
             {
-                Setting_Canvas_Autoload_Checkbox.IsChecked = true;
                 if (Config.Get("CanvasLastPath") != "")
                 {
                     ImageLoad(1);
                 }
             }
 
-            if (Config.Get("CanvasAutoSave") == "true")
+            for (int i = 0; i <= 3; i++)
             {
-                Setting_Canvas_Autosave_Checkbox.IsChecked = true;
+                alarm_Day.Items.Add(i);
             }
+            for (int i = 0; i <= 24; i++)
+            {
+                alarm_Hour.Items.Add(i);
+            }
+            for (int i = 0; i <= 60; i++)
+            {
+                alarm_Minutes.Items.Add(i);
+                alarm_Second.Items.Add(i);
+            }
+            alarm_Day.SelectedIndex = 0;
+            alarm_Hour.SelectedIndex = 0;
+            alarm_Minutes.SelectedIndex = 0;
+            alarm_Second.SelectedIndex = 0;
+
 
             System.Windows.Markup.XmlLanguage cond = System.Windows.Markup.XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentUICulture.Name);
             List<string> listFont = new List<string>();
@@ -276,122 +254,96 @@ namespace Progretter
         }
         #endregion
 
-        #region 설정
-        private void Setting_Schedule_StartUp_Btn_Click(object sender, RoutedEventArgs e)
+        #region 메뉴
+        private void Menu_Setting_General(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Excel File(*.xlsx)|*.xlsx";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                Setting_Schedule_StartUp_Label.Content = openFileDialog.FileName;
-                Config.Set("ScheduleStartUpImport", "true");
-                Config.Set("ScheduleStartUpPath", Setting_Schedule_StartUp_Label.Content.ToString());
-            }
+            Settings settings = new Settings();
+            settings.Owner = this;
+            settings.Show();
         }
-
-        private void Setting_Schedule_StartUp_Reset_Btn_Click(object sender, RoutedEventArgs e)
+        private void Menu_Help_PCInfo(object sender, RoutedEventArgs e)
         {
-            Setting_Schedule_StartUp_Label.Content = null;
-            Config.Set("ScheduleStartUpImport", "false");
-            Config.Set("ScheduleStartUpPath", "");
+            Process.Start(new ProcessStartInfo("msinfo32.exe"));
         }
-
-        private void Setting_Schedule_Close_Save_CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("ScheduleCloseSave", "true");
-        }
-
-        private void Setting_Schedule_Close_Save_CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("ScheduleCloseSave", "false");
-        }
-
-        private void Setting_Note_DragAllExtension_CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("TextDragAllExtension", "true");
-        }
-
-        private void Setting_Note_DragAllExtension_CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("TextDragAllExtension", "false");
-        }
-
-        private void Setting_Cal_DeleteLog_CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("CalculatorDeleteLog", "true");
-        }
-
-        private void Setting_Cal_DeleteLog_CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("CalculatorDeleteLog", "false");
-        }
-        private void Setting_Canvas_Autosave_Checkbox_Checked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("CanvasAutoSave", "true");
-        }
-
-        private void Setting_Canvas_Autosave_Checkbox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("CanvasAutoSave", "false");
-        }
-
-        private void Setting_Canvas_Autoload_Checkbox_Checked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("CanvasAutoLoad", "true");
-        }
-
-        private void Setting_Canvas_Autoload_Checkbox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Config.Set("CanvasAutoLoad", "false");
-        }
-
-        private void Setting_Info_Btn_Click(object sender, RoutedEventArgs e)
+        private void Menu_Help_ProductInfo(object sender, RoutedEventArgs e)
         {
             Info info = new Info();
             info.Owner = this;
-            info.ShowDialog();
+            info.Show();
         }
-        private void Setting_AS_Folder_Btn_Click(object sender, RoutedEventArgs e)
+        private void Menu_Help_Update(object sender, RoutedEventArgs e)
         {
-            DirectoryInfo di = new DirectoryInfo(ASpath);
+            NoUpdate_Noti = true;
+            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
+        }
+        #endregion
 
-            if (!di.Exists)   //If New Folder not exists
+        #region 알람
+        private void Alarm_RemoveAll(object sender, RoutedEventArgs e)
+        {
+            ToastNotificationManagerCompat.History.Clear();
+        }
+        private void Alarm_Add(object sender, RoutedEventArgs e)
+        {
+            int returnVal;
+            int day = 0;
+            int hour = 0;
+            int min = 0;
+            int sec = 0;
+            if (alarm_Day.Text != null)
             {
-                di.Create();             //create Folder
+                bool bl = int.TryParse(alarm_Day.Text.ToString(), out returnVal);
+                if (bl)
+                {
+                    day = int.Parse(alarm_Day.Text.ToString());
+                }
             }
-            ProcessStartInfo startInfo = new ProcessStartInfo(ASpath)
+            if (alarm_Hour.Text != null)
             {
-                UseShellExecute = true
-            };
-            Process.Start(startInfo);
-        }
-
-        private void Setting_Reset_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("모든 설정을 초기화 하시겠습니까?", "설정 초기화", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                bool bl = int.TryParse(alarm_Hour.Text.ToString(), out returnVal);
+                if (bl)
+                {
+                    hour = int.Parse(alarm_Hour.Text.ToString());
+                }
+            }
+            if (alarm_Minutes.Text != null)
             {
-                Config.Set("ScheduleStartUpImport", "false");
-                Config.Set("ScheduleStartUpPath", "");
-                Config.Set("ScheduleCloseSave", "false");
-                Config.Set("TextTheme", "0");
-                Config.Set("TextDragAllExtension", "false");
-                Config.Set("CalculatorDeleteLog", "false");
-                Config.Set("CalculatorLog", "");
-                Config.Set("CanvasStrokeSlider", "");
-                Config.Set("CanvasEraseMode", "");
-                Config.Set("CanvasEraseSlider", "");
-                Config.Set("CanvasAutoLoad", "false");
-                Config.Set("CanvasAutoSave", "false");
-                Config.Set("CanvasLastPath", "");
-                Process.Start(Process.GetCurrentProcess().MainModule.FileName);
-                Application.Current.Shutdown();
+                bool bl = int.TryParse(alarm_Minutes.Text.ToString(), out returnVal);
+                if (bl)
+                {
+                    min = int.Parse(alarm_Minutes.Text.ToString());
+                }
+            }
+            if (alarm_Second.Text != null)
+            {
+                bool bl = int.TryParse(alarm_Second.Text.ToString(), out returnVal);
+                if (bl)
+                {
+                    sec = int.Parse(alarm_Second.Text.ToString());
+                }
+            }
+            if (Alarm.IsChecked == true && Todo.IsChecked == false)
+            {
+                Notification(Alarm_Title.Text, Alarm_Contents.Text, 9100, day, hour, min, sec);
+            }
+            else if (Alarm.IsChecked == false && Todo.IsChecked == true)
+            {
+                Notification(Alarm_Title.Text, Alarm_Contents.Text, 9000, day, hour, min, sec);
+            }
+            else
+            {
+                MessageBox.Show("오류가 발생했습니다. 알람 종류를 선택하여 주십시오.");
             }
         }
 
-        private void Setting_Update_Btn_Click(object sender, RoutedEventArgs e) // UPDATE
+        private void Alarm_Checked(object sender, RoutedEventArgs e)
         {
-            AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
-            /*            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;*/
+            Todo.IsChecked = false;
+        }
+
+        private void Todo_Checked(object sender, RoutedEventArgs e)
+        {
+            Alarm.IsChecked = false;
         }
         #endregion
 
@@ -1313,34 +1265,6 @@ namespace Progretter
         }
         #endregion
 
-        #region 테트리스
-        private void Tetris_btn_Click(object sender, RoutedEventArgs e)
-        {
-            Tetris tetris = new Tetris();
-            tetris.Show();
-        }
-        #endregion
-
-        #region Update
-        /*        private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
-                {
-                    if (args.Error == null)
-                    {
-                        if (args.IsUpdateAvailable)
-                        {
-                            if (MessageBox.Show($@"프로그래터 {args.CurrentVersion} 버전이 사용가능합니다. 현재 {args.InstalledVersion} 버전을 사용하고 있습니다. 업데이트 하시겠습니까?", "업데이트 사용가능", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                            {
-                                AutoUpdater.Start("https://raw.githubusercontent.com/kuaman/Progretter-code/master/Progretter/version.xml"); //XML RAW URL
-                            }
-                        }
-                        else
-                        {
-                            Notification("프로그래터 업데이트", "사용 가능한 업데이트가 없습니다.\n다시 시도해 주십시오");
-                        }
-                    }
-                }*/
-        #endregion
-
         #region Function
         private void App_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1358,6 +1282,59 @@ namespace Progretter
                     if (tabcontrol.SelectedIndex != 4)
                         tabcontrol.SelectedIndex += 1;
                     break;
+            }
+        }
+
+        private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
+        {
+            if (args.Error == null)
+            {
+                if (args.IsUpdateAvailable)
+                {
+                    Notification("온라인 클래스 도우미 업데이트", "업데이트가 있습니다.", 9900, 3, 0, 0, 0); // Update Check
+                }
+                else
+                {
+                    if (NoUpdate_Noti)
+                    {
+                        Notification("온라인 클래스 도우미 업데이트", "현재 업데이트가 없습니다.", 9000, 0, 3, 0, 0);
+                        NoUpdate_Noti = false;
+                    }
+                }
+            }
+        }
+
+        public void Notification(string title, string contents, int notitag, int day, int hour, int min, int sec)
+        {
+            TimeSpan time = new TimeSpan(day, hour, min, sec);
+            // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
+            if (notitag == 9100)
+            {
+                var builder = new ToastContentBuilder()
+                    .AddArgument("action", "NotiTag")
+                    .AddArgument("NotiTag", notitag)
+                    .AddText(title)
+                    .AddText(contents)
+                    .SetToastScenario(ToastScenario.Alarm)
+                    .AddButton(new ToastButton()
+                        .SetContent("중지")
+                        .AddArgument("dismiss", "true"))
+                    .AddButton(new ToastButton()
+                        .SetContent("다시 알림")
+                        .AddArgument("again", "true"));
+                builder.Schedule(DateTimeOffset.Now.LocalDateTime.Add(time));
+            }
+            else
+            {
+                new ToastContentBuilder()
+                .AddArgument("action", "NotiTag")
+                .AddArgument("NotiTag", notitag)
+                .AddText(title)
+                .AddText(contents)
+                .Show(toast =>
+                {
+                    toast.ExpirationTime = DateTime.Now.Add(time);
+                });// Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 6 (or later), then your TFM must be net6.0-windows10.0.17763.0 or greater
             }
         }
         #endregion
